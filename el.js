@@ -1,5 +1,7 @@
+var fs = require('fs');
+var request = require('ajax-request');
+
 const run = async (newAccount, emails, inter) => {
-  var fs = require('fs');
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -17,7 +19,6 @@ const run = async (newAccount, emails, inter) => {
       experimentalFeatures: true
     }
   })
-  var request = require('ajax-request');
   // var iframe = require('nightmare-iframe');
 
   var countries = [
