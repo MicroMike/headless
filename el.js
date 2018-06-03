@@ -303,7 +303,7 @@ const run = async (newAccount) => {
   console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
 
   setTimeout(() => {
-    anticaptcha(captchaisNew, captchaemail);
+    anticaptcha(isNew, tempmail);
     // twocaptcha(isNew);
     // create(true)
   }, getRandomInt(180000));
