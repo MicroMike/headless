@@ -291,9 +291,8 @@ const run = async (newAccount) => {
       if (err) {
         return console.log(err);
       }
-
-      console.log('The email: ' + tempmail + ' was saved!');
     });
+    console.log('The email: ' + tempmail + ' was saved!');
   }
 
   // console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
