@@ -56,7 +56,7 @@ const run = async (newAccount) => {
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
 
-  const doItAgain = async (first) => {
+  const doItAgain = async (first, maildoit) => {
     await nightmare
       .wait(5000)
       .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
@@ -67,7 +67,7 @@ const run = async (newAccount) => {
       .wait(5000)
       .click('.control-button.spoticon-shuffle-16')
 
-    await console.log('\x1b[34m%s\x1b[0m', first ? 'start' : 'change')
+    await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit : 'change')
   }
 
   const tempmaillist = [
@@ -158,7 +158,7 @@ const run = async (newAccount) => {
           .wait(5000)
       }
 
-      doItAgain(true)
+      doItAgain(true, tempmail)
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e)
@@ -224,7 +224,7 @@ const run = async (newAccount) => {
     })
   }
 
-  const anticaptcha = (newAccount, tempmail) => {
+  const anticaptcha = (captchaisNew, captchaemail) => {
     request({
       url: 'https://api.anti-captcha.com/createTask',
       method: 'POST',
@@ -233,38 +233,43 @@ const run = async (newAccount) => {
         clientKey: '5cf44dee27fed739df49a69bb4494b9a',
         task: {
           type: 'NoCaptchaTaskProxyless',
-          websiteKey: newAccount ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-          websiteURL: newAccount ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login',
-          invisible: newAccount ? 0 : 1
+          websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+          websiteURL: captchaisNew ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login',
+          invisible: captchaisNew ? 0 : 1
         }
       }
     }, function (err, res, response) {
-      console.log(response)
-
-      const interval = setInterval(() => {
-        request({
-          url: 'https://api.anti-captcha.com/getTaskResult',
-          method: 'POST',
-          json: true,
-          data: {
-            clientKey: '5cf44dee27fed739df49a69bb4494b9a',
-            taskId: response.taskId
-          }
-        }, function (err, res, response) {
-          if (response.status !== 'processing') {
-            clearInterval(interval)
-            create(newAccount, response.solution.gRecaptchaResponse, tempmail)
-          }
-          else {
-            // console.log(response)
-          }
-        });
-      }, 10000)
+      // console.log(response)
+      try {
+        const interval = setInterval(() => {
+          request({
+            url: 'https://api.anti-captcha.com/getTaskResult',
+            method: 'POST',
+            json: true,
+            data: {
+              clientKey: '5cf44dee27fed739df49a69bb4494b9a',
+              taskId: response.taskId
+            }
+          }, function (err, res, response) {
+            if (response.status !== 'processing') {
+              clearInterval(interval)
+              create(captchaisNew, response.solution.gRecaptchaResponse, captchaemail)
+            }
+            else {
+              // console.log(response)
+            }
+          });
+        }, 10000)
+      }
+      catch (e) {
+        console.log(e)
+        anticaptcha(captchaisNew, captchaemail)
+      }
     });
   }
 
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
-  const isNew = newAccount || yn70()
+  const isNew = newAccount ? newAccount : yn70()
 
   const tempmail = isNew
     ? await nightmare
@@ -295,10 +300,10 @@ const run = async (newAccount) => {
     console.log('The email: ' + tempmail + ' was saved!');
   }
 
-  // console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
+  console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
 
   setTimeout(() => {
-    anticaptcha(isNew, tempmail);
+    anticaptcha(captchaisNew, captchaemail);
     // twocaptcha(isNew);
     // create(true)
   }, getRandomInt(180000));
