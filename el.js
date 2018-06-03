@@ -239,7 +239,7 @@ const run = async (newAccount) => {
         }
       }
     }, function (err, res, response) {
-      // console.log(response)
+      console.log(response)
       try {
         const interval = setInterval(() => {
           request({
