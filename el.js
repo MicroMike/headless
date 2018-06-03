@@ -10,7 +10,7 @@ const run = async (newAccount) => {
     //   mode: 'detach'
     // },
     waitTimeout: 60000,
-    show: true,
+    show: false,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
