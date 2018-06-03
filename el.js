@@ -1,5 +1,5 @@
 const run = async (newAccount, emails, inter) => {
-
+  var fs = require('fs');
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -286,7 +286,6 @@ const run = async (newAccount, emails, inter) => {
   }
 
   if (isNew) {
-    var fs = require('fs');
     fs.appendFile('emails.txt', ',' + tempmail, function (err) {
       if (err) {
         return console.log(err);
