@@ -1,7 +1,7 @@
 var fs = require('fs');
 var request = require('ajax-request');
 
-const run = async (newAccount) => {
+const run = async (newaccount) => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -79,7 +79,7 @@ const run = async (newAccount) => {
 
   var emailurl = tempmaillist[getRandomInt(tempmaillist.length, 0)]
 
-  var url = (newAccount) => (newAccount ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login');
+  var url = (newA) => (newA ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login');
 
   const create = async (newAccount, captcha, tempmail) => {
     try {
@@ -240,36 +240,31 @@ const run = async (newAccount) => {
       }
     }, function (err, res, response) {
       console.log(response)
-      try {
-        const interval = setInterval(() => {
-          request({
-            url: 'https://api.anti-captcha.com/getTaskResult',
-            method: 'POST',
-            json: true,
-            data: {
-              clientKey: '5cf44dee27fed739df49a69bb4494b9a',
-              taskId: response.taskId
-            }
-          }, function (err, res, response) {
-            if (response.status !== 'processing') {
-              clearInterval(interval)
-              create(captchaisNew, response.solution.gRecaptchaResponse, captchaemail)
-            }
-            else {
-              // console.log(response)
-            }
-          });
-        }, 10000)
-      }
-      catch (e) {
-        console.log(e)
-        anticaptcha(captchaisNew, captchaemail)
-      }
+      
+      const interval = setInterval(() => {
+        request({
+          url: 'https://api.anti-captcha.com/getTaskResult',
+          method: 'POST',
+          json: true,
+          data: {
+            clientKey: '5cf44dee27fed739df49a69bb4494b9a',
+            taskId: response.taskId
+          }
+        }, function (err, res, response) {
+          if (response.status !== 'processing') {
+            clearInterval(interval)
+            create(captchaisNew, response.solution.gRecaptchaResponse, captchaemail)
+          }
+          else {
+            // console.log(response)
+          }
+        });
+      }, 10000)
     });
   }
 
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
-  const isNew = newAccount ? newAccount : yn70()
+  const isNew = newaccount ? newaccount : yn70()
 
   const tempmail = isNew
     ? await nightmare
