@@ -1,7 +1,7 @@
 var fs = require('fs');
 var request = require('ajax-request');
 
-const run = async (newAccount, emails, inter) => {
+const run = async (newAccount) => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -282,7 +282,7 @@ const run = async (newAccount, emails, inter) => {
       }, emailurl)
     : emails[count++]
 
-  if (count >= email.length) {
+  if (count >= emails.length) {
     clearInterval(inter)
   }
 
@@ -306,15 +306,17 @@ const run = async (newAccount, emails, inter) => {
 }
 
 var emails
-fs.readFile('emails.txt', function (err, data) {
+var count = 0
+var inter;
+
+fs.readFile('emails.txt', 'utf8', function (err, data) {
   if (err) {
     return console.log(err);
   }
-  emails = data.join(',')
-});
+  emails = data.split(',')
 
-var count = 0
-const inter = setInterval(() => {
-  run(false, emails, inter)
-}, 30000)
-run()
+  inter = setInterval(() => {
+    run()
+  }, 30000)
+  run()
+});

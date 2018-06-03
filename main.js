@@ -19,6 +19,7 @@ function createWindow() {
       allowRunningInsecureContent: true,
       plugins: true,
     },
+    show: false,
     width: 800, height: 600
   })
 
