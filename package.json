@@ -20,6 +20,8 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
-    "electron-widevinecdm": "^7.0.0"
+    "ajax-request": "^1.2.3",
+    "electron-widevinecdm": "^7.0.0",
+    "nightmare": "^3.0.1"
   }
 }

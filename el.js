@@ -1,12 +1,12 @@
 const Nightmare = require('nightmare')
-require('nightmare-iframe-manager')(Nightmare);
+// require('nightmare-iframe-manager')(Nightmare);
 const nightmare = Nightmare({
   electronPath: require('electron'),
   // openDevTools: {
   //   mode: 'detach'
   // },
   waitTimeout: 60000,
-  show: false,
+  show: true,
   typeInterval: 300,
   webPreferences: {
     webSecurity: false,
@@ -82,7 +82,7 @@ var emails = [
   'tyris.phoenixx@ldaho.net',
   'reif.jaiceon@ldaho.net',
   'elder.suyash@ldaho.net',
-  'rayon.trek@ldaho.net',
+  // 'rayon.trek@ldaho.net',
   'reif.jaiceon@ldaho.net',
   'tyris.phoenixx@ldaho.net',
   'sofian.emari@ldaho.net',
@@ -162,8 +162,6 @@ var artists = [
 var oneHour = 3600000;
 var interval = getRandomInt(720000, 480000)
 var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
-
-var yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
 const doItAgain = async (first) => {
   await nightmare
@@ -283,7 +281,7 @@ const create = async (newAccount, captcha, tempmail) => {
 
   nightmare
     .catch(error => {
-      console.error('\x1b[31m%s\x1b[0m', 'Search failed:', error)
+      console.error('\x1b[31m%s\x1b[0m', '!!!!!ERROR!!!!!:', tempmail)
     })
 
 }
@@ -356,14 +354,15 @@ const anticaptcha = (newAccount, tempmail) => {
           create(newAccount, response.solution.gRecaptchaResponse, tempmail)
         }
         else {
-          console.log(response)
+          // console.log(response)
         }
       });
     }, 10000)
   });
 }
 
-const isNew = process.env.NEWACCOUNT === '1'
+const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
+const isNew = yn70()
 
 const tempmail = isNew
   ? nightmare
@@ -381,9 +380,9 @@ const tempmail = isNew
     }, emailurl)
   : emails[getRandomInt(emails.length, 0)]
 
-console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
+// console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
 
-setTimeout(async () => {
+setTimeout(() => {
   anticaptcha(isNew, tempmail);
   // twocaptcha(isNew);
   // create(true)
