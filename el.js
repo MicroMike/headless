@@ -52,9 +52,6 @@ const run = async (newaccount) => {
     // 'uk',
   ]
 
-  var month = getRandomInt(12)
-  month = month < 10 ? '0' + month : '' + month
-
   var artists = [
     'artist/4fjzml1NOgcHdsmJM00i7a',
     'artist/5WuAJTOU9cvpenk1t5CyJM',
@@ -96,6 +93,9 @@ const run = async (newaccount) => {
         run()
       })
   }
+
+  var month = getRandomInt(12)
+  month = month < 10 ? '0' + month : '' + month
 
   const create = async (newAccount, captcha, tempmail) => {
     try {
