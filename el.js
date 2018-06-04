@@ -89,8 +89,8 @@ const run = async (newaccount) => {
         count--
         if (tempmail) {
           emails.push(tempmail)
+          run()
         }
-        run()
       })
   }
 
@@ -115,7 +115,7 @@ const run = async (newaccount) => {
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
-      restart(nightmare)
+      restart()
     }
   }
 
@@ -210,6 +210,7 @@ const run = async (newaccount) => {
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
       restart()
+      run()
     }
 
     var doitinter = setInterval(() => {
@@ -311,7 +312,7 @@ const run = async (newaccount) => {
   }
 
   try {
-    var isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
+    var isNew = typeof newaccount !== 'undefined' ? newaccount : count % 10
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
@@ -338,11 +339,11 @@ const run = async (newaccount) => {
     //   clearInterval(inter)
     // }
 
-    setTimeout(() => {
-      anticaptcha(isNew, tempmail);
-      // twocaptcha(isNew);
-      // create(true)
-    }, getRandomInt(1000 * 60 * 1));
+    // setTimeout(() => {
+    anticaptcha(isNew, tempmail);
+    // twocaptcha(isNew);
+    // create(true)
+    // }, getRandomInt(1000 * 60 * 1));
   }
   catch (e) {
     console.log(e)
