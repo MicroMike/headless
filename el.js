@@ -312,7 +312,7 @@ const run = async (newaccount) => {
   }
 
   try {
-    var isNew = typeof newaccount !== 'undefined' ? newaccount : count % 10
+    var isNew = typeof newaccount !== 'undefined' ? newaccount : count % 10 === 0
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
