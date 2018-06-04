@@ -273,39 +273,44 @@ const run = async (newaccount) => {
     });
   }
 
-  const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
-  const isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
-  const randemail = getRandomInt(emails.length, 0)
+  try {
+    const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
+    var isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
+    const randemail = getRandomInt(emails.length, 0)
 
-  isNew = !isNew && emails.length === 0 ? true : isNew;
+    isNew = !isNew && emails.length === 0 ? true : isNew;
 
-  const tempmail = isNew
-    ? await nightmare
-      .goto(emailurl)
-      .wait(2000)
-      .evaluate((emailurl) => {
-        switch (emailurl) {
-          case 'https://www.mohmal.com/fr/create/random':
-            return $('[data-email]').attr('data-email')
-          case 'https://www.crazymailing.com':
-            return document.getElementById('email_addr').innerText
-          case 'https://www.tempmailaddress.com':
-            return document.getElementById('email').innerText
-        }
-      }, emailurl)
-    : emails[randemail]
+    const tempmail = isNew
+      ? await nightmare
+        .goto(emailurl)
+        .wait(2000)
+        .evaluate((emailurl) => {
+          switch (emailurl) {
+            case 'https://www.mohmal.com/fr/create/random':
+              return $('[data-email]').attr('data-email')
+            case 'https://www.crazymailing.com':
+              return document.getElementById('email_addr').innerText
+            case 'https://www.tempmailaddress.com':
+              return document.getElementById('email').innerText
+          }
+        }, emailurl)
+      : emails[randemail]
 
-  emails.splice(randemail, 1)
+    emails.splice(randemail, 1)
 
-  // if (emails.length === 0) {
-  //   clearInterval(inter)
-  // }
+    // if (emails.length === 0) {
+    //   clearInterval(inter)
+    // }
 
-  setTimeout(() => {
-    anticaptcha(isNew, tempmail);
-    // twocaptcha(isNew);
-    // create(true)
-  }, getRandomInt(1000 * 60 * 1));
+    setTimeout(() => {
+      anticaptcha(isNew, tempmail);
+      // twocaptcha(isNew);
+      // create(true)
+    }, getRandomInt(1000 * 60 * 1));
+  }
+  catch (e) {
+    console.log(e)
+  }
 }
 
 var emails
