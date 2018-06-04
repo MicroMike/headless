@@ -1,6 +1,22 @@
 var fs = require('fs');
 var request = require('ajax-request');
 
+var emails
+var count = 0
+var inter;
+
+fs.readFile('emails.txt', 'utf8', function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  emails = data.split(',')
+
+  // inter = setInterval(() => {
+  // run(false)
+  // }, 30000)
+  run(false)
+});
+
 const run = async (newaccount) => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
@@ -36,10 +52,6 @@ const run = async (newaccount) => {
     // 'uk',
   ]
 
-  function getRandomInt(max, min) {
-    return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
-  }
-
   var month = getRandomInt(12)
   month = month < 10 ? '0' + month : '' + month
 
@@ -57,28 +69,6 @@ const run = async (newaccount) => {
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
 
-  const doItAgain = async (first, maildoit) => {
-    try {
-      await nightmare
-        .wait(5000)
-        .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
-        .forward()
-        // .click('.artist-header .btn.btn-black')
-        .wait('.tracklist-play-pause.tracklist-middle-align')
-        .click('.tracklist-play-pause.tracklist-middle-align')
-        .wait(5000)
-        .click('.control-button.spoticon-shuffle-16')
-
-      if (first) {
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
-      }
-    }
-    catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
-      restart(nightmare)
-    }
-  }
-
   const tempmaillist = [
     'https://www.tempmailaddress.com',
     'https://www.tempmailaddress.com',
@@ -89,6 +79,23 @@ const run = async (newaccount) => {
   var emailurl = tempmaillist[getRandomInt(tempmaillist.length, 0)]
 
   var url = (newA) => (newA ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login');
+
+  const getRandomInt = (max, min) => {
+    return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
+  }
+
+  const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
+
+  const restart = (tempmail) => {
+    nightmare
+      .halt('Halt', () => {
+        count--
+        if (tempmail) {
+          emails.push(tempmail)
+        }
+        run()
+      })
+  }
 
   const create = async (newAccount, captcha, tempmail) => {
     try {
@@ -180,7 +187,7 @@ const run = async (newaccount) => {
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
-      restart(nightmare)
+      restart()
     }
 
     var doitinter = setInterval(() => {
@@ -189,7 +196,7 @@ const run = async (newaccount) => {
 
     setTimeout(() => {
       clearInterval(doitinter)
-      restart(nightmare, tempmail)
+      restart(tempmail)
     }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
@@ -201,7 +208,7 @@ const run = async (newaccount) => {
     nightmare
       .catch(error => {
         console.error('\x1b[31m%s\x1b[0m', error, tempmail)
-        restart(nightmare)
+        restart()
       })
 
   }
@@ -317,34 +324,6 @@ const run = async (newaccount) => {
   }
   catch (e) {
     console.log(e)
-    restart(nightmare)
+    restart()
   }
-}
-
-var emails
-var count = 0
-var inter;
-const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
-
-fs.readFile('emails.txt', 'utf8', function (err, data) {
-  if (err) {
-    return console.log(err);
-  }
-  emails = data.split(',')
-
-  // inter = setInterval(() => {
-  // run(false)
-  // }, 30000)
-  run(false)
-});
-
-const restart = (nightmare, tempmail) => {
-  nightmare
-    .halt('Halt', () => {
-      count--
-      if (tempmail) {
-        emails.push(tempmail)
-      }
-      run()
-    })
 }
