@@ -162,6 +162,13 @@ const run = async (newaccount) => {
           .goto(urlactivate)
           .forward()
           .wait(5000)
+
+        fs.appendFile('emails.txt', ',' + tempmail, function (err) {
+          if (err) {
+            return console.log(err);
+          }
+        });
+        console.log('The email: ' + tempmail + ' was saved!');
       }
 
       doItAgain(true, tempmail)
@@ -290,7 +297,7 @@ const run = async (newaccount) => {
               return $('[data-email]').attr('data-email')
             case 'https://www.crazymailing.com':
               return document.getElementById('email_addr').innerText
-            case 'https://www.tempmailaddress.com':
+            case 'https://www.tempmailaddress.com': hS81bXjnAJ37
               return document.getElementById('email').innerText
           }
         }, emailurl)
