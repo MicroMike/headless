@@ -97,6 +97,28 @@ const run = async (newaccount) => {
   var month = getRandomInt(12)
   month = month < 10 ? '0' + month : '' + month
 
+  const doItAgain = async (first, maildoit) => {
+    try {
+      await nightmare
+        .wait(5000)
+        .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
+        .forward()
+        // .click('.artist-header .btn.btn-black')
+        .wait('.tracklist-play-pause.tracklist-middle-align')
+        .click('.tracklist-play-pause.tracklist-middle-align')
+        .wait(5000)
+        .click('.control-button.spoticon-shuffle-16')
+
+      if (first) {
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+      }
+    }
+    catch (e) {
+      console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
+      restart(nightmare)
+    }
+  }
+
   const create = async (newAccount, captcha, tempmail) => {
     try {
       await nightmare
