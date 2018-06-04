@@ -57,7 +57,7 @@ const run = async (newaccount) => {
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
 
-  const doItAgain = async (first, maildoit) => {
+  const doItAgain = async (first, maildoit, savenew) => {
     try {
       await nightmare
         .wait(5000)
@@ -71,11 +71,20 @@ const run = async (newaccount) => {
 
       if (first) {
         await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+
+        if (savenew) {
+          fs.appendFile('emails.txt', ',' + tempmail, function (err) {
+            if (err) {
+              return console.log(err);
+            }
+          });
+          console.log('The email: ' + tempmail + ' was saved!');
+        }
       }
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
-      restart()
+      restart(nightmare)
     }
   }
 
@@ -165,21 +174,14 @@ const run = async (newaccount) => {
           .goto(urlactivate)
           .forward()
           .wait(5000)
-
-        fs.appendFile('emails.txt', ',' + tempmail, function (err) {
-          if (err) {
-            return console.log(err);
-          }
-        });
-        console.log('The email: ' + tempmail + ' was saved!');
       }
 
-      doItAgain(true, tempmail)
+      doItAgain(true, tempmail, newAccount)
       run()
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
-      restart()
+      restart(nightmare)
     }
 
     var doitinter = setInterval(() => {
@@ -188,7 +190,7 @@ const run = async (newaccount) => {
 
     setTimeout(() => {
       clearInterval(doitinter)
-      restart(tempmail)
+      restart(nightmare, tempmail)
     }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
@@ -200,7 +202,7 @@ const run = async (newaccount) => {
     nightmare
       .catch(error => {
         console.error('\x1b[31m%s\x1b[0m', error, tempmail)
-        restart()
+        restart(nightmare)
       })
 
   }
@@ -317,7 +319,7 @@ const run = async (newaccount) => {
   }
   catch (e) {
     console.log(e)
-    restart()
+    restart(nightmare)
   }
 }
 
@@ -337,7 +339,7 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   run(false)
 });
 
-const restart = (tempmail) => {
+const restart = (nightmare, tempmail) => {
   nightmare
     .halt('Halt', () => {
       count--
