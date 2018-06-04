@@ -57,17 +57,22 @@ const run = async (newaccount) => {
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
 
   const doItAgain = async (first, maildoit) => {
-    await nightmare
-      .wait(5000)
-      .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
-      .forward()
-      // .click('.artist-header .btn.btn-black')
-      .wait('.tracklist-play-pause.tracklist-middle-align')
-      .click('.tracklist-play-pause.tracklist-middle-align')
-      .wait(5000)
-      .click('.control-button.spoticon-shuffle-16')
+    try {
+      await nightmare
+        .wait(5000)
+        .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
+        .forward()
+        // .click('.artist-header .btn.btn-black')
+        .wait('.tracklist-play-pause.tracklist-middle-align')
+        .click('.tracklist-play-pause.tracklist-middle-align')
+        .wait(5000)
+        .click('.control-button.spoticon-shuffle-16')
 
-    await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit : 'change')
+      await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit : 'change')
+    }
+    catch (e) {
+      console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
+    }
   }
 
   const tempmaillist = [
@@ -172,7 +177,7 @@ const run = async (newaccount) => {
       clearInterval(doitinter)
       nightmare
         .end()
-      run(true)
+      // run(true)
     }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
@@ -240,7 +245,7 @@ const run = async (newaccount) => {
       }
     }, function (err, res, response) {
       console.log(response)
-      
+
       const interval = setInterval(() => {
         request({
           url: 'https://api.anti-captcha.com/getTaskResult',
@@ -264,7 +269,8 @@ const run = async (newaccount) => {
   }
 
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
-  const isNew = newaccount ? newaccount : yn70()
+  const isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
+  const randemail = getRandomInt(emails.length, 0)
 
   const tempmail = isNew
     ? await nightmare
@@ -280,9 +286,11 @@ const run = async (newaccount) => {
             return document.getElementById('email').innerText
         }
       }, emailurl)
-    : emails[count++]
+    : emails[randemail]
 
-  if (count >= emails.length) {
+  emails.splice(randemail, 1)
+
+  if (emails.length > 0) {
     clearInterval(inter)
   }
 
@@ -315,7 +323,7 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   emails = data.split(',')
 
   inter = setInterval(() => {
-    run()
+    run(false)
   }, 30000)
   run()
 });
