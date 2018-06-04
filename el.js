@@ -57,7 +57,7 @@ const run = async (newaccount) => {
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
 
-  const doItAgain = async (first, maildoit, savenew) => {
+  const doItAgain = async (first, maildoit) => {
     try {
       await nightmare
         .wait(5000)
@@ -71,15 +71,6 @@ const run = async (newaccount) => {
 
       if (first) {
         await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
-
-        if (savenew) {
-          fs.appendFile('emails.txt', ',' + tempmail, function (err) {
-            if (err) {
-              return console.log(err);
-            }
-          });
-          console.log('The email: ' + tempmail + ' was saved!');
-        }
       }
     }
     catch (e) {
@@ -119,7 +110,7 @@ const run = async (newaccount) => {
           .type('form input[name="dob_day"]', getRandomInt(28))
           .select('form select[name="dob_month"]', month)
           .type('form input[name="dob_year"]', getRandomInt(32, 1963))
-          .click('form input[id="register-male"]')
+          .click('form input[id="register-' + (yn70() ? 'male' : 'female') + '"]')
           .wait(10000)
           .click('#register-button-email-submit')
       }
@@ -174,9 +165,17 @@ const run = async (newaccount) => {
           .goto(urlactivate)
           .forward()
           .wait(5000)
+
+        fs.appendFile('emails.txt', ',' + tempmail, function (err) {
+          if (err) {
+            return console.log(err);
+          }
+        });
+
+        console.log('The email: ' + tempmail + ' was saved!');
       }
 
-      doItAgain(true, tempmail, newAccount)
+      doItAgain(true, tempmail)
       run()
     }
     catch (e) {
@@ -283,7 +282,6 @@ const run = async (newaccount) => {
   }
 
   try {
-    const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
     var isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
     const randemail = getRandomInt(emails.length, 0)
 
@@ -326,6 +324,7 @@ const run = async (newaccount) => {
 var emails
 var count = 0
 var inter;
+const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
 fs.readFile('emails.txt', 'utf8', function (err, data) {
   if (err) {
