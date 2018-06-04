@@ -297,7 +297,7 @@ const run = async (newaccount) => {
               return $('[data-email]').attr('data-email')
             case 'https://www.crazymailing.com':
               return document.getElementById('email_addr').innerText
-            case 'https://www.tempmailaddress.com': hS81bXjnAJ37
+            case 'https://www.tempmailaddress.com':
               return document.getElementById('email').innerText
           }
         }, emailurl)
