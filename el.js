@@ -69,10 +69,13 @@ const run = async (newaccount) => {
         .wait(5000)
         .click('.control-button.spoticon-shuffle-16')
 
-      await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit + ' ' + (++count) : '')
+      if (first) {
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+      }
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
+      restart()
     }
   }
 
@@ -176,20 +179,16 @@ const run = async (newaccount) => {
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
+      restart()
     }
 
     var doitinter = setInterval(() => {
-      doItAgain()
+      doItAgain(false, tempmail)
     }, interval + getRandomInt(1000 * 60 * 2));
 
     setTimeout(() => {
       clearInterval(doitinter)
-      nightmare
-        .halt('Halt', () => {
-          count--
-          emails.push(tempmail)
-          run()
-        })
+      restart(tempmail)
     }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
@@ -200,7 +199,8 @@ const run = async (newaccount) => {
 
     nightmare
       .catch(error => {
-        console.error('\x1b[31m%s\x1b[0m', e, tempmail)
+        console.error('\x1b[31m%s\x1b[0m', error, tempmail)
+        restart()
       })
 
   }
@@ -317,6 +317,7 @@ const run = async (newaccount) => {
   }
   catch (e) {
     console.log(e)
+    restart()
   }
 }
 
@@ -335,3 +336,14 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   // }, 30000)
   run(false)
 });
+
+const restart = (tempmail) => {
+  nightmare
+    .halt('Halt', () => {
+      count--
+      if (tempmail) {
+        emails.push(tempmail)
+      }
+      run()
+    })
+}
