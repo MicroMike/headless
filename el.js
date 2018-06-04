@@ -62,6 +62,10 @@ const run = async (newaccount) => {
     'album/6vvfbzMU2dkFQRJiP99RS4',
   ]
 
+  const getRandomInt = (max, min) => {
+    return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
+  }
+
   var oneHour = 3600000;
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
@@ -76,10 +80,6 @@ const run = async (newaccount) => {
   var emailurl = tempmaillist[getRandomInt(tempmaillist.length, 0)]
 
   var url = (newA) => (newA ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login');
-
-  const getRandomInt = (max, min) => {
-    return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
-  }
 
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
