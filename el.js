@@ -10,7 +10,8 @@ const run = async (newaccount) => {
     //   mode: 'detach'
     // },
     waitTimeout: 60000,
-    show: false,
+    alwaysOnTop: false,
+    show: true,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -68,7 +69,7 @@ const run = async (newaccount) => {
         .wait(5000)
         .click('.control-button.spoticon-shuffle-16')
 
-      await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit : 'change')
+      await console.log('\x1b[34m%s\x1b[0m', first ? 'start :' + maildoit + ' ' + (++count) : '')
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
@@ -164,9 +165,10 @@ const run = async (newaccount) => {
       }
 
       doItAgain(true, tempmail)
+      run()
     }
     catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', e)
+      console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
     }
 
     var doitinter = setInterval(() => {
@@ -176,8 +178,11 @@ const run = async (newaccount) => {
     setTimeout(() => {
       clearInterval(doitinter)
       nightmare
-        .end()
-      // run(true)
+        .halt('Halt', () => {
+          count--
+          emails.push(tempmail)
+          run()
+        })
     }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
@@ -188,7 +193,7 @@ const run = async (newaccount) => {
 
     nightmare
       .catch(error => {
-        console.error('\x1b[31m%s\x1b[0m', '!!!!!ERROR!!!!!:', tempmail)
+        console.error('\x1b[31m%s\x1b[0m', e, tempmail)
       })
 
   }
@@ -272,6 +277,8 @@ const run = async (newaccount) => {
   const isNew = typeof newaccount !== 'undefined' ? newaccount : yn70()
   const randemail = getRandomInt(emails.length, 0)
 
+  isNew = !isNew && emails.length === 0 ? true : isNew;
+
   const tempmail = isNew
     ? await nightmare
       .goto(emailurl)
@@ -290,26 +297,15 @@ const run = async (newaccount) => {
 
   emails.splice(randemail, 1)
 
-  if (emails.length > 0) {
-    clearInterval(inter)
-  }
-
-  if (isNew) {
-    fs.appendFile('emails.txt', ',' + tempmail, function (err) {
-      if (err) {
-        return console.log(err);
-      }
-    });
-    console.log('The email: ' + tempmail + ' was saved!');
-  }
-
-  console.log('\x1b[33m%s\x1b[0m', 'load: ' + tempmail)
+  // if (emails.length === 0) {
+  //   clearInterval(inter)
+  // }
 
   setTimeout(() => {
     anticaptcha(isNew, tempmail);
     // twocaptcha(isNew);
     // create(true)
-  }, getRandomInt(180000));
+  }, getRandomInt(1000 * 60 * 1));
 }
 
 var emails
@@ -322,8 +318,8 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   }
   emails = data.split(',')
 
-  inter = setInterval(() => {
-    run(false)
-  }, 30000)
-  run()
+  // inter = setInterval(() => {
+  // run(false)
+  // }, 30000)
+  run(false)
 });
