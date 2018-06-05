@@ -4,6 +4,7 @@ var request = require('ajax-request');
 var emails
 var count = 0
 var inter;
+var renewInter = false
 
 fs.readFile('emails.txt', 'utf8', function (err, data) {
   if (err) {
@@ -100,7 +101,8 @@ const run = async () => {
       }
     }
     catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', 'error: ' + maildoit)
+      nightmare.screenshot(maildoit)
+      console.log('\x1b[31m%s\x1b[0m', e + ' : ' + maildoit)
       restart()
     }
   }
@@ -304,11 +306,18 @@ const run = async () => {
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
 
-    if (count >= 150) {
-      setTimeout(() => {
+    if (renewInter) {
+      clearInterval(renewInter)
+    }
+
+    renewInter = setInterval(() => {
+      if (count <= 150) {
         run()
-      }, 1000 * 60 * 15);
-      return;
+      }
+    }, 1000 * 60 * 15);
+
+    if (count > 150) {
+      return
     }
 
     const tempmail = isNew
