@@ -96,7 +96,7 @@ const run = async () => {
         .click('.control-button.spoticon-shuffle-16')
 
       if (first) {
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + count)
       }
     }
     catch (e) {
@@ -299,7 +299,7 @@ const run = async () => {
   }
 
   try {
-    var isNew = count % 20 === 0
+    var isNew = ++count % 20 === 0
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
