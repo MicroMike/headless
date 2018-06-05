@@ -14,10 +14,10 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   // inter = setInterval(() => {
   // run(false)
   // }, 30000)
-  run(false)
+  run()
 });
 
-const run = async (newaccount) => {
+const run = async () => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -37,20 +37,6 @@ const run = async (newaccount) => {
     }
   })
   // var iframe = require('nightmare-iframe');
-
-  var countries = [
-    // 'de',
-    // 'be',
-    // 'dk',
-    // 'es',
-    'fr',
-    // 'el',
-    // 'it',
-    // 'lu',
-    // 'nl',
-    // 'pt',
-    // 'uk',
-  ]
 
   var artists = [
     'artist/4fjzml1NOgcHdsmJM00i7a',
@@ -110,7 +96,7 @@ const run = async (newaccount) => {
         .click('.control-button.spoticon-shuffle-16')
 
       if (first) {
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + count)
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
       }
     }
     catch (e) {
@@ -206,22 +192,22 @@ const run = async (newaccount) => {
 
       await doItAgain(true, tempmail)
 
-      await run()
+      var doitinter = setInterval(() => {
+        doItAgain(false, tempmail)
+      }, interval + getRandomInt(1000 * 60 * 2));
+
+      setTimeout(() => {
+        clearInterval(doitinter)
+        restart(tempmail)
+      }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
+
     }
     catch (e) {
       console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
       restart()
-      run()
     }
 
-    var doitinter = setInterval(() => {
-      doItAgain(false, tempmail)
-    }, interval + getRandomInt(1000 * 60 * 2));
-
-    setTimeout(() => {
-      clearInterval(doitinter)
-      restart(tempmail)
-    }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
+    await run()
 
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
     // // .wait('.tracklist-header__extra-buttons .btn.btn-transparent')
@@ -313,10 +299,17 @@ const run = async (newaccount) => {
   }
 
   try {
-    var isNew = typeof newaccount !== 'undefined' ? newaccount : ++count % 10 === 0
+    var isNew = count % 20 === 0
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
+
+    if (count >= 150) {
+      setTimeout(() => {
+        run()
+      }, 1000 * 60 * 15);
+      return;
+    }
 
     const tempmail = isNew
       ? await nightmare
