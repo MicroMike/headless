@@ -6,6 +6,11 @@ var count = 1
 var inter;
 var renewInter = false
 
+
+const getRandomInt = (max, min) => {
+  return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
+}
+
 fs.readFile('emails.txt', 'utf8', function (err, data) {
   if (err) {
     return console.log(err);
@@ -15,7 +20,6 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   // inter = setInterval(() => {
   // run(false)
   // }, 30000)
-  run()
 });
 
 const run = async () => {
@@ -49,10 +53,6 @@ const run = async () => {
     'album/6vvfbzMU2dkFQRJiP99RS4',
   ]
 
-  const getRandomInt = (max, min) => {
-    return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
-  }
-
   var oneHour = 3600000;
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
@@ -71,12 +71,12 @@ const run = async () => {
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
   const restart = (tempmail) => {
+    nightmare.screenshot(tempmail)
     nightmare
       .halt('Halt', () => {
         count--
         if (tempmail) {
           emails.push(tempmail)
-          run()
         }
       })
   }
@@ -101,7 +101,6 @@ const run = async () => {
       }
     }
     catch (e) {
-      nightmare.screenshot(maildoit)
       console.log('\x1b[31m%s\x1b[0m', e + ' : ' + maildoit)
       restart()
     }
@@ -209,8 +208,6 @@ const run = async () => {
       restart()
     }
 
-    await run()
-
     // .goto('https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX')
     // // .wait('.tracklist-header__extra-buttons .btn.btn-transparent')
     // .click('.tracklist-header__extra-buttons .btn.btn-transparent')
@@ -306,20 +303,6 @@ const run = async () => {
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
 
-    if (renewInter) {
-      clearInterval(renewInter)
-    }
-
-    renewInter = setInterval(() => {
-      if (count <= 150) {
-        run()
-      }
-    }, 1000 * 60 * 15);
-
-    if (count > 150) {
-      return
-    }
-
     const tempmail = isNew
       ? await nightmare
         .goto(emailurl)
@@ -353,3 +336,9 @@ const run = async () => {
     restart()
   }
 }
+
+setInterval(() => {
+  if (count <= 150) {
+    run()
+  }
+}, 1000 * 60 * 1 + getRandomInt(1000 * 60 * 2));
