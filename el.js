@@ -22,7 +22,7 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   // }, 30000)
 });
 
-const run = async () => {
+const run = async (norepeat) => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -71,13 +71,14 @@ const run = async () => {
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
   const restart = (tempmail) => {
-    nightmare.screenshot(tempmail)
     nightmare
       .halt('Halt', () => {
+        console.log('Halt')
         count--
         if (tempmail) {
           emails.push(tempmail)
         }
+        run(true)
       })
   }
 
@@ -97,7 +98,10 @@ const run = async () => {
         .click('.control-button.spoticon-shuffle-16')
 
       if (first) {
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + count)
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+        if (!norepeat) {
+          run()
+        }
       }
     }
     catch (e) {
@@ -298,10 +302,14 @@ const run = async () => {
   }
 
   try {
-    var isNew = ++count % 20 === 0
+    var isNew = count % 20 === 0
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
+
+    if (count > 150) {
+      return
+    }
 
     const tempmail = isNew
       ? await nightmare
@@ -337,8 +345,4 @@ const run = async () => {
   }
 }
 
-setInterval(() => {
-  if (count <= 150) {
-    run()
-  }
-}, 1000 * 60 * 1);
+run()
