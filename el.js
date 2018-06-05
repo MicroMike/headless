@@ -17,9 +17,7 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   }
   emails = data.split(',')
 
-  // inter = setInterval(() => {
-  // run(false)
-  // }, 30000)
+  run()
 });
 
 const run = async (norepeat) => {
@@ -344,5 +342,3 @@ const run = async (norepeat) => {
     restart()
   }
 }
-
-run()
