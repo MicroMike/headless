@@ -2,11 +2,11 @@ var fs = require('fs');
 var request = require('ajax-request');
 
 var emails
-var count = 0
 var inter;
 var renewInter = false
 var isRunning = false
 var playing = []
+var count
 
 const getRandomInt = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
@@ -27,7 +27,7 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   }, 1000 * 60 * 1)
 });
 
-const run = async (norepeat) => {
+const run = async () => {
   const Nightmare = require('nightmare')
   // require('nightmare-iframe-manager')(Nightmare);
   const nightmare = Nightmare({
@@ -79,24 +79,20 @@ const run = async (norepeat) => {
 
   const restart = (halt) => {
     isRunning = false
-
-    var indexPlaying = playing.indexOf(currentmail)
-    if (indexPlaying > -1) {
-      playing.splice(indexPlaying, 1)
-      emails.push(currentmail)
-      count--
-    }
-
-    if (halt) {
-      console.log('Halt')
-    }
-    else {
-      console.log('Restart')
-    }
-
     nightmare
       .halt('Halt', () => {
-        run(true)
+        var indexPlaying = playing.indexOf(currentmail)
+        if (indexPlaying > -1) {
+          playing.splice(indexPlaying, 1)
+          emails.push(currentmail)
+        }
+
+        if (halt) {
+          console.log('Halt')
+        }
+        else {
+          console.log('Restart')
+        }
       })
   }
 
@@ -117,11 +113,8 @@ const run = async (norepeat) => {
 
       if (first) {
         playing.push(currentmail)
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + currentmail + ' ' + (++count))
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + currentmail + ' ' + playing.length)
         isRunning = false
-        if (!norepeat) {
-          run()
-        }
       }
     }
     catch (e) {
@@ -322,12 +315,12 @@ const run = async (norepeat) => {
   }
 
   try {
-    var isNew = count % 20 === 0
+    var isNew = ++count % 20 === 0
     const randemail = getRandomInt(emails.length, 0)
 
     isNew = !isNew && emails.length === 0 ? true : isNew;
 
-    if (count > 150) {
+    if (playing.length > 150 || isRunning) {
       return
     }
 
@@ -349,6 +342,7 @@ const run = async (norepeat) => {
         }, emailurl)
       : emails[randemail]
 
+    playing.push(tempmail)
     emails.splice(randemail, 1)
     currentmail = tempmail
 
