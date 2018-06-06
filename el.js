@@ -6,6 +6,7 @@ var count = 0
 var inter;
 var renewInter = false
 var isRunning = false
+var playing = []
 
 const getRandomInt = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
@@ -57,6 +58,8 @@ const run = async (norepeat) => {
     'album/6vvfbzMU2dkFQRJiP99RS4',
   ]
 
+  var currentmail
+
   var oneHour = 3600000;
   var interval = getRandomInt(720000, 480000)
   var intervalHours = getRandomInt(oneHour * 3, oneHour * 1.5)
@@ -74,18 +77,25 @@ const run = async (norepeat) => {
 
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
-  const restart = (tempmail) => {
+  const restart = (halt) => {
     isRunning = false
+
+    var indexPlaying = playing.indexOf(currentmail)
+    if (indexPlaying > -1) {
+      playing.splice(indexPlaying, 1)
+      emails.push(currentmail)
+      count--
+    }
+
+    if (halt) {
+      console.log('Halt')
+    }
+    else {
+      console.log('Restart')
+    }
+
     nightmare
       .halt('Halt', () => {
-        count--
-        if (tempmail) {
-          console.log('Restart')
-          emails.push(tempmail)
-        }
-        else {
-          console.log('Halt')
-        }
         run(true)
       })
   }
@@ -93,7 +103,7 @@ const run = async (norepeat) => {
   var month = getRandomInt(12)
   month = month < 10 ? '0' + month : '' + month
 
-  const doItAgain = async (first, maildoit) => {
+  const doItAgain = async (first, currentmail) => {
     try {
       await nightmare
         .wait(5000)
@@ -106,19 +116,21 @@ const run = async (norepeat) => {
         .click('.control-button.spoticon-shuffle-16')
 
       if (first) {
-        await console.log('\x1b[34m%s\x1b[0m', 'start :' + maildoit + ' ' + (++count))
+        playing.push(currentmail)
+        await console.log('\x1b[34m%s\x1b[0m', 'start :' + currentmail + ' ' + (++count))
+        isRunning = false
         if (!norepeat) {
           run()
         }
       }
     }
     catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', e + ' : ' + maildoit)
+      console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
       restart()
     }
   }
 
-  const create = async (newAccount, captcha, tempmail) => {
+  const create = async (newAccount, captcha, currentmail) => {
     try {
       await nightmare
         .goto(url(newAccount))
@@ -131,10 +143,10 @@ const run = async (norepeat) => {
           }, captcha)
 
         nightmare
-          .type('form input[name="email"]', tempmail)
-          .type('form input[name="confirm_email"]', tempmail)
-          .type('form input[name="password"]', tempmail)
-          .type('form input[name="displayname"]', tempmail.split('@')[0])
+          .type('form input[name="email"]', currentmail)
+          .type('form input[name="confirm_email"]', currentmail)
+          .type('form input[name="password"]', currentmail)
+          .type('form input[name="displayname"]', currentmail.split('@')[0])
           .type('form input[name="dob_day"]', getRandomInt(28))
           .select('form select[name="dob_month"]', month)
           .type('form input[name="dob_year"]', getRandomInt(32, 1963))
@@ -144,15 +156,15 @@ const run = async (norepeat) => {
       }
       else {
         await nightmare
-          .type('form input[name="username"]', tempmail)
-          .type('form input[name="password"]', tempmail)
+          .type('form input[name="username"]', currentmail)
+          .type('form input[name="password"]', currentmail)
           .wait(2000)
           .evaluate((captcha) => {
             window.___grecaptcha_cfg.clients[0].ba.l.callback(captcha)
           }, captcha)
       }
 
-      await console.log('\x1b[32m%s\x1b[0m', (newAccount ? 'account created: ' : 'account logged: ') + tempmail)
+      await console.log('\x1b[32m%s\x1b[0m', (newAccount ? 'account created: ' : 'account logged: ') + currentmail)
 
       if (newAccount) {
         await nightmare
@@ -194,29 +206,29 @@ const run = async (norepeat) => {
           .forward()
           .wait(5000)
 
-        fs.appendFile('emails.txt', ',' + tempmail, function (err) {
+        fs.appendFile('emails.txt', ',' + currentmail, function (err) {
           if (err) {
             return console.log(err);
           }
         });
 
-        console.log('The email: ' + tempmail + ' was saved!');
+        console.log('The email: ' + currentmail + ' was saved!');
       }
 
-      await doItAgain(true, tempmail)
+      await doItAgain(true)
 
       var doitinter = setInterval(() => {
-        doItAgain(false, tempmail)
+        doItAgain(false)
       }, interval + getRandomInt(1000 * 60 * 2));
 
       setTimeout(() => {
         clearInterval(doitinter)
-        restart(tempmail)
+        restart(true)
       }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
 
     }
     catch (e) {
-      console.log('\x1b[31m%s\x1b[0m', e + ' ' + tempmail)
+      console.log('\x1b[31m%s\x1b[0m', e + ' ' + currentmail)
       restart()
     }
 
@@ -270,7 +282,7 @@ const run = async (norepeat) => {
     })
   }
 
-  const anticaptcha = (captchaisNew, captchaemail) => {
+  const anticaptcha = (captchaisNew) => {
     request({
       url: 'https://api.anti-captcha.com/createTask',
       method: 'POST',
@@ -299,7 +311,7 @@ const run = async (norepeat) => {
         }, function (err, res, response) {
           if (response.status !== 'processing') {
             clearInterval(interval)
-            create(captchaisNew, response.solution.gRecaptchaResponse, captchaemail)
+            create(captchaisNew, response.solution.gRecaptchaResponse)
           }
           else {
             // console.log(response)
@@ -338,13 +350,14 @@ const run = async (norepeat) => {
       : emails[randemail]
 
     emails.splice(randemail, 1)
+    currentmail = tempmail
 
     // if (emails.length === 0) {
     //   clearInterval(inter)
     // }
 
     // setTimeout(() => {
-    anticaptcha(isNew, tempmail);
+    anticaptcha(isNew);
     // twocaptcha(isNew);
     // create(true)
     // }, getRandomInt(1000 * 60 * 1));
