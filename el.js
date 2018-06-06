@@ -130,14 +130,25 @@ const englobe = async (captchaFCT) => {
         }
       }
       catch (e) {
-        if (secondTry) {
-          console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
-          restart()
-        }
-        else {
-          console.log('try : ' + currentmail)
-          doItAgain(false, true)
-        }
+        const html = await
+          nightmare.evaluate(() => {
+            return document.body.innerHTML
+          })
+
+        fs.appendFile(currentmail + '.txt', html, function (err) {
+          if (err) {
+            return console.log(err);
+          }
+        });
+
+        // if (secondTry) {
+        console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
+        restart()
+        // }
+        // else {
+        //   console.log('try : ' + currentmail)
+        //   doItAgain(false, true)
+        // }
       }
     }
 
