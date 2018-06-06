@@ -234,7 +234,7 @@ const englobe = async (captchaFCT) => {
         setTimeout(() => {
           clearInterval(doitinter)
           restart(true)
-        }, 1000 * 60 * 60 * 3 + getRandomInt(1000 * 60 * 60));
+        }, 1000 * 60 * 60 * 1 + getRandomInt(1000 * 60 * 60 * 4));
 
       }
       catch (e) {
