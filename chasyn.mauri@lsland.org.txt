@@ -1,0 +1,14 @@
+<img id="cream-id-mgmt" src="https://pixel.spotify.com/v1/sync" style="display: none;" width="0" height="0"><div class="main-login-class"><img class="landing-logo" src="https://open.scdn.co/static/images/logo-white-1x.png" alt="Spotify"><h1>Log in to listen for free</h1><div class="cols-wrap"><div class="col col-left"><img id="cover-img" src="//i.scdn.co/image/4b24fc8aaff61abfc6537ad9773f6ebfc69bbbbd" alt="Yokem"><p class="primary-title">Yokem</p></div><div class="col col-right"><div id="login-pane"><div id="login"><div id="login-method"><div class="step show" id="screen-signup-flow"><div class="step-outer"><div class="step-inner"><button id="signup-spotify" class="btn-landing btn-green" data-or="or" data-contextual="true">
+                        Sign up
+                      </button><div class="separator-container"><div class="separator-line"></div><div class="separator-text">Already have an account?</div><div class="separator-line"></div></div><button id="has-account" class="btn-landing btn-white" data-or="or">
+                        Log in
+                      </button></div></div></div></div></div></div></div></div></div><script src="https://vt.myvisualiq.net/2/afTxMmlGwCNRJiC5Bd75ug%3D%3D/vt-150.js" async=""></script><!-- Begin comScore Tag --><script>
+var _comscore = _comscore || [];
+_comscore.push({ c1: "2", c2: "15654041" });
+(function() {
+  var s = document.createElement("script"), el =
+    document.getElementsByTagName("script")[0]; s.async = true;
+  s.src = "https://sb.scorecardresearch.com/beacon.js";
+  el.parentNode.insertBefore(s, el);
+})();
+</script><!-- End comScore Tag -->
