@@ -7,7 +7,11 @@ var count
 
 const englobe = async (captchaFCT) => {
   var isRunning = false
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> f7b81807be0e35705bdaadaf5d00d16f0a72217c
   const getRandomInt = (max, min) => {
     return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
   }
@@ -17,9 +21,15 @@ const englobe = async (captchaFCT) => {
       return console.log(err);
     }
     emails = data.split(',')
+<<<<<<< HEAD
 
     run()
 
+=======
+
+    run()
+
+>>>>>>> f7b81807be0e35705bdaadaf5d00d16f0a72217c
     setInterval(() => {
       if (!isRunning) {
         run()
@@ -158,6 +168,7 @@ const englobe = async (captchaFCT) => {
         }
 
         await console.log('\x1b[32m%s\x1b[0m', (newAccount ? 'account created: ' : 'account logged: ') + currentmail)
+<<<<<<< HEAD
 
         if (newAccount) {
           await nightmare
@@ -165,6 +176,15 @@ const englobe = async (captchaFCT) => {
             .goto(emailurl)
             .forward()
 
+=======
+
+        if (newAccount) {
+          await nightmare
+            .wait('.welcome-message')
+            .goto(emailurl)
+            .forward()
+
+>>>>>>> f7b81807be0e35705bdaadaf5d00d16f0a72217c
           if (emailurl === 'https://www.mohmal.com/fr/create/random') {
             var urlclick = await nightmare
               .wait(5000)
@@ -239,6 +259,7 @@ const englobe = async (captchaFCT) => {
 
     }
 
+<<<<<<< HEAD
     try {
       var isNew = ++count % 20 === 0
       const randemail = getRandomInt(emails.length, 0)
@@ -364,3 +385,130 @@ const anticaptcha = (captchaisNew) => {
 
 englobe(anticaptcha)
 englobe(twocaptcha)
+=======
+    const twocaptcha = (captchaisNew) => {
+      request.post({
+        url: 'http://2captcha.com/in.php',
+        data: {
+          key: '964a5072a7fdea86b877739dc4ea4788',
+          method: 'userrecaptcha',
+          googlekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+          pageurl: captchaisNew ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login',
+          invisible: captchaisNew ? 0 : 1
+        }
+      }, function (err, res, body) {
+        console.log(body)
+
+        const interval = setInterval(() => {
+          request({
+            url: 'http://2captcha.com/res.php',
+            method: 'GET',
+            data: {
+              key: '964a5072a7fdea86b877739dc4ea4788',
+              action: 'get',
+              id: body.split('|')[1]
+            }
+          }, function (err, res, body) {
+
+            if (body !== 'CAPCHA_NOT_READY') {
+              clearInterval(interval)
+              create(captchaisNew, body.split('|')[1])
+            }
+            else {
+              // console.log(body.split('|')[0])
+            }
+          });
+        }, 10000)
+      })
+    }
+
+    const anticaptcha = (captchaisNew) => {
+      request({
+        url: 'https://api.anti-captcha.com/createTask',
+        method: 'POST',
+        json: true,
+        data: {
+          clientKey: '5cf44dee27fed739df49a69bb4494b9a',
+          task: {
+            type: 'NoCaptchaTaskProxyless',
+            websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+            websiteURL: captchaisNew ? 'https://spotify.com/fr/signup' : 'https://accounts.spotify.com/fr/login',
+            invisible: captchaisNew ? 0 : 1
+          }
+        }
+      }, function (err, res, response) {
+        console.log(response)
+
+        const interval = setInterval(() => {
+          request({
+            url: 'https://api.anti-captcha.com/getTaskResult',
+            method: 'POST',
+            json: true,
+            data: {
+              clientKey: '5cf44dee27fed739df49a69bb4494b9a',
+              taskId: response.taskId
+            }
+          }, function (err, res, response) {
+            if (response.status !== 'processing') {
+              clearInterval(interval)
+              create(captchaisNew, response.solution.gRecaptchaResponse)
+            }
+            else {
+              // console.log(response)
+            }
+          });
+        }, 10000)
+      });
+    }
+
+    try {
+      var isNew = ++count % 20 === 0
+      const randemail = getRandomInt(emails.length, 0)
+
+      isNew = !isNew && emails.length === 0 ? true : isNew;
+
+      if (playing.length > 150 || isRunning) {
+        return
+      }
+
+      isRunning = true
+
+      const tempmail = isNew
+        ? await nightmare
+          .goto(emailurl)
+          .wait(2000)
+          .evaluate((emailurl) => {
+            switch (emailurl) {
+              case 'https://www.mohmal.com/fr/create/random':
+                return $('[data-email]').attr('data-email')
+              case 'https://www.crazymailing.com':
+                return document.getElementById('email_addr').innerText
+              case 'https://www.tempmailaddress.com':
+                return document.getElementById('email').innerText
+            }
+          }, emailurl)
+        : emails[randemail]
+
+      emails.splice(randemail, 1)
+      currentmail = tempmail
+
+      // if (emails.length === 0) {
+      //   clearInterval(inter)
+      // }
+
+      // setTimeout(() => {
+      captchaFCT ? anticaptcha(isNew) : twocaptcha(isNew);
+      // twocaptcha(isNew);
+      // create(true)
+      // }, getRandomInt(1000 * 60 * 1));
+    }
+    catch (e) {
+      console.log(e)
+      restart()
+    }
+  }
+}
+
+englobe(true)
+englobe(false)
+>>>>>>> f7b81807be0e35705bdaadaf5d00d16f0a72217c
