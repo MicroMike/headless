@@ -105,11 +105,23 @@ const englobe = async (captchaFCT) => {
           .wait(5000)
           .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
           .forward()
-          // .click('.artist-header .btn.btn-black')
-          .wait('.tracklist-play-pause.tracklist-middle-align')
-          .click('.tracklist-play-pause.tracklist-middle-align')
-          .wait(5000)
-          .click('.control-button.spoticon-shuffle-16')
+
+        if (secondTry) {
+          await
+            nightmare
+              .wait('.control-button.spoticon-play-16.control-button--circled')
+              .click('.control-button.spoticon-play-16.control-button--circled')
+              .wait(5000)
+              .click('.control-button.spoticon-shuffle-16')
+        }
+        else {
+          await
+            nightmare
+              .wait('.tracklist-play-pause.tracklist-middle-align')
+              .click('.tracklist-play-pause.tracklist-middle-align')
+              .wait(5000)
+              .click('.control-button.spoticon-shuffle-16')
+        }
 
         if (first) {
           playing.push(currentmail)
