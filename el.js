@@ -103,7 +103,7 @@ const run = async (norepeat) => {
   var month = getRandomInt(12)
   month = month < 10 ? '0' + month : '' + month
 
-  const doItAgain = async (first, currentmail) => {
+  const doItAgain = async (first) => {
     try {
       await nightmare
         .wait(5000)
@@ -246,7 +246,7 @@ const run = async (norepeat) => {
 
   }
 
-  const twocaptcha = (newAccount, tempmail) => {
+  const twocaptcha = (newAccount) => {
     request.post({
       url: 'http://2captcha.com/in.php',
       data: {
@@ -272,7 +272,7 @@ const run = async (norepeat) => {
 
           if (body !== 'CAPCHA_NOT_READY') {
             clearInterval(interval)
-            create(newAccount, body.split('|')[1], tempmail)
+            create(newAccount, body.split('|')[1])
           }
           else {
             console.log(body.split('|')[0])
