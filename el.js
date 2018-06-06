@@ -91,7 +91,7 @@ const englobe = async (captchaFCT) => {
             console.log('Halt')
           }
           else {
-            console.log('Restart')
+            console.log('Error restart')
           }
         })
     }
@@ -99,56 +99,30 @@ const englobe = async (captchaFCT) => {
     var month = getRandomInt(12)
     month = month < 10 ? '0' + month : '' + month
 
-    const doItAgain = async (first, secondTry) => {
+    const doItAgain = async (first) => {
       try {
         await nightmare
           .wait(5000)
           .goto('https://open.spotify.com/' + artists[getRandomInt(artists.length, 0)])
           .forward()
+          .wait('.tracklist-play-pause.tracklist-middle-align')
+          .click('.tracklist-play-pause.tracklist-middle-align')
 
-        if (secondTry) {
-          await
-            nightmare
-              .wait('.control-button.spoticon-play-16.control-button--circled')
-              .click('.control-button.spoticon-play-16.control-button--circled')
-              .wait(5000)
-              .click('.control-button.spoticon-shuffle-16')
-        }
-        else {
-          await
-            nightmare
-              .wait('.tracklist-play-pause.tracklist-middle-align')
-              .click('.tracklist-play-pause.tracklist-middle-align')
-              .wait(5000)
-              .click('.control-button.spoticon-shuffle-16')
-        }
+        if (first) {
+          await nightmare
+            .wait(5000)
+            .click('.control-button.spoticon-shuffle-16')
 
-        if (first || secondTry) {
           playing.push(currentmail)
+
           await console.log('\x1b[34m%s\x1b[0m', 'start :' + currentmail + ' ' + playing.length)
+
           isRunning = false
         }
       }
       catch (e) {
-        const html = await
-          nightmare.evaluate(() => {
-            return document.body.innerHTML
-          })
-
-        fs.appendFile(currentmail + '.txt', html, function (err) {
-          if (err) {
-            return console.log(err);
-          }
-        });
-
-        // if (secondTry) {
         console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
         restart()
-        // }
-        // else {
-        //   console.log('try : ' + currentmail)
-        //   doItAgain(false, true)
-        // }
       }
     }
 
@@ -180,7 +154,7 @@ const englobe = async (captchaFCT) => {
           await nightmare
             .type('form input[name="username"]', currentmail)
             .type('form input[name="password"]', currentmail)
-            .wait(2000)
+            .wait(1000)
             .evaluate((captcha) => {
               window.___grecaptcha_cfg.clients[0].ba.l.callback(captcha)
             }, captcha)
@@ -191,6 +165,7 @@ const englobe = async (captchaFCT) => {
         if (newAccount) {
           await nightmare
             .wait('.welcome-message')
+            .click('.welcome-message')
             .goto(emailurl)
             .forward()
 
@@ -246,7 +221,7 @@ const englobe = async (captchaFCT) => {
         setTimeout(() => {
           clearInterval(doitinter)
           restart(true)
-        }, 1000 * 60 * 60 * 1 + getRandomInt(1000 * 60 * 60 * 4));
+        }, 1000 * 60 * 60 * 5 + getRandomInt(1000 * 60 * 60 * 1));
 
       }
       catch (e) {
@@ -392,4 +367,6 @@ const englobe = async (captchaFCT) => {
 }
 
 englobe(true)
-englobe(false)
+setTimeout(() => {
+  englobe(false)
+}, 500);
