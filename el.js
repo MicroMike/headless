@@ -130,7 +130,7 @@ const run = async (norepeat) => {
     }
   }
 
-  const create = async (newAccount, captcha, currentmail) => {
+  const create = async (newAccount, captcha) => {
     try {
       await nightmare
         .goto(url(newAccount))
