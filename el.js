@@ -123,7 +123,7 @@ const englobe = async (captchaFCT) => {
               .click('.control-button.spoticon-shuffle-16')
         }
 
-        if (first) {
+        if (first || secondTry) {
           playing.push(currentmail)
           await console.log('\x1b[34m%s\x1b[0m', 'start :' + currentmail + ' ' + playing.length)
           isRunning = false
