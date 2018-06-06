@@ -5,7 +5,7 @@ var emails
 var count = 0
 var inter;
 var renewInter = false
-
+var isRunning = false
 
 const getRandomInt = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 1));
@@ -18,6 +18,12 @@ fs.readFile('emails.txt', 'utf8', function (err, data) {
   emails = data.split(',')
 
   run()
+
+  setInterval(() => {
+    if (!isRunning) {
+      run()
+    }
+  }, 1000 * 60 * 1)
 });
 
 const run = async (norepeat) => {
@@ -69,12 +75,16 @@ const run = async (norepeat) => {
   const yn70 = () => (getRandomInt(10, 1) > 7 ? true : false)
 
   const restart = (tempmail) => {
+    isRunning = false
     nightmare
       .halt('Halt', () => {
-        console.log('Halt')
         count--
         if (tempmail) {
+          console.log('Restart')
           emails.push(tempmail)
+        }
+        else {
+          console.log('Halt')
         }
         run(true)
       })
@@ -308,6 +318,8 @@ const run = async (norepeat) => {
     if (count > 150) {
       return
     }
+
+    isRunning = true
 
     const tempmail = isNew
       ? await nightmare
