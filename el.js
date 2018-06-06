@@ -99,7 +99,7 @@ const englobe = async (captchaFCT) => {
     var month = getRandomInt(12)
     month = month < 10 ? '0' + month : '' + month
 
-    const doItAgain = async (first) => {
+    const doItAgain = async (first, secondTry) => {
       try {
         await nightmare
           .wait(5000)
@@ -119,7 +119,12 @@ const englobe = async (captchaFCT) => {
       }
       catch (e) {
         console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
-        restart()
+        if (secondTry) {
+          restart()
+        }
+        else {
+          doItAgain(false, true)
+        }
       }
     }
 
