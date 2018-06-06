@@ -130,11 +130,12 @@ const englobe = async (captchaFCT) => {
         }
       }
       catch (e) {
-        console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
         if (secondTry) {
+          console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
           restart()
         }
         else {
+          console.log('try : ' + currentmail)
           doItAgain(false, true)
         }
       }
