@@ -3,7 +3,7 @@ var request = require('ajax-request');
 
 var emails
 var playing = []
-var count
+var count = 0
 
 const englobe = async (captchaFCT) => {
   var isRunning = false
