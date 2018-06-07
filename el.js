@@ -287,10 +287,16 @@ const englobe = async (captchaFCT) => {
               id: body.split('|')[1]
             }
           }, function (err, res, body) {
+            console.log(body)
 
             if (body !== 'CAPCHA_NOT_READY') {
               clearInterval(interval)
-              create(captchaisNew, body.split('|')[1])
+              if (body) {
+                create(captchaisNew, body.split('|')[1])
+              }
+              else {
+                twocaptcha(captchaisNew)
+              }
             }
             else {
               // console.log(body.split('|')[0])
