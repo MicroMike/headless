@@ -383,7 +383,5 @@ const englobe = async (captchaFCT) => {
 }
 }
 
-englobe(true)
-setTimeout(() => {
-  englobe(false)
-}, 500);
+// englobe(true)
+englobe(false)
