@@ -287,8 +287,6 @@ const englobe = async (captchaFCT) => {
               id: body.split('|')[1]
             }
           }, function (err, res, body) {
-            console.log(body)
-
             if (body !== 'CAPCHA_NOT_READY') {
               clearInterval(interval)
               if (body) {
