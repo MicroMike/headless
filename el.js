@@ -138,7 +138,12 @@ const englobe = async (captchaFCT) => {
       }
       catch (e) {
         console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
-        restart()
+        if (e.match(/navigation/)) {
+          doItAgain()
+        }
+        else {
+          restart()
+        }
       }
     }
 
