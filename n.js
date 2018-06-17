@@ -22,17 +22,21 @@ nightmare
   .type('#password', 'fxl59948@mziqo.com')
   .click('.signin')
   .wait('.nav-search-button')
+  .wait(2000)
   // .goto('https://app.napster.com/artist/micro-beats-and-breaks/album/first-trial')
   .goto('https://app.napster.com/artist/yokem/album/boombeats')
+  .wait(2000)
   .wait('.track-list-header .shuffle-button')
   .click('.track-list-header .shuffle-button')
-  .wait('#endless-switch')
-  .click('#endless-switch')
+  .wait(2000)
+  .wait('.repeat-button')
+  .click('.repeat-button')
   .catch()
 
 setInterval(() => {
+  console.log('refresh')
   nightmare
-    .goto('https://app.napster.com/artist/yokem/album/boombeats')
+    .refresh()
     .wait('.track-list-header .shuffle-button')
     .click('.track-list-header .shuffle-button')
 }, 1000 * 60 * 5);
