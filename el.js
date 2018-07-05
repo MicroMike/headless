@@ -138,7 +138,12 @@ const englobe = async (captchaFCT) => {
       }
       catch (e) {
         console.log('\x1b[31m%s\x1b[0m', e + ' : ' + currentmail)
-        restart()
+        if (e.toString().match(/navigation/)) {
+          doItAgain()
+        }
+        else {
+          restart()
+        }
       }
     }
 
@@ -172,7 +177,7 @@ const englobe = async (captchaFCT) => {
             .type('form input[name="password"]', currentmail)
             .wait(1000)
             .evaluate((captcha) => {
-              window.___grecaptcha_cfg.clients[0].ba.l.callback(captcha)
+              window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
             }, captcha)
         }
 
@@ -286,7 +291,6 @@ const englobe = async (captchaFCT) => {
               id: body.split('|')[1]
             }
           }, function (err, res, body) {
-
             if (body !== 'CAPCHA_NOT_READY') {
               clearInterval(interval)
               if (body) {
