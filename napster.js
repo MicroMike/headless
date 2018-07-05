@@ -103,19 +103,25 @@ const main = async (restart) => {
 
       await console.log('in : ' + account)
 
-      inter = setInterval(async () => {
-        let aUrl = album()
+      inter = setInterval(() => {
+        try {
+          let aUrl = album()
 
-        while (aUrl === nAl) {
-          aUrl = album()
+          while (aUrl === nAl) {
+            aUrl = album()
+          }
+
+          nAl = aUrl
+          // console.log('change : ' + nAl)
+          nightmare
+            .goto(nAl)
+            .wait(5000 + rand(2000))
+            .click(playBtn)
         }
-
-        nAl = aUrl
-        // console.log('change : ' + nAl)
-        await nightmare
-          .goto(nAl)
-          .wait(5000 + rand(2000))
-          .click(playBtn)
+        catch (e) {
+          nightmare.screenshot(account + 'png')
+          console.log(e)
+        }
       }, 1000 * 60 * 5 + rand(1000 * 60 * 5));
 
       setTimeout(async () => {
