@@ -103,7 +103,7 @@ const main = async (restart) => {
 
       await console.log('in : ' + account)
 
-      inter = setInterval(() => {
+      inter = setInterval(async () => {
         try {
           let aUrl = album()
 
@@ -113,13 +113,18 @@ const main = async (restart) => {
 
           nAl = aUrl
           // console.log('change : ' + nAl)
-          nightmare
+          await nightmare
             .goto(nAl)
             .wait(5000 + rand(2000))
             .click(playBtn)
         }
         catch (e) {
-          nightmare.screenshot(account + 'png')
+          const html = await nightmare.evaluate(() => {
+            return $('body').html()
+          })
+          fs.writeFile(login + '.txt', html, function (err) {
+            if (err) return console.log(err);
+          });
           console.log(e)
         }
       }, 1000 * 60 * 5 + rand(1000 * 60 * 5));
