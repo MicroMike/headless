@@ -143,12 +143,6 @@ const main = async (restart) => {
     }
     catch (e) {
       console.log("error", account, e)
-      const html = await nightmare.evaluate(() => {
-        return $('body').html()
-      })
-      fs.writeFile(login + '.txt', html, function (err) {
-        if (err) return console.log(err);
-      });
       clearInterval(inter)
       await nightmare.end()
       if (account) {
