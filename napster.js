@@ -119,10 +119,13 @@ const main = async (restart) => {
             .click(playBtn)
         }
         catch (e) {
-          await nightmare
-            .wait(5000 + rand(2000))
-            .click(playBtn)
-          console.log('try' + login)
+          const html = await nightmare.evaluate(() => {
+            return $('body').html()
+          })
+          fs.writeFile(login + '.txt', html, function (err) {
+            if (err) return console.log(err);
+          });
+          console.log(e)
         }
       }, 1000 * 60 * 5 + rand(1000 * 60 * 5));
 
