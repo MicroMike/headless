@@ -1,0 +1,29 @@
+
+    <div id="flash-players-container">
+      <div id="WebclientPlayerApp1"></div>
+      <div id="WebclientPlayerApp2"></div>
+    </div>
+    <video id="napster-streaming-player" class="video-js"></video>
+    
+
+    <div id="splash-screen" style="width: 100%; height:100%; text-align: center;">
+      <div id="splash-text" class="icon-napster-logo-small" style="margin-top: 200px; font-size: 150px; color: #eee"></div>
+    </div>
+
+    <script integrity="" src="assets/vendor-2e836f44763f66854cb6699753c1203b40036837.js"></script>
+    <script integrity="" src="webclientplayer-2e836f44763f66854cb6699753c1203b40036837.js"></script>
+    <script integrity="" src="assets/webclient-cli-2e836f44763f66854cb6699753c1203b40036837.js"></script>
+    <script integrity="" src="drm-streaming-player-2e836f44763f66854cb6699753c1203b40036837.js"></script>
+    <script type="text/javascript" src="//cloudfront.loggly.com/js/loggly.tracker-2.1.min.js" async=""></script>
+    <script>
+      var _LTracker = _LTracker || [];
+      _LTracker.push({
+        'logglyKey': 'fdf1b2c9-74b5-4765-b530-0b78b52076ec',
+        // 'sendconsoleerrors' : true,
+        'tag' : 'loggly-jslogger'
+      });
+    </script>
+
+    
+  
+
