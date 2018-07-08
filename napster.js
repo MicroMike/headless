@@ -5,9 +5,9 @@ const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
 
-const main = async (restart) => {
+const main = async (restartAccount) => {
   setTimeout(async () => {
-    let account = accounts.shift()
+    let account = restartAccount || accounts.shift()
     let inter
     const Nightmare = require('nightmare')
     const nightmare = Nightmare({
@@ -27,8 +27,8 @@ const main = async (restart) => {
       }
     })
 
-    const push = () => {
-      if (accounts.indexOf(account) < 0) {
+    const push = (e) => {
+      if (e !== 'getout' && accounts.indexOf(account) < 0) {
         accounts.push(account)
       }
     }
@@ -97,6 +97,15 @@ const main = async (restart) => {
         .wait(5000 + rand(2000))
         .goto(nAl)
         .wait(5000 + rand(2000))
+        .evaluate(() => {
+          return $('.unradio').text() || $('.account-issue').text() || $('.single-stream-error').text()
+        })
+
+      if (unradio) {
+        throw 'getout';
+      }
+
+      await nightmare
         .click(playBtn)
         .wait(5000 + rand(2000))
         .click(shuffle)
@@ -104,40 +113,47 @@ const main = async (restart) => {
       await console.log('in : ' + account)
 
       inter = setInterval(async () => {
-        try {
-          let aUrl = album()
+        let tries = 0
+        let aUrl = album()
 
-          while (aUrl === nAl) {
-            aUrl = album()
+        while (aUrl === nAl) {
+          aUrl = album()
+        }
+
+        console.log(nAl, aUrl)
+        nAl = aUrl
+
+        const retry = async () => {
+          try {
+            await nightmare
+              .goto(nAl)
+              .wait(5000 + rand(2000))
+              .click(playBtn)
           }
+          catch (e) {
+            if (tries++ < 3) {
+              setTimeout(() => {
+                retry()
+              }, 5000);
+            }
+            else {
+              console.log('change error')
+            }
+          }
+        }
 
-          nAl = aUrl
-          // console.log('change : ' + nAl)
-          await nightmare
-            .goto(nAl)
-            .wait(5000 + rand(2000))
-            .click(playBtn)
-        }
-        catch (e) {
-          const html = await nightmare.evaluate(() => {
-            return $('body').html()
-          })
-          fs.writeFile(login + '.txt', html, function (err) {
-            if (err) return console.log(err);
-          });
-          console.log(e)
-        }
-      }, 1000 * 60 * 5 + rand(1000 * 60 * 5));
+        retry()
+      }, 1000 * 60 * 15 + rand(1000 * 60 * 10));
 
       setTimeout(async () => {
         console.log('out : ' + account)
         push()
         clearInterval(inter)
         await nightmare.end()
-        main(true)
+        main(account)
       }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-      if (accounts.length && !restart) {
+      if (accounts.length && !restartAccount) {
         main()
       }
     }
@@ -146,13 +162,13 @@ const main = async (restart) => {
       clearInterval(inter)
       await nightmare.end()
       if (account) {
-        push()
+        push(e)
         if (accounts.length) {
           main()
         }
       }
     }
-  }, restart ? rand(1000 * 60 * 60) : 0);
+  }, restartAccount ? rand(1000 * 60 * 60) : 0);
 }
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
