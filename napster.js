@@ -88,7 +88,7 @@ const main = async (restartAccount) => {
       const album = () => albums[rand(albums.length)]
       let nAl = album()
 
-      await nightmare
+      const unradio = await nightmare
         .goto(url)
         .wait(5000 + rand(2000))
         .type(inputs.username, login)
