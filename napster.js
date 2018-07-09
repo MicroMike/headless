@@ -17,7 +17,7 @@ const main = async (restartAccount) => {
       // },
       alwaysOnTop: false,
       waitTimeout: 10000,
-      show: true,
+      show: false,
       typeInterval: 300,
       webPreferences: {
         webSecurity: false,
@@ -33,12 +33,12 @@ const main = async (restartAccount) => {
       }
     }
 
-    try {
-      accountInfo = account.split(':')
-      const player = accountInfo[0]
-      const login = accountInfo[1]
-      const pass = accountInfo[2]
+    accountInfo = account.split(':')
+    const player = accountInfo[0]
+    const login = accountInfo[1]
+    const pass = accountInfo[2]
 
+    try {
       let albums
       let inputs = {
         username: '#username',
@@ -113,7 +113,6 @@ const main = async (restartAccount) => {
       await console.log('in : ' + account)
 
       inter = setInterval(async () => {
-        let tries = 0
         let aUrl = album()
 
         while (aUrl === nAl) {
@@ -123,26 +122,16 @@ const main = async (restartAccount) => {
         console.log(nAl, aUrl)
         nAl = aUrl
 
-        const retry = async () => {
-          try {
-            await nightmare
-              .goto(nAl)
-              .wait(5000 + rand(2000))
-              .click(playBtn)
-          }
-          catch (e) {
-            if (tries++ < 3) {
-              setTimeout(() => {
-                retry()
-              }, 5000);
-            }
-            else {
-              console.log('change error')
-            }
-          }
+        try {
+          await nightmare
+            .goto(nAl)
+            .wait(5000 + rand(2000))
+            .click(playBtn)
         }
-
-        retry()
+        catch (e) {
+          nightmare.screenshot(login + '.png')
+          console.log('change error')
+        }
       }, 1000 * 60 * 15 + rand(1000 * 60 * 10));
 
       setTimeout(async () => {
@@ -154,17 +143,22 @@ const main = async (restartAccount) => {
       }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
       if (accounts.length && !restartAccount) {
-        main()
+        setTimeout(() => {
+          main()
+        }, 1000 * 60 * 5);
       }
     }
     catch (e) {
       console.log("error", account, e)
       clearInterval(inter)
+      await nightmare.screenshot(login + '.png')
       await nightmare.end()
       if (account) {
         push(e)
         if (accounts.length) {
-          main()
+          setTimeout(() => {
+            main(login)
+          }, 1000 * 60 * 5);
         }
       }
     }
