@@ -129,7 +129,7 @@ const main = async (restartAccount) => {
             .click(playBtn)
         }
         catch (e) {
-          nightmare.screenshot(login + '.png')
+          // nightmare.screenshot(login + '.png')
           console.log('change error')
         }
       }, 1000 * 60 * 15 + rand(1000 * 60 * 10));
@@ -151,7 +151,7 @@ const main = async (restartAccount) => {
     catch (e) {
       console.log("error", account, e)
       clearInterval(inter)
-      await nightmare.screenshot(login + '.png')
+      // await nightmare.screenshot(login + '.png')
       await nightmare.end()
       if (account) {
         push(e)
