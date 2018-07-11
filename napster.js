@@ -157,7 +157,7 @@ const main = async (restartAccount) => {
         push(e)
         if (accounts.length) {
           setTimeout(() => {
-            main(login)
+            main(account)
           }, rand(1000 * 60 * 5));
         }
       }
