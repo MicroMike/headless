@@ -54,6 +54,7 @@ const main = async (restartAccount) => {
           url = 'https://app.napster.com/login/'
           loginBtn = '.signin'
           albums = [
+            'https://app.napster.com/artist/yokem/album/house-of-beats',
             'https://app.napster.com/artist/honey/album/just-another-emotion',
             'https://app.napster.com/artist/yokem/album/boombeats',
             'https://app.napster.com/artist/hanke/album/new-york-story',
@@ -131,6 +132,8 @@ const main = async (restartAccount) => {
         catch (e) {
           // nightmare.screenshot(login + '.png')
           console.log('change error')
+          clearInterval(inter)
+          await nightmare.end()
         }
       }, 1000 * 60 * 15 + rand(1000 * 60 * 10));
 
@@ -153,7 +156,7 @@ const main = async (restartAccount) => {
       clearInterval(inter)
       // await nightmare.screenshot(login + '.png')
       await nightmare.end()
-      if (account) {
+      if (account && e !== 'getout') {
         push(e)
         if (accounts.length) {
           setTimeout(() => {
