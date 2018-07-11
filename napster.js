@@ -120,7 +120,7 @@ const main = async (restartAccount) => {
           aUrl = album()
         }
 
-        console.log(nAl, aUrl)
+        // console.log(nAl, aUrl)
         nAl = aUrl
 
         try {
