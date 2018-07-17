@@ -54,7 +54,6 @@ const main = async (restartAccount) => {
           url = 'https://app.napster.com/login/'
           loginBtn = '.signin'
           albums = [
-            'https://app.napster.com/artist/yokem/album/house-of-beats',
             'https://app.napster.com/artist/honey/album/just-another-emotion',
             'https://app.napster.com/artist/yokem/album/boombeats',
             'https://app.napster.com/artist/hanke/album/new-york-story',
