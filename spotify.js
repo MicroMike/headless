@@ -23,11 +23,15 @@ const anticaptcha = (captchaisNew) => {
     }
   }, function (err, res, response) {
     console.log(response)
-    if (response.errorId) {
+    if (response && response.errorId) {
       setTimeout(() => {
         anticaptcha()
       }, 1000 * 60 * 1);
       return;
+    }
+    else if (!response) {
+      console.log(err)
+      anticaptcha()
     }
 
     const interval = setInterval(() => {
