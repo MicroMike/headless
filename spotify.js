@@ -217,7 +217,7 @@ const main = async (restart) => {
           await nightmare
             .click(playBtn)
 
-          console.log(account, 'change ok')
+          console.log(account, 'change ok ' + change + '/' + pause)
         }
         catch (e) {
           console.log(account, 'change error', e)
