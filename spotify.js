@@ -2,6 +2,7 @@ let accounts = []
 let accountsValid = []
 let processing = false;
 let errorcount = 0
+let total
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -174,7 +175,8 @@ const main = async (restart) => {
       }
 
       accountsValid.push(account)
-      await console.log('in : ' + account + ' ' + accountsValid.length - errorcount)
+      total = accountsValid.length - errorcount
+      await console.log('in : ' + account + ' ' + total)
 
       // fs.appendFile('spotifyWhiteList.txt', account + '--' + date + '\r\n', function (err) {
       //   if (err) return console.log(err);
@@ -219,12 +221,13 @@ const main = async (restart) => {
           await nightmare
             .click(playBtn)
 
-          console.log(account, 'change ok ' + change + '/' + pause)
+          console.log(account, 'change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
           if (changeerror) {
             errorcount++
             clearInterval(inter)
+            await nightmare.end()
           }
           console.log(account, 'change error', changeerror ? e : '')
           changeerror = true
