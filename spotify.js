@@ -1,5 +1,6 @@
 let accounts = []
 let accountsValid = []
+let processing = false;
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -8,6 +9,7 @@ const rand = (max, min) => {
 var request = require('ajax-request');
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
+  processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
     method: 'POST',
@@ -208,14 +210,17 @@ const main = async (restart) => {
           if (++change > pause) {
             change = 0
             pause = rand(8) + 2
+            console.log(account, 'change pause')
             return
           }
 
           await nightmare
             .click(playBtn)
+
+          console.log(account, 'change ok')
         }
         catch (e) {
-          console.log(account, e)
+          console.log(account, 'change error', e)
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
@@ -227,21 +232,23 @@ const main = async (restart) => {
       // main(true)
       // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-      if (accounts.length && !restart) {
-        anticaptcha()
-      }
+      processing = false
     }
     catch (e) {
-      console.log("error", account, e)
+      console.log("error", account)
       // accounts.push(account)
       // clearInterval(inter)
-      fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
-        if (err) return console.log(err);
-      });
-      await nightmare.end()
-      if (accounts.length) {
-        anticaptcha()
+      if (e.code === -7) {
+        accounts.unshift(account)
       }
+      else {
+        console.log(e)
+        fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
+          if (err) return console.log(err);
+        });
+      }
+      await nightmare.end()
+      processing = false
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
@@ -252,3 +259,9 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
   // console.log(accounts)
   anticaptcha()
 });
+
+setInterval(() => {
+  if (accounts.length && !processing) {
+    anticaptcha()
+  }
+}, 1000 * 10)
