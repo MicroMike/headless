@@ -26,7 +26,7 @@ const anticaptcha = (captchaisNew) => {
     if (response.errorId) {
       setTimeout(() => {
         anticaptcha()
-      }, 1000 * 60 * 5);
+      }, 1000 * 60 * 1);
       return;
     }
 
