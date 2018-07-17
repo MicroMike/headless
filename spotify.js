@@ -32,6 +32,7 @@ const anticaptcha = (captchaisNew) => {
     else if (!response) {
       console.log(err)
       anticaptcha()
+      return
     }
 
     const interval = setInterval(() => {
@@ -50,8 +51,8 @@ const anticaptcha = (captchaisNew) => {
           main()
         }
         else if (!response) {
-          console.log(err)
           anticaptcha()
+          clearInterval(interval)
         }
       });
     }, 10000)
