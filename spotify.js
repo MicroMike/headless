@@ -156,8 +156,8 @@ const main = async (restart) => {
         throw 'getout'
       }
 
-      await console.log('in : ' + account)
       accountsValid.push(account)
+      await console.log('in : ' + account + ' ' + accountsValid.length)
 
       // fs.appendFile('spotifyWhiteList.txt', account + '--' + date + '\r\n', function (err) {
       //   if (err) return console.log(err);
@@ -174,6 +174,9 @@ const main = async (restart) => {
         .wait(4000 + rand(2000))
         .click(shuffle)
 
+      let change = 0
+      let pause = rand(8) + 2
+
       inter = setInterval(async () => {
         let aUrl = album()
 
@@ -186,6 +189,14 @@ const main = async (restart) => {
         await nightmare
           .goto(nAl)
           .wait(4000 + rand(2000))
+
+        if (++change > pause) {
+          change = 0
+          pause = rand(8) + 2
+          return
+        }
+
+        await nightmare
           .click(playBtn)
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
