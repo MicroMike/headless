@@ -64,6 +64,14 @@ const fs = require('fs');
 const main = async (restart) => {
   setTimeout(async () => {
     let account = accounts.shift()
+    while (accountsValid.indexOf(account) >= 0) {
+      fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
+        if (err) return console.log(err);
+      });
+      if (accounts.length) {
+        account = accounts.shift()
+      }
+    }
     let inter
     const Nightmare = require('nightmare')
     const nightmare = Nightmare({
