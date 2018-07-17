@@ -192,6 +192,7 @@ const main = async (restart) => {
 
       let change = 0
       let pause = rand(8) + 2
+      let changeerror
 
       inter = setInterval(async () => {
         try {
@@ -220,7 +221,8 @@ const main = async (restart) => {
           console.log(account, 'change ok ' + change + '/' + pause)
         }
         catch (e) {
-          console.log(account, 'change error', e)
+          console.log(account, 'change error', changeerror ? e : '')
+          changeerror = true
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
