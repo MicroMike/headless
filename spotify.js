@@ -40,13 +40,14 @@ const anticaptcha = (captchaisNew) => {
           taskId: response.taskId
         }
       }, function (err, res, response) {
-        if (response.status !== 'processing') {
+        if (response && response.status !== 'processing') {
           clearInterval(interval)
           captcha = response.solution.gRecaptchaResponse
           main()
         }
-        else {
-          // console.log(response)
+        else if (!response) {
+          console.log(err)
+          anticaptcha()
         }
       });
     }, 10000)
