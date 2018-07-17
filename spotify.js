@@ -192,26 +192,31 @@ const main = async (restart) => {
       let pause = rand(8) + 2
 
       inter = setInterval(async () => {
-        let aUrl = album()
+        try {
+          let aUrl = album()
 
-        while (aUrl === nAl) {
-          aUrl = album()
+          while (aUrl === nAl) {
+            aUrl = album()
+          }
+
+          nAl = aUrl
+          // console.log('change : ' + nAl)
+          await nightmare
+            .goto(nAl)
+            .wait(4000 + rand(2000))
+
+          if (++change > pause) {
+            change = 0
+            pause = rand(8) + 2
+            return
+          }
+
+          await nightmare
+            .click(playBtn)
         }
-
-        nAl = aUrl
-        // console.log('change : ' + nAl)
-        await nightmare
-          .goto(nAl)
-          .wait(4000 + rand(2000))
-
-        if (++change > pause) {
-          change = 0
-          pause = rand(8) + 2
-          return
+        catch (e) {
+          console.log(account, e)
         }
-
-        await nightmare
-          .click(playBtn)
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
       // setTimeout(async () => {
