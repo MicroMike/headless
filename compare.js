@@ -9,22 +9,17 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
   one = data.split(',')
 });
 
-fs.readFile('compare.txt', 'utf8', function (err, data) {
-  if (err) return console.log(err);
-  two = data.split(',')
-});
-
-setTimeout(() => {
+setTimeout(async () => {
   while (one.length) {
     let account = one.shift()
     if (one.indexOf(account) >= 0) {
       console.log(account)
-      fs.writeFile('compare.txt', valid.concat(one), function (err) {
-        if (err) return console.log(err);
-      });
     }
     else {
       valid.push(account)
     }
   }
+  fs.writeFile('spotifyAccount.txt', valid, function (err) {
+    if (err) return console.log(err);
+  });
 }, 5000);

@@ -1,14 +1,20 @@
+const fs = require('fs');
+var request = require('ajax-request');
+
 let accounts = []
 let accountsValid = []
 let processing = false;
-let errorcount = 0
 let total
+let albums = [
+  'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
+  'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
+  'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
+]
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
 
-var request = require('ajax-request');
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
   processing = true;
@@ -63,7 +69,6 @@ const anticaptcha = (captchaisNew) => {
   });
 }
 
-const fs = require('fs');
 
 const main = async (restart) => {
   setTimeout(async () => {
@@ -84,7 +89,7 @@ const main = async (restart) => {
       //   mode: 'detach'
       // },
       alwaysOnTop: false,
-      waitTimeout: 1000 * 30,
+      waitTimeout: 1000 * 60,
       show: true,
       typeInterval: 300,
       webPreferences: {
@@ -101,7 +106,6 @@ const main = async (restart) => {
       const login = accountInfo[1]
       const pass = accountInfo[2]
 
-      let albums
       let inputs = {
         username: '#username',
         password: '#password'
@@ -109,43 +113,12 @@ const main = async (restart) => {
       let url
       let loginBtn
       let playBtn
-      let shuffle
 
-      switch (player) {
-        case 'napster':
-          url = 'https://app.napster.com/login/'
-          loginBtn = '.signin'
-          albums = [
-            'https://app.napster.com/artist/honey/album/just-another-emotion',
-            'https://app.napster.com/artist/yokem/album/boombeats',
-            'https://app.napster.com/artist/hanke/album/new-york-story',
-          ]
-          playBtn = '.track-list-header .shuffle-button'
-          shuffle = '.repeat-button'
-          break
-        case 'tidal':
-          url = 'https://listen.tidal.com/login'
-          loginBtn = '.js-login-form button'
-          albums = [
-            'https://listen.tidal.com/album/88716570',
-          ]
-          playBtn = '...'
-          break
-        case 'spotify':
-          url = 'https://accounts.spotify.com/dk/login'
-          loginBtn = '#login-button'
-          albums = [
-            'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
-            'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
-            'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
-          ]
-          playBtn = '.tracklist-play-pause.tracklist-middle-align'
-          shuffle = '.spoticon-shuffle-16'
-          inputs.username = 'form input[name="username"]'
-          inputs.password = 'form input[name="password"]'
-          break
-        default:
-      }
+      url = 'https://accounts.spotify.com/dk/login'
+      loginBtn = '#login-button'
+      playBtn = '.tracklist-play-pause.tracklist-middle-align'
+      inputs.username = 'form input[name="username"]'
+      inputs.password = 'form input[name="password"]'
 
       const album = () => albums[rand(albums.length)]
       let nAl = album()
@@ -175,27 +148,33 @@ const main = async (restart) => {
       }
 
       accountsValid.push(account)
-      total = accountsValid.length - errorcount
-      await console.log('in : ' + account + ' ' + total)
 
-      // fs.appendFile('spotifyWhiteList.txt', account + '--' + date + '\r\n', function (err) {
-      //   if (err) return console.log(err);
-      // });
-
-      // fs.writeFile('spotifyAccount.txt', accounts.join(','), function (err) {
-      //   if (err) return console.log(err);
-      // });
-
-      await nightmare
+      let already = await nightmare
         .goto(nAl)
         .wait(4000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.connect-bar')
+        })
+
+      if (already) {
+        throw {
+          code: 1
+        }
+      }
+
+      await nightmare
         .click(playBtn)
         .wait(4000 + rand(2000))
-        .click(shuffle)
+        .evaluate(() => {
+          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+          document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          document.querySelector(repeat) && document.querySelector(repeat).click()
+        })
+      // .click(shuffle)
 
       let change = 0
       let pause = rand(8) + 2
-      let changeerror
 
       inter = setInterval(async () => {
         try {
@@ -207,30 +186,39 @@ const main = async (restart) => {
 
           nAl = aUrl
           // console.log('change : ' + nAl)
-          await nightmare
+          let interalready = await nightmare
             .goto(nAl)
             .wait(4000 + rand(2000))
+            .evaluate(() => {
+              return document.querySelector('.connect-bar')
+            })
+
+          if (interalready) {
+            throw {
+              code: 1
+            }
+          }
 
           if (++change > pause) {
             change = 0
             pause = rand(8) + 2
-            console.log(account, 'change pause')
+            // console.log(account, 'change pause')
             return
           }
 
           await nightmare
             .click(playBtn)
 
-          console.log(account, 'change ok ' + change + '/' + pause + ' : ' + total)
+          // console.log(account, 'change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
-          if (changeerror) {
-            errorcount++
-            clearInterval(inter)
-            await nightmare.end()
+          console.log('error ' + account + ' ' + e.code)
+          accountsValid = accountsValid.filter(a => a !== account)
+          if (e.code) {
+            accounts.push(account)
           }
-          console.log(account, 'change error', changeerror ? e : '')
-          changeerror = true
+          clearInterval(inter)
+          await nightmare.end()
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
@@ -245,14 +233,12 @@ const main = async (restart) => {
       processing = false
     }
     catch (e) {
-      console.log("error", account)
-      // accounts.push(account)
-      // clearInterval(inter)
-      if (e.code === -7) {
-        accounts.unshift(account)
+      console.log('error ' + account + ' ' + e.code)
+      accountsValid = accountsValid.filter(a => a !== account)
+      if (e.code) {
+        accounts.push(account)
       }
       else {
-        console.log(e)
         fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
           if (err) return console.log(err);
         });
@@ -275,3 +261,19 @@ setInterval(() => {
     anticaptcha()
   }
 }, 1000 * 10)
+
+setInterval(() => {
+  console.log('total ' + accountsValid.length, 'albums ' + albums.length)
+
+  fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    let tempaccounts = data.split(',')
+    accounts = accounts.filter(account => accountsValid.indexOf(account) === -1)
+    // console.log(accounts)
+  });
+
+  fs.readFile('albums.txt', 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    albums = data.split(',')
+  });
+}, 1000 * 60 * 60);
