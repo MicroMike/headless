@@ -55,12 +55,18 @@ const anticaptcha = (captchaisNew) => {
           taskId: response.taskId
         }
       }, function (err, res, response) {
-        if (response && response.status !== 'processing') {
-          clearInterval(interval)
-          captcha = response.solution.gRecaptchaResponse
-          main()
+        try {
+          if (response && response.status !== 'processing') {
+            clearInterval(interval)
+            captcha = response.solution.gRecaptchaResponse
+            main()
+          }
+          else if (!response) {
+            anticaptcha()
+            clearInterval(interval)
+          }
         }
-        else if (!response) {
+        catch (e) {
           anticaptcha()
           clearInterval(interval)
         }
@@ -212,10 +218,13 @@ const main = async (restart) => {
           // console.log(account, 'change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
-          console.log('error ' + account + ' ' + e.code)
+          console.log('loop error ' + account + ' ' + e.code)
           accountsValid = accountsValid.filter(a => a !== account)
           if (e.code) {
             accounts.push(account)
+          }
+          else {
+            console.log(e)
           }
           clearInterval(inter)
           await nightmare.end()
@@ -239,6 +248,7 @@ const main = async (restart) => {
         accounts.push(account)
       }
       else {
+        console.log(e)
         fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
           if (err) return console.log(err);
         });
