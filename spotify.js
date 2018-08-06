@@ -154,7 +154,7 @@ const main = async (restart) => {
       // }
 
       accountsValid.push(account)
-      if (accountsValid.length === 1 || accountsValid.length % 10) {
+      if (accountsValid.length === 1 || accountsValid.length % 10 === 0) {
         console.log('total ' + accountsValid.length)
       }
 
