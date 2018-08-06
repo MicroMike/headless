@@ -32,7 +32,6 @@ const anticaptcha = (captchaisNew) => {
       }
     }
   }, function (err, res, response) {
-    // console.log(response)
     if (response && response.errorId) {
       setTimeout(() => {
         anticaptcha()
