@@ -149,11 +149,14 @@ const main = async (restart) => {
           return /free/.test($('.subscription-status').html())
         })
 
-      if (free) {
-        throw 'getout'
-      }
+      // if (free) {
+      //   throw 'getout'
+      // }
 
       accountsValid.push(account)
+      if (accountsValid.length === 1 || accountsValid.length % 10) {
+        console.log('total ' + accountsValid.length)
+      }
 
       let already = await nightmare
         .goto(nAl)
@@ -162,11 +165,11 @@ const main = async (restart) => {
           return document.querySelector('.connect-bar')
         })
 
-      if (already) {
-        throw {
-          code: 1
-        }
-      }
+      // if (already) {
+      //   throw {
+      //     code: 1
+      //   }
+      // }
 
       await nightmare
         .click(playBtn)
@@ -273,17 +276,19 @@ setInterval(() => {
 }, 1000 * 10)
 
 setInterval(() => {
-  console.log('total ' + accountsValid.length, 'albums ' + albums.length)
+  console.log('total ' + accountsValid.length)
 
   fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     let tempaccounts = data.split(',')
     accounts = accounts.filter(account => accountsValid.indexOf(account) === -1)
+    console.log('new accounts ' + accounts.length)
     // console.log(accounts)
   });
 
   fs.readFile('albums.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     albums = data.split(',')
+    console.log('albums ' + albums.length)
   });
-}, 1000 * 60 * 60);
+}, 1000 * 60 * 15);
