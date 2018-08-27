@@ -278,7 +278,7 @@ setInterval(() => {
   fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     let tempaccounts = data.split(',')
-    accounts = accounts.filter(account => accountsValid.indexOf(account) === -1)
+    accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
     console.log('new accounts ' + accounts.length)
     // console.log(accounts)
   });
