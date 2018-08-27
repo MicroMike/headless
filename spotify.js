@@ -161,19 +161,17 @@ const main = async (restart) => {
         console.log('total ' + accountsValid.length)
       }
 
-      let already = await nightmare
+      let noplay = await nightmare
         .wait(4000 + rand(2000))
         .goto(nAl)
         .wait(4000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.connect-bar')
+          return document.querySelector('.tracklist-play-pause.tracklist-middle-align')
         })
 
-      // if (already) {
-      //   throw {
-      //     code: 1
-      //   }
-      // }
+      if (noplay) {
+        throw 'noplay'
+      }
 
       const errorhtml = await nightmare
         // .click(playBtn)
@@ -205,7 +203,7 @@ const main = async (restart) => {
       }
 
       let change = 0
-      let pause = rand(8) + 2
+      let pause = rand(5) + 2
 
       inter = setInterval(async () => {
         try {
