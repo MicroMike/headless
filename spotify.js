@@ -175,16 +175,38 @@ const main = async (restart) => {
       //   }
       // }
 
-      await nightmare
-        .click(playBtn)
+      const errorhtml = await nightmare
+        // .click(playBtn)
         .wait(4000 + rand(2000))
         .evaluate(() => {
           let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
           let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-          document.querySelector(repeat) && document.querySelector(repeat).click()
+          let playBtn = '.tracklist-play-pause.tracklist-middle-align'
+
+          if (!document.querySelector(playBtn)) {
+            return document.querySelector('body').innerHTML
+          }
+
+          document.querySelector(playBtn) && document.querySelector(playBtn).click()
+
+          setTimeout(() => {
+            document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          }, 1000);
+
+          setTimeout(() => {
+            document.querySelector(repeat) && document.querySelector(repeat).click()
+          }, 2000);
         })
-      // .click(shuffle)
+
+      if (errorhtml) {
+        fs.writeFile(account + '-error.txt', errorhtml, function (err) {
+          if (err) return console.log(err);
+        });
+
+        throw {
+          code: 1
+        }
+      }
 
       let change = 0
       let pause = rand(8) + 2
