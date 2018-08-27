@@ -273,7 +273,7 @@ setInterval(() => {
   if (accounts.length && !processing) {
     anticaptcha()
   }
-}, 1000 * 30 + rand(1000 * 60))
+}, 1000 * 30)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length)
