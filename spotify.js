@@ -33,16 +33,12 @@ const anticaptcha = (captchaisNew) => {
     }
   }, function (err, res, response) {
     // console.log(response)
-    if (response && response.errorId) {
-      console.log(response)
+    if (!response || response.errorId) {
+      console.log(response || 'no response')
       setTimeout(() => {
         anticaptcha()
       }, 1000 * 60 * 1);
       return;
-    }
-    else if (!response) {
-      anticaptcha()
-      return
     }
 
     const interval = setInterval(() => {
@@ -140,14 +136,14 @@ const main = async (restart) => {
         }, captcha)
       // .click(loginBtn)
 
-      const free = await nightmare
-        .wait(4000 + rand(2000))
-        .goto('https://www.spotify.com/dk/account/overview/')
-        .wait('#js-navbar')
-        .wait(4000 + rand(2000))
-        .evaluate(() => {
-          return /free/.test($('.subscription-status').html())
-        })
+      // const free = await nightmare
+      //   .wait(4000 + rand(2000))
+      //   .goto('https://www.spotify.com/dk/account/overview/')
+      //   .wait('#js-navbar')
+      //   .wait(4000 + rand(2000))
+      //   .evaluate(() => {
+      //     return /free/.test($('.subscription-status').html())
+      //   })
 
       // if (free) {
       //   throw 'getout'
@@ -159,6 +155,7 @@ const main = async (restart) => {
       }
 
       let already = await nightmare
+        .wait(4000 + rand(2000))
         .goto(nAl)
         .wait(4000 + rand(2000))
         .evaluate(() => {
@@ -202,15 +199,15 @@ const main = async (restart) => {
               return document.querySelector('.connect-bar')
             })
 
-          if (interalready) {
-            throw {
-              code: 1
-            }
-          }
+          // if (interalready) {
+          //   throw {
+          //     code: 1
+          //   }
+          // }
 
           if (++change > pause) {
             change = 0
-            pause = rand(8) + 2
+            pause = rand(4) + 2
             // console.log(account, 'change pause')
             return
           }
