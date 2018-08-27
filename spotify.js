@@ -188,14 +188,10 @@ const main = async (restart) => {
           }
 
           document.querySelector(playBtn) && document.querySelector(playBtn).click()
+          document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          document.querySelector(repeat) && document.querySelector(repeat).click()
 
-          setTimeout(() => {
-            document.querySelector(shuffle) && document.querySelector(shuffle).click()
-          }, 1000);
-
-          setTimeout(() => {
-            document.querySelector(repeat) && document.querySelector(repeat).click()
-          }, 2000);
+          return
         })
 
       if (errorhtml) {
@@ -224,9 +220,9 @@ const main = async (restart) => {
           let interalready = await nightmare
             .goto(nAl)
             .wait(4000 + rand(2000))
-            .evaluate(() => {
-              return document.querySelector('.connect-bar')
-            })
+          // .evaluate(() => {
+          //   return document.querySelector('.connect-bar')
+          // })
 
           // if (interalready) {
           //   throw {
@@ -250,6 +246,7 @@ const main = async (restart) => {
           console.log('loop error ' + account + ' ' + e.code)
           accountsValid = accountsValid.filter(a => a !== account)
           if (e.code) {
+            console.log(e)
             accounts.push(account)
           }
           else {
@@ -300,7 +297,7 @@ setInterval(() => {
   if (accounts.length && !processing) {
     anticaptcha()
   }
-}, 1000 * 10)
+}, 1000 * 30 + rand(1000 * 60))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length)
