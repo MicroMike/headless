@@ -165,13 +165,6 @@ const main = async (restart) => {
         .wait(4000 + rand(2000))
         .goto(nAl)
         .wait(4000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.tracklist-play-pause.tracklist-middle-align')
-        })
-
-      if (noplay) {
-        throw 'noplay'
-      }
 
       const errorhtml = await nightmare
         // .click(playBtn)
