@@ -75,14 +75,14 @@ const anticaptcha = (captchaisNew) => {
 const main = async (restart) => {
   setTimeout(async () => {
     let account = accounts.shift()
-    while (accountsValid.indexOf(account) >= 0) {
-      fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
-        if (err) return console.log(err);
-      });
-      if (accounts.length) {
-        account = accounts.shift()
-      }
-    }
+    // while (accountsValid.indexOf(account) >= 0) {
+    //   fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
+    //     if (err) return console.log(err);
+    //   });
+    //   if (accounts.length) {
+    //     account = accounts.shift()
+    //   }
+    // }
     let inter
     const Nightmare = require('nightmare')
     const nightmare = Nightmare({
@@ -245,16 +245,16 @@ const main = async (restart) => {
       console.log('error ' + account + ' ' + e.code)
       accountsValid = accountsValid.filter(a => a !== account)
       if (e.code) {
+        console.log(e)
         accounts.push(account)
       }
       else {
         console.log(e)
-        fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
-          if (err) return console.log(err);
-        });
+        // fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
+        //   if (err) return console.log(err);
+        // });
       }
       await nightmare.end()
-      processing = false
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
@@ -274,14 +274,15 @@ setInterval(() => {
 
 setInterval(() => {
   console.log('total ' + accountsValid.length)
+  console.log('accounts ' + accounts.length)
 
-  fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    let tempaccounts = data.split(',')
-    accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-    console.log('new accounts ' + accounts.length)
-    // console.log(accounts)
-  });
+  // fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
+  //   if (err) return console.log(err);
+  //   let tempaccounts = data.split(',')
+  //   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
+  //   console.log('new accounts ' + accounts.length)
+  //   // console.log(accounts)
+  // });
 
   fs.readFile('albums.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
