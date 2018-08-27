@@ -243,13 +243,7 @@ const main = async (restart) => {
         catch (e) {
           console.log('loop error ' + account + ' ' + e.code)
           accountsValid = accountsValid.filter(a => a !== account)
-          if (e.code) {
-            console.log(e)
-            accounts.push(account)
-          }
-          else {
-            console.log(e)
-          }
+          console.log(e)
           clearInterval(inter)
           await nightmare.end()
         }
@@ -268,16 +262,7 @@ const main = async (restart) => {
     catch (e) {
       console.log('error ' + account + ' ' + e.code)
       accountsValid = accountsValid.filter(a => a !== account)
-      if (e.code) {
-        console.log(e)
-        accounts.push(account)
-      }
-      else {
-        console.log(e)
-        // fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
-        //   if (err) return console.log(err);
-        // });
-      }
+      console.log(e)
       await nightmare.end()
       processing = false
     }
