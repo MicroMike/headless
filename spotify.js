@@ -4,6 +4,7 @@ var request = require('ajax-request');
 let accounts = []
 let accountsValid = []
 let processing = false;
+let onecaptcha = false;
 let total
 let albums = [
   'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
@@ -17,6 +18,7 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
+  if (onecaptcha) { return }
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -41,6 +43,8 @@ const anticaptcha = (captchaisNew) => {
       return;
     }
 
+    onecaptcha = true;
+
     const interval = setInterval(() => {
       request({
         url: 'https://api.anti-captcha.com/getTaskResult',
@@ -53,16 +57,19 @@ const anticaptcha = (captchaisNew) => {
       }, function (err, res, response) {
         try {
           if (response && response.status !== 'processing') {
+            onecaptcha = false;
             clearInterval(interval)
             captcha = response.solution.gRecaptchaResponse
             main()
           }
           else if (!response) {
+            onecaptcha = false;
             anticaptcha()
             clearInterval(interval)
           }
         }
         catch (e) {
+          onecaptcha = false;
           anticaptcha()
           clearInterval(interval)
         }
@@ -255,6 +262,7 @@ const main = async (restart) => {
         // });
       }
       await nightmare.end()
+      processing = false
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
