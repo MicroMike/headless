@@ -158,7 +158,7 @@ const main = async (restart) => {
 
       accountsValid.push(account)
       if (accountsValid.length === 1 || accountsValid.length % 10 === 0) {
-        console.log('total ' + accountsValid.length)
+        // console.log('total ' + accountsValid.length)
       }
 
       let noplay = await nightmare
@@ -179,20 +179,27 @@ const main = async (restart) => {
           }
 
           document.querySelector(playBtn) && document.querySelector(playBtn).click()
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-          document.querySelector(repeat) && document.querySelector(repeat).click()
+          setTimeout(() => {
+            document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          }, 1000);
+          setTimeout(() => {
+            document.querySelector(repeat) && document.querySelector(repeat).click()
+          }, 2000);
 
           return
         })
 
       if (errorhtml) {
-        fs.writeFile(account + '-error.txt', errorhtml, function (err) {
-          if (err) return console.log(err);
-        });
+        // fs.writeFile(account + '-error.txt', errorhtml, function (err) {
+        //   if (err) return console.log(err);
+        // });
 
         throw {
-          code: 1
+          code: -7
         }
+
+        processing = false
+        return
       }
 
       let change = 0
@@ -224,21 +231,22 @@ const main = async (restart) => {
           if (++change > pause) {
             change = 0
             pause = rand(4) + 2
-            // console.log(account, 'change pause')
+            console.log(account, 'change pause')
             return
           }
 
           await nightmare
             .click(playBtn)
 
-          // console.log(account, 'change ok ' + change + '/' + pause + ' : ' + total)
+          console.log(username + ' change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
-          console.log('loop error ' + account + ' ' + e.code)
-          accountsValid = accountsValid.filter(a => a !== account)
-          console.log(e)
-          clearInterval(inter)
-          await nightmare.end()
+          console.log('loop error ' + username + ' ' + e.code)
+          if (e.code !== -7) {
+            accountsValid = accountsValid.filter(a => a !== account)
+            clearInterval(inter)
+            await nightmare.end()
+          }
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
@@ -250,14 +258,19 @@ const main = async (restart) => {
       // main(true)
       // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
+      console.log('ok' + username)
       processing = false
     }
     catch (e) {
-      console.log('error ' + account + ' ' + e.code)
+      console.log('error ' + username)
+      if (e.code === -7) {
+        accounts.unshift(account)
+      }
+      else if (e.code !== -1) {
+        console.log(e.code)
+      }
       accountsValid = accountsValid.filter(a => a !== account)
-      console.log(e)
       await nightmare.end()
-      processing = false
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
@@ -276,16 +289,17 @@ setInterval(() => {
 }, 1000 * 30)
 
 setInterval(() => {
-  console.log('total ' + accountsValid.length)
-  console.log('accounts ' + accounts.length)
+  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
+}, 1000 * 60 * 5);
 
-  // fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
-  //   if (err) return console.log(err);
-  //   let tempaccounts = data.split(',')
-  //   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-  //   console.log('new accounts ' + accounts.length)
-  //   // console.log(accounts)
-  // });
+// fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
+//   if (err) return console.log(err);
+//   let tempaccounts = data.split(',')
+//   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
+//   console.log('new accounts ' + accounts.length)
+//   // console.log(accounts)
+// });
+setInterval(() => {
 
   fs.readFile('albums.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
