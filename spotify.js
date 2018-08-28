@@ -256,8 +256,9 @@ const main = async (restart) => {
       // main(true)
       // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-      console.log('ok' + login)
+      console.log('ok ' + login)
       processing = false
+      anticaptcha()
     }
     catch (e) {
       console.log('error ' + login)
@@ -278,13 +279,14 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
   // console.log(accounts)
-
-  setInterval(() => {
-    if (accounts.length && !processing && !onecaptcha) {
-      anticaptcha()
-    }
-  }, 1000 * 30)
+  anticaptcha()
 });
+
+setInterval(() => {
+  if (accounts.length && !processing && !onecaptcha) {
+    // anticaptcha()
+  }
+}, 1000 * 30)
 
 
 setInterval(() => {
