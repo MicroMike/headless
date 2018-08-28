@@ -238,10 +238,10 @@ const main = async (restart) => {
           await nightmare
             .click(playBtn)
 
-          console.log(inputs.username + ' change ok ' + change + '/' + pause + ' : ' + total)
+          console.log(login + ' change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
-          console.log('loop error ' + inputs.username + ' ' + e.code)
+          console.log('loop error ' + login + ' ' + e.code)
           if (e.code !== -7) {
             accountsValid = accountsValid.filter(a => a !== account)
             clearInterval(inter)
@@ -258,11 +258,11 @@ const main = async (restart) => {
       // main(true)
       // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-      console.log('ok' + inputs.username)
+      console.log('ok' + login)
       processing = false
     }
     catch (e) {
-      console.log('error ' + inputs.username)
+      console.log('error ' + login)
       if (e.code === -7) {
         accounts.unshift(account)
       }
