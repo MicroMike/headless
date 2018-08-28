@@ -3,6 +3,7 @@ var request = require('ajax-request');
 
 let accounts = []
 let accountsValid = []
+let accountsInvalid = []
 let processing = false;
 let onecaptcha = false;
 let total
@@ -79,7 +80,6 @@ const anticaptcha = (captchaisNew) => {
 
 
 const main = async (restart) => {
-  let temp
   let account = accounts.shift()
   // while (accountsValid.indexOf(account) >= 0) {
   //   fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
@@ -264,10 +264,10 @@ const main = async (restart) => {
   }
   catch (e) {
     console.log('error ' + login + ' ' + e.code)
-    if (!temp) {
+    if (accountsInvalid.indexOf(account) < 0) {
       accounts.unshift(account)
     }
-    temp = account
+    accountsInvalid.push(account)
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
