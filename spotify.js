@@ -18,7 +18,7 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
-  if (onecaptcha) { return }
+  if (onecaptcha || processing) { return }
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -37,9 +37,8 @@ const anticaptcha = (captchaisNew) => {
     // console.log(response)
     if (!response || response.errorId) {
       console.log(response || 'no response')
-      setTimeout(() => {
-        anticaptcha()
-      }, 1000 * 60 * 1);
+      processing = false
+      onecaptcha = false
       return;
     }
 
@@ -65,13 +64,13 @@ const anticaptcha = (captchaisNew) => {
           else if (!response) {
             clearInterval(interval)
             onecaptcha = false;
-            anticaptcha()
+            processing = false;
           }
         }
         catch (e) {
           clearInterval(interval)
           onecaptcha = false;
-          anticaptcha()
+          processing = false;
         }
       });
     }, 10000)
@@ -198,8 +197,6 @@ const main = async (restart) => {
         throw {
           code: -7
         }
-
-        return
       }
 
       let change = 0
@@ -247,7 +244,6 @@ const main = async (restart) => {
             clearInterval(inter)
             await nightmare.end()
             processing = false
-            await anticaptcha()
           }
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
@@ -262,7 +258,6 @@ const main = async (restart) => {
 
       console.log('ok' + login)
       processing = false
-      await anticaptcha()
     }
     catch (e) {
       console.log('error ' + login)
@@ -275,7 +270,6 @@ const main = async (restart) => {
       accountsValid = accountsValid.filter(a => a !== account)
       await nightmare.end()
       processing = false
-      await anticaptcha()
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
@@ -284,14 +278,14 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
   // console.log(accounts)
-  anticaptcha()
+
+  setInterval(() => {
+    if (accounts.length && !processing && !onecaptcha) {
+      anticaptcha()
+    }
+  }, 1000 * 30)
 });
 
-setInterval(() => {
-  if (accounts.length && !processing && !onecaptcha) {
-    anticaptcha()
-  }
-}, 1000 * 60 * 10)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
