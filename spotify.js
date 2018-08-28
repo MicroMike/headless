@@ -25,7 +25,7 @@ const anticaptcha = (captchaisNew) => {
     method: 'POST',
     json: true,
     data: {
-      clientKey: '5cf44dee27fed739df49a69bb4494b9a',
+      clientKey: '21648811563096fd1970c47f55b3d548',
       task: {
         type: 'NoCaptchaTaskProxyless',
         websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
