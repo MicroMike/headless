@@ -247,7 +247,7 @@ const main = async (restart) => {
             clearInterval(inter)
             await nightmare.end()
             processing = false
-            anticaptcha()
+            await anticaptcha()
           }
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
@@ -262,7 +262,7 @@ const main = async (restart) => {
 
       console.log('ok' + login)
       processing = false
-      anticaptcha()
+      await anticaptcha()
     }
     catch (e) {
       console.log('error ' + login)
@@ -275,7 +275,7 @@ const main = async (restart) => {
       accountsValid = accountsValid.filter(a => a !== account)
       await nightmare.end()
       processing = false
-      anticaptcha()
+      await anticaptcha()
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
