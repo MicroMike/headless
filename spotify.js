@@ -260,7 +260,7 @@ const main = async (restart) => {
     // main(true)
     // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-    console.log('ok ' + login)
+    // console.log('ok ' + login)
   }
   catch (e) {
     console.log('error ' + login + ' ' + e.code)
