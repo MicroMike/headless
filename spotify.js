@@ -109,25 +109,26 @@ const main = async (restart) => {
       }
     })
 
+    accountInfo = account.split(':')
+    const player = accountInfo[0]
+    const login = accountInfo[1]
+    const pass = accountInfo[2]
+
+    let inputs = {
+      username: '#username',
+      password: '#password'
+    }
+    let url
+    let loginBtn
+    let playBtn
+
+    url = 'https://accounts.spotify.com/dk/login'
+    loginBtn = '#login-button'
+    playBtn = '.tracklist-play-pause.tracklist-middle-align'
+    inputs.username = 'form input[name="username"]'
+    inputs.password = 'form input[name="password"]'
+
     try {
-      accountInfo = account.split(':')
-      const player = accountInfo[0]
-      const login = accountInfo[1]
-      const pass = accountInfo[2]
-
-      let inputs = {
-        username: '#username',
-        password: '#password'
-      }
-      let url
-      let loginBtn
-      let playBtn
-
-      url = 'https://accounts.spotify.com/dk/login'
-      loginBtn = '#login-button'
-      playBtn = '.tracklist-play-pause.tracklist-middle-align'
-      inputs.username = 'form input[name="username"]'
-      inputs.password = 'form input[name="password"]'
 
       const album = () => albums[rand(albums.length)]
       let nAl = album()
@@ -237,10 +238,10 @@ const main = async (restart) => {
           await nightmare
             .click(playBtn)
 
-          console.log(username + ' change ok ' + change + '/' + pause + ' : ' + total)
+          console.log(inputs.username + ' change ok ' + change + '/' + pause + ' : ' + total)
         }
         catch (e) {
-          console.log('loop error ' + username + ' ' + e.code)
+          console.log('loop error ' + inputs.username + ' ' + e.code)
           if (e.code !== -7) {
             accountsValid = accountsValid.filter(a => a !== account)
             clearInterval(inter)
@@ -257,11 +258,11 @@ const main = async (restart) => {
       // main(true)
       // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
 
-      console.log('ok' + username)
+      console.log('ok' + inputs.username)
       processing = false
     }
     catch (e) {
-      console.log('error ' + username)
+      console.log('error ' + inputs.username)
       if (e.code === -7) {
         accounts.unshift(account)
       }
@@ -269,7 +270,7 @@ const main = async (restart) => {
         console.log(e.code)
       }
       accountsValid = accountsValid.filter(a => a !== account)
-      processing = false      
+      processing = false
       await nightmare.end()
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
