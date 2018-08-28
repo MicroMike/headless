@@ -57,21 +57,21 @@ const anticaptcha = (captchaisNew) => {
       }, function (err, res, response) {
         try {
           if (response && response.status !== 'processing') {
-            onecaptcha = false;
             clearInterval(interval)
+            onecaptcha = false;
             captcha = response.solution.gRecaptchaResponse
             main()
           }
           else if (!response) {
+            clearInterval(interval)
             onecaptcha = false;
             anticaptcha()
-            clearInterval(interval)
           }
         }
         catch (e) {
+          clearInterval(interval)
           onecaptcha = false;
           anticaptcha()
-          clearInterval(interval)
         }
       });
     }, 10000)
@@ -246,6 +246,8 @@ const main = async (restart) => {
             accountsValid = accountsValid.filter(a => a !== account)
             clearInterval(inter)
             await nightmare.end()
+            processing = false
+            anticaptcha()
           }
         }
       }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
@@ -260,6 +262,7 @@ const main = async (restart) => {
 
       console.log('ok' + login)
       processing = false
+      anticaptcha()
     }
     catch (e) {
       console.log('error ' + login)
@@ -270,8 +273,9 @@ const main = async (restart) => {
         console.log(e.code)
       }
       accountsValid = accountsValid.filter(a => a !== account)
-      processing = false
       await nightmare.end()
+      processing = false
+      anticaptcha()
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
 }
@@ -284,10 +288,10 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
 });
 
 setInterval(() => {
-  if (accounts.length && !processing) {
+  if (accounts.length && !processing && !onecaptcha) {
     anticaptcha()
   }
-}, 1000 * 30)
+}, 1000 * 60 * 10)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
@@ -300,11 +304,11 @@ setInterval(() => {
 //   console.log('new accounts ' + accounts.length)
 //   // console.log(accounts)
 // });
-setInterval(() => {
 
+setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     albums = data.split(',')
     console.log('albums ' + albums.length)
   });
-}, 1000 * 60 * 15);
+}, 1000 * 60 * 60);
