@@ -79,6 +79,7 @@ const anticaptcha = (captchaisNew) => {
 
 
 const main = async (restart) => {
+  let temp
   let account = accounts.shift()
   // while (accountsValid.indexOf(account) >= 0) {
   //   fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
@@ -230,20 +231,21 @@ const main = async (restart) => {
         if (++change > pause) {
           change = 0
           pause = rand(4) + 2
-          console.log(account, 'change pause')
+          // console.log(account, 'change pause')
           return
         }
 
         await nightmare
           .click(playBtn)
 
-        console.log(login + ' change ok ' + change + '/' + pause)
+        // console.log(login + ' change ok ' + change + '/' + pause)
       }
       catch (e) {
         console.log('loop error ' + login + ' ' + e.code)
         if (e.code !== -7) {
-          accountsValid = accountsValid.filter(a => a !== account)
           clearInterval(inter)
+          accountsValid = accountsValid.filter(a => a !== account)
+          accounts.unshift(account)
           await nightmare.end()
           processing = false
         }
@@ -261,13 +263,11 @@ const main = async (restart) => {
     console.log('ok ' + login)
   }
   catch (e) {
-    console.log('error ' + login)
-    if (e.code === -7) {
+    console.log('error ' + login + ' ' + e.code)
+    if (!temp) {
       accounts.unshift(account)
     }
-    else if (e.code !== -1) {
-      console.log(e.code)
-    }
+    temp = account
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
