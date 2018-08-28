@@ -198,7 +198,6 @@ const main = async (restart) => {
           code: -7
         }
 
-        processing = false
         return
       }
 
@@ -270,6 +269,7 @@ const main = async (restart) => {
         console.log(e.code)
       }
       accountsValid = accountsValid.filter(a => a !== account)
+      processing = false      
       await nightmare.end()
     }
   }, restart ? rand(1000 * 60 * 60) : 0);
