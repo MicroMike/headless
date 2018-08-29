@@ -279,7 +279,7 @@ fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
 });
 
 setInterval(() => {
-  if (accounts.length && !processing && !onecaptcha) {
+  if (accounts.length && !processing && !onecaptcha && accountsValid.length < 30) {
     anticaptcha()
   }
 }, 1000 * 30)
