@@ -3,7 +3,6 @@ var request = require('ajax-request');
 
 let accounts = []
 let accountsValid = []
-let accountsInvalid = []
 let processing = false;
 let onecaptcha = false;
 let total
@@ -242,13 +241,16 @@ const main = async (restart) => {
       }
       catch (e) {
         console.log('loop error ' + login + ' ' + e.code)
-        if (e.code !== -7) {
-          clearInterval(inter)
-          accountsValid = accountsValid.filter(a => a !== account)
+        if (e.code === -7) {
           accounts.unshift(account)
-          await nightmare.end()
-          processing = false
         }
+        else {
+          console.log(e)
+        }
+        clearInterval(inter)
+        accountsValid = accountsValid.filter(a => a !== account)
+        await nightmare.end()
+        processing = false
       }
     }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
@@ -264,10 +266,6 @@ const main = async (restart) => {
   }
   catch (e) {
     console.log('error ' + login + ' ' + e.code)
-    if (accountsInvalid.indexOf(account) < 0) {
-      accounts.unshift(account)
-    }
-    accountsInvalid.push(account)
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
