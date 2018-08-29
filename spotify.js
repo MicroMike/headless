@@ -274,7 +274,7 @@ const main = async (restart) => {
   }
 }
 
-fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
+fs.readFile('spotifyAccountPremium.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
   // console.log(accounts)
