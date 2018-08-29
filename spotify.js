@@ -241,7 +241,7 @@ const main = async (restart) => {
       }
       catch (e) {
         console.log('loop error ' + login + ' ' + e.code)
-        if (e.code === -7) {
+        if (e.code === -7 || e.code === -21) {
           accounts.unshift(account)
         }
         else {
