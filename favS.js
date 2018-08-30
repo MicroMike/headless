@@ -94,7 +94,7 @@ const main = async (restart) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
-    show: true,
+    show: false,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -152,8 +152,6 @@ const main = async (restart) => {
         if (!document.querySelector('.nowPlayingBar-container')) {
           return true
         }
-
-        $('.spoticon-heart-24') && $('.spoticon-heart-24').click()
 
         let playBtn = '.tracklist-play-pause.tracklist-middle-align'
         let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
