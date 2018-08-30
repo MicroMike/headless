@@ -81,6 +81,10 @@ const main = async (restart) => {
     console.log(account)
   }
 
+  fs.writeFile(process.env.FILE, accounts.join(','), function (err) {
+    if (err) return console.log(err);
+  });
+
   let inter
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -267,14 +271,14 @@ setInterval(() => {
     anticaptcha()
   }
 
-  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    let tempaccounts = data.split(',')
-    accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-    if (accountsValid.length < 5) {
-      console.log(accounts.length)
-    }
-  });
+  // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+  //   if (err) return console.log(err);
+  //   let tempaccounts = data.split(',')
+  //   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
+  //   if (accountsValid.length < 5) {
+  //     console.log(accounts.length)
+  //   }
+  // });
 
   fs.readFile('errors.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
