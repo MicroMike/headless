@@ -128,7 +128,7 @@ const main = async (restart) => {
   try {
     const error = await nightmare
       .goto(url)
-      .wait('4000 + rand(2000)')
+      .wait(4000 + rand(2000))
       .type(inputs.username, login)
       .type(inputs.password, pass)
       .wait(2000)
