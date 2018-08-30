@@ -148,6 +148,7 @@ const main = async (restart) => {
       })
 
     if (error) {
+      console.log(error)
       throw 'out'
     }
 
