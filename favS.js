@@ -56,13 +56,7 @@ const anticaptcha = (captchaisNew) => {
             clearInterval(interval)
             onecaptcha = false;
             captcha = response.solution.gRecaptchaResponse
-            fs.readFile(process.env.FILE, 'utf8', function (err, data) {
-              if (err) return console.log(err);
-              let tempaccounts = data.split(',')
-              accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-              // console.log(accounts.length)
-              main()
-            });
+            main()
           }
           else if (!response) {
             clearInterval(interval)
@@ -86,10 +80,6 @@ const main = async (restart) => {
   if (accountsValid.length < 5) {
     console.log(account)
   }
-
-  fs.writeFile(process.env.FILE, accounts.join(','), function (err) {
-    if (err) return console.log(err);
-  });
 
   let inter
   const Nightmare = require('nightmare')
@@ -276,6 +266,15 @@ setInterval(() => {
   if (accounts.length && !processing && !onecaptcha && accountsValid.length < 30) {
     anticaptcha()
   }
+
+  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    let tempaccounts = data.split(',')
+    accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
+    if (accountsValid.length < 5) {
+      console.log(accounts.length)
+    }
+  });
 
   fs.readFile('errors.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);

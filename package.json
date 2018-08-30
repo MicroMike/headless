@@ -4,10 +4,10 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "startp": "cross-env FILE=spotifyAccountPremium.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
-    "startn": "cross-env FILE=spotifyAccount.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
-    "start": "concurrently \"npm run startp\" \"npm run startn\"",
-    "pull": "git reset --hard && git pull && chmod -R 777 ."
+    "startp": "cross-env FILE=spotifyAccountPremium.txt xvfb-run -a node favS",
+    "startn": "cross-env FILE=spotifyAccount.txt xvfb-run -a node favS",
+    "_start": "concurrently \"npm run startp\" \"npm run startn\"",
+    "start": "git reset --hard && git pull && chmod -R 777 . && npm run _start"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
