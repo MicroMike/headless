@@ -245,7 +245,12 @@ const main = async (restart) => {
     // console.log('ok ' + login)
   }
   catch (e) {
-    console.log('error ' + login + ' ' + e.code)
+    if (e.code) {
+      console.log('error ' + login + ' ' + e.code)
+    }
+    else {
+      console.log(e)
+    }
     if (errors.indexOf(e.code) >= 0) {
       accounts.unshift(account)
     }
@@ -258,7 +263,7 @@ const main = async (restart) => {
 fs.readFile('albums.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   albums = data.split(',')
-  console.log('albums ' + albums.length)
+  // console.log('albums ' + albums.length)
 });
 
 fs.readFile(process.env.FILE, 'utf8', function (err, data) {
