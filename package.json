@@ -6,7 +6,8 @@
   "scripts": {
     "startp": "cross-env FILE=spotifyAccountPremium.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
     "startn": "cross-env FILE=spotifyAccount.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
-    "start": "concurrently \"npm run startp\" \"npm run startn\""
+    "start": "concurrently \"npm run startp\" \"npm run startn\"",
+    "pull": "git reset --hard ^HEAD && git pull"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
