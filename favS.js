@@ -127,7 +127,7 @@ const main = async (restart) => {
   let pause = rand(4) + 2
 
   const album = () => albums[rand(albums.length)]
-  let nAl = album()
+  let nAl
 
   try {
     const error = await nightmare
@@ -140,46 +140,7 @@ const main = async (restart) => {
         window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
       }, captcha)
 
-    accountsValid.push(account)
-
-    await nightmare
-      .wait(4000 + rand(2000))
-      .goto(nAl)
-
-    const errorhtml = await nightmare
-      .wait(4000 + rand(2000))
-      .evaluate(() => {
-        if (!document.querySelector('.nowPlayingBar-container')) {
-          return true
-        }
-
-        let playBtn = '.tracklist-play-pause.tracklist-middle-align'
-        let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-        let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-
-        document.querySelector(playBtn) && document.querySelector(playBtn).click()
-
-        setTimeout(() => {
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, 1000);
-
-        setTimeout(() => {
-          document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, 2000);
-
-        return false
-      })
-
-    if (errorhtml) {
-      throw {
-        code: 'custom'
-      }
-    }
-    else {
-      processing = false
-    }
-
-    inter = setInterval(async () => {
+    const loop = async () => {
       try {
         let aUrl = album()
 
@@ -190,20 +151,28 @@ const main = async (restart) => {
         nAl = aUrl
         // console.log('change : ' + nAl)
         let like = await nightmare
+          .wait(4000 + rand(2000))
           .goto(nAl)
           .wait(4000 + rand(2000))
           .evaluate(() => {
-            let like = '.spoticon-heart-24'
+            let playBtn = '.tracklist-play-pause.tracklist-middle-align'
+            document.querySelector(playBtn) && document.querySelector(playBtn).click()
+
             setTimeout(() => {
+              let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+              document.querySelector(shuffle) && document.querySelector(shuffle).click()
+            }, 1000);
+
+            setTimeout(() => {
+              let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+              document.querySelector(repeat) && document.querySelector(repeat).click()
+            }, 2000);
+
+            setTimeout(() => {
+              let like = '.spoticon-heart-24'
               document.querySelector(like) && document.querySelector(like).click()
             }, 5000);
           })
-
-        // if (interalready) {
-        //   throw {
-        //     code: 1
-        //   }
-        // }
 
         if (++change > pause) {
           change = 0
@@ -216,28 +185,24 @@ const main = async (restart) => {
           .click(playBtn)
       }
       catch (e) {
-        if (errors.indexOf(e.code) >= 0) {
-          console.log('retry ' + login)
-        }
-        else {
-          console.log('loop error ' + login + ' ' + e.code)
+        console.log('loop error (' + e.code + ') ' + login)
+        loop()
+        if (!e.code) {
+          console.log('loop error ' + login + ' out')
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           await nightmare.end()
           processing = false
         }
       }
-    }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
+    }
 
-    // setTimeout(async () => {
-    // console.log('out : ' + account)
-    // clearInterval(inter)
-    // await nightmare.end()
-    // accounts.push(account)
-    // main(true)
-    // }, 1000 * 60 * 60 + rand(1000 * 60 * 60));
+    loop()
 
-    // console.log('ok ' + login)
+    accountsValid.push(account)
+    processing = false
+
+    inter = setInterval(loop, 1000 * 60 * 10 + rand(1000 * 60 * 5));
   }
   catch (e) {
     if (e.code) {
