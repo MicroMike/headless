@@ -258,7 +258,7 @@ setInterval(() => {
     accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
 
     if (accounts.length && !processing && !onecaptcha && accountsValid.length < 30) {
-      // anticaptcha()
+      anticaptcha()
     }
 
     // console.log(accounts.length)
