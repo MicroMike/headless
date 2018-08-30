@@ -130,7 +130,7 @@ const main = async (restart) => {
   let nAl
 
   try {
-    const error = await nightmare
+    await nightmare
       .goto(url)
       .wait(4000 + rand(2000))
       .type(inputs.username, login)
@@ -139,6 +139,16 @@ const main = async (restart) => {
       .evaluate((captcha) => {
         window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
       }, captcha)
+
+    const error = await nightmare
+      .wait(4000 + rand(2000))
+      .evaluate(() => {
+        return document.querySelector('.alert.alert-warning').innerHTML
+      })
+
+    if (error) {
+      throw 'out'
+    }
 
     const loop = async () => {
       try {
@@ -209,7 +219,7 @@ const main = async (restart) => {
       console.log('error ' + login + ' ' + e.code)
     }
     else {
-      console.log(e)
+      console.log(login + ' ' + e)
     }
     if (errors.indexOf(e.code) >= 0) {
       accounts.unshift(account)
