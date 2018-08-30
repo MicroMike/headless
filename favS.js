@@ -143,7 +143,8 @@ const main = async (restart) => {
     const error = await nightmare
       .wait(4000 + rand(2000))
       .evaluate(() => {
-        return document.querySelector('.alert.alert-warning').innerHTML
+        let warning = '.alert.alert-warning'
+        return document.querySelector(warning) && document.querySelector(warning).innerHTML
       })
 
     if (error) {
