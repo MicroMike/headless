@@ -186,7 +186,9 @@ const main = async (restart) => {
       }
       catch (e) {
         console.log('loop error (' + e.code + ') ' + login)
-        loop()
+        setTimeout(() => {
+          loop()
+        }, 1000 * 30);
         if (!e.code) {
           console.log('loop error ' + login + ' out')
           clearInterval(inter)
