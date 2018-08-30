@@ -154,7 +154,15 @@ const main = async (restart) => {
           .wait(4000 + rand(2000))
           .goto(nAl)
           .wait(4000 + rand(2000))
+          .wait('.nowPlayingBar-container')
           .evaluate(() => {
+            if (++change > pause) {
+              change = 0
+              pause = rand(4) + 2
+              // console.log(account, 'change pause')
+              return
+            }
+
             let playBtn = '.tracklist-play-pause.tracklist-middle-align'
             document.querySelector(playBtn) && document.querySelector(playBtn).click()
 
@@ -173,16 +181,6 @@ const main = async (restart) => {
               document.querySelector(like) && document.querySelector(like).click()
             }, 5000);
           })
-
-        if (++change > pause) {
-          change = 0
-          pause = rand(4) + 2
-          // console.log(account, 'change pause')
-          return
-        }
-
-        await nightmare
-          .click(playBtn)
       }
       catch (e) {
         console.log('loop error (' + e.code + ') ' + login)
