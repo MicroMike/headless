@@ -6,6 +6,7 @@ let accountsValid = []
 let processing = false;
 let onecaptcha = false;
 let total
+let errors = []
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -74,16 +75,12 @@ const anticaptcha = (captchaisNew) => {
 
 
 const main = async (restart) => {
-  let albumCount = 0
   let account = accounts.shift()
-  // while (accountsValid.indexOf(account) >= 0) {
-  //   fs.writeFile('spotifyAccount.txt', accountsValid.concat(accounts), function (err) {
-  //     if (err) return console.log(err);
-  //   });
-  //   if (accounts.length) {
-  //     account = accounts.shift()
-  //   }
-  // }
+
+  fs.writeFile(process.env.FILE, accounts.join(','), function (err) {
+    if (err) return console.log(err);
+  });
+
   let inter
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -125,7 +122,7 @@ const main = async (restart) => {
   let change = 0
   let pause = rand(5) + 2
 
-  const album = () => albums[albumCount++]
+  const album = () => albums[rand(albums.length)]
   let nAl = album()
 
   try {
@@ -182,33 +179,39 @@ const main = async (restart) => {
 
     inter = setInterval(async () => {
       try {
-        if (albumCount < albums.length) {
-          nAl = album()
+        let aUrl = album()
 
-          // console.log('change : ' + nAl)
-          let interalready = await nightmare
-            .goto(nAl)
-            .wait(4000 + rand(2000))
-            .click(playBtn)
-
+        while (aUrl === nAl) {
+          aUrl = album()
         }
-        else {
-          if (++change > pause) {
-            change = 0
-            pause = rand(4) + 2
-            // console.log(account, 'change pause')
-            return
-          }
 
-          await nightmare
-            .goto('https://open.spotify.com/collection/tracks')
-            .refresh()
-            .wait(4000 + rand(2000))
-            .click(playBtn)
+        nAl = aUrl
+        // console.log('change : ' + nAl)
+        let interalready = await nightmare
+          .goto(nAl)
+          .wait(4000 + rand(2000))
+          .evaluate(() => {
+            $('.spoticon-heart-24') && $('.spoticon-heart-24').click()
+          })
+
+        // if (interalready) {
+        //   throw {
+        //     code: 1
+        //   }
+        // }
+
+        if (++change > pause) {
+          change = 0
+          pause = rand(4) + 2
+          // console.log(account, 'change pause')
+          return
         }
+
+        await nightmare
+          .click(playBtn)
       }
       catch (e) {
-        if (e.code === -7 || e.code === -21 || e.code === -3) {
+        if (errors.indexOf(e.code) >= 0) {
           console.log('retry ' + login)
         }
         else {
@@ -219,7 +222,7 @@ const main = async (restart) => {
           processing = false
         }
       }
-    }, 1000 * 60 * 10 + rand(1000 * 60 * (albumCount < albums.length ? 5 : 50)));
+    }, 1000 * 60 * 10 + rand(1000 * 60 * 5));
 
     // setTimeout(async () => {
     // console.log('out : ' + account)
@@ -233,7 +236,7 @@ const main = async (restart) => {
   }
   catch (e) {
     console.log('error ' + login + ' ' + e.code)
-    if (e.code === -7 || e.code === -21 || e.code === -3) {
+    if (errors.indexOf(e.code) >= 0) {
       accounts.unshift(account)
     }
     accountsValid = accountsValid.filter(a => a !== account)
@@ -242,30 +245,34 @@ const main = async (restart) => {
   }
 }
 
-fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
+fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
-  // console.log(accounts)
+  // console.log(accounts.length)
 });
 
 setInterval(() => {
-  if (accounts.length && !processing && !onecaptcha) {
-    anticaptcha()
-  }
-}, 1000 * 30)
+  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    let tempaccounts = data.split(',')
+    accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
 
+    if (accounts.length && !processing && !onecaptcha && accountsValid.length < 30) {
+      // anticaptcha()
+    }
+
+    // console.log(accounts.length)
+  });
+
+  fs.readFile('errors.txt', 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    errors = data.split(',')
+  });
+}, 1000 * 30)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
 }, 1000 * 60 * 5);
-
-// fs.readFile('spotifyAccount.txt', 'utf8', function (err, data) {
-//   if (err) return console.log(err);
-//   let tempaccounts = data.split(',')
-//   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-//   console.log('new accounts ' + accounts.length)
-//   // console.log(accounts)
-// });
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {

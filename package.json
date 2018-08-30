@@ -4,7 +4,9 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "startp": "cross-env FILE=spotifyAccountPremium.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
+    "startn": "cross-env FILE=spotifyAccount.txt concurrently \"xvfb-run -a node favS\" \"xvfb-run -a node favS\"",
+    "start": "concurrently \"npm run startp\" \"npm run startn\""
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -21,6 +23,7 @@
   },
   "dependencies": {
     "ajax-request": "^1.2.3",
+    "concurrently": "^4.0.1",
     "electron-widevinecdm": "^7.0.0",
     "nightmare": "^3.0.1"
   }
