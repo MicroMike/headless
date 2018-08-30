@@ -233,7 +233,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 });
 
 setInterval(() => {
-  if (accounts.length && !processing && !onecaptcha && accountsValid.length < 30) {
+  if (accounts.length && !processing && !onecaptcha && accountsValid.length < 100) {
     anticaptcha()
   }
 
