@@ -124,7 +124,7 @@ const main = async (restart) => {
   inputs.password = 'form input[name="password"]'
 
   let change = 0
-  let pause = rand(5) + 2
+  let pause = rand(4) + 2
 
   const album = () => albums[rand(albums.length)]
   let nAl = album()
@@ -189,11 +189,14 @@ const main = async (restart) => {
 
         nAl = aUrl
         // console.log('change : ' + nAl)
-        let interalready = await nightmare
+        let like = await nightmare
           .goto(nAl)
           .wait(4000 + rand(2000))
           .evaluate(() => {
-            $('.spoticon-heart-24') && $('.spoticon-heart-24').click()
+            let like = '.spoticon-heart-24'
+            setTimeout(() => {
+              document.querySelector(like) && document.querySelector(like).click()
+            }, 5000);
           })
 
         // if (interalready) {
