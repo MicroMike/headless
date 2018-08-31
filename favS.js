@@ -15,7 +15,7 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
-  if (onecaptcha || processing) { return }
+  // if (onecaptcha || processing) { return }
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -93,8 +93,10 @@ const main = async (restart) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60,
+    waitTimeout: 1000 * 30,
     show: true,
+    width: 300,
+    height: 300,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -135,6 +137,7 @@ const main = async (restart) => {
       .wait(2000 + rand(2000))
       .type(inputs.username, login)
       .type(inputs.password, pass)
+      .wait(2000 + rand(2000))
       .evaluate((captcha) => {
         window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
       }, captcha)
@@ -203,7 +206,6 @@ const main = async (restart) => {
     loop()
 
     accountsValid.push(account)
-    await nightmare.viewport(10, 10)
     processing = false
 
     inter = setInterval(loop, 1000 * 60 * 10 + rand(1000 * 60 * 5));
@@ -237,7 +239,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 });
 
 setInterval(() => {
-  if (accounts.length && !processing && !onecaptcha && accountsValid.length < 100) {
+  if (accounts.length - 1) {
     anticaptcha()
   }
 
@@ -254,7 +256,7 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 30)
+}, 1000 * 30 + rand(1000 * 30))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
