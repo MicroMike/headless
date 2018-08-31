@@ -263,7 +263,7 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 60 + rand(1000 * 60))
+}, 1000 * 30 + rand(1000 * 60))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
