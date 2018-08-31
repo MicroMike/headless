@@ -95,8 +95,6 @@ const main = async (restart) => {
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
     show: true,
-    height: 200,
-    width: 200,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -134,16 +132,17 @@ const main = async (restart) => {
   try {
     await nightmare
       .goto(url)
-      .wait(4000 + rand(2000))
+      .wait(2000 + rand(2000))
       .type(inputs.username, login)
       .type(inputs.password, pass)
-      .wait(2000)
       .evaluate((captcha) => {
-        window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+        setTimeout(() => {
+          window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+        }, 1000 * 30);
       }, captcha)
 
     const error = await nightmare
-      .wait(4000 + rand(2000))
+      .wait(2000 + rand(2000))
       .evaluate(() => {
         let warning = '.alert.alert-warning'
         return document.querySelector(warning) && document.querySelector(warning).innerHTML
@@ -172,9 +171,9 @@ const main = async (restart) => {
 
         // console.log('change : ' + nAl)
         let like = await nightmare
-          .wait(4000 + rand(2000))
+          .wait(2000 + rand(2000))
           .goto(nAl)
-          .wait(4000 + rand(2000))
+          .wait(2000 + rand(2000))
           .wait('.nowPlayingBar-container')
           .evaluate(() => {
             let playBtn = '.tracklist-play-pause.tracklist-middle-align'
@@ -214,6 +213,7 @@ const main = async (restart) => {
     loop()
 
     accountsValid.push(account)
+    await nightmare.viewport(10, 10)
     processing = false
 
     inter = setInterval(loop, 1000 * 60 * 10 + rand(1000 * 60 * 5));
