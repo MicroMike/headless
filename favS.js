@@ -160,6 +160,14 @@ const main = async (restart) => {
         }
 
         nAl = aUrl
+
+        if (++change > pause) {
+          change = 0
+          pause = rand(4) + 2
+          // console.log(account, 'change pause')
+          return
+        }
+
         // console.log('change : ' + nAl)
         let like = await nightmare
           .wait(4000 + rand(2000))
@@ -167,13 +175,6 @@ const main = async (restart) => {
           .wait(4000 + rand(2000))
           .wait('.nowPlayingBar-container')
           .evaluate(() => {
-            if (++change > pause) {
-              change = 0
-              pause = rand(4) + 2
-              // console.log(account, 'change pause')
-              return
-            }
-
             let playBtn = '.tracklist-play-pause.tracklist-middle-align'
             document.querySelector(playBtn) && document.querySelector(playBtn).click()
 
