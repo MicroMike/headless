@@ -126,7 +126,7 @@ const main = async (restart) => {
   inputs.password = 'form input[name="password"]'
 
   let change = 0
-  let pause = rand(4) + 2
+  let pause = rand(2) + 2
 
   const album = () => albums[rand(albums.length)]
   let nAl
@@ -157,7 +157,7 @@ const main = async (restart) => {
 
         if (++change > pause) {
           change = 0
-          pause = rand(4) + 2
+          pause = rand(2) + 2
           // console.log(account, 'change pause')
           return
         }
@@ -189,16 +189,18 @@ const main = async (restart) => {
           })
       }
       catch (e) {
-        console.log('loop error (' + e.code + ') ' + login)
-        setTimeout(() => {
-          loop()
-        }, 1000 * 30);
         if (!e.code) {
-          console.log('loop error ' + login + ' out')
+          console.log('loop error ' + login + ' out ' + e)
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           await nightmare.end()
           processing = false
+        }
+        else {
+          console.log('loop error (' + e.code + ') ' + login)
+          setTimeout(() => {
+            loop()
+          }, 1000 * 30);
         }
       }
     }
@@ -208,17 +210,22 @@ const main = async (restart) => {
     accountsValid.push(account)
     processing = false
 
-    inter = setInterval(loop, 1000 * 60 * 10 + rand(1000 * 60 * 5));
+    inter = setInterval(loop, 1000 * 60 * 30 + rand(1000 * 60 * 30));
   }
   catch (e) {
     if (e.code) {
-      console.log('error ' + login + ' ' + e.code)
+      if (e.code === -1) {
+        console.log(e)
+      }
+      else {
+        console.log('error ' + login + ' ' + e.code)
+      }
+      if (errors.indexOf(e.code) >= 0) {
+        accounts.unshift(account)
+      }
     }
     else {
-      console.log(login + ' ' + e)
-    }
-    if (errors.indexOf(e.code) >= 0) {
-      accounts.unshift(account)
+      console.log(login + ' error login')
     }
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
@@ -256,7 +263,7 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 30 + rand(1000 * 30))
+}, 1000 * 60 + rand(1000 * 60))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
