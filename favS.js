@@ -94,7 +94,9 @@ const main = async (restart) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
-    show: false,
+    show: true,
+    height: 200,
+    width: 200,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
