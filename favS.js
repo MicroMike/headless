@@ -130,27 +130,17 @@ const main = async (restart) => {
   let nAl
 
   try {
-    await nightmare
+    const error = await nightmare
       .goto(url)
       .wait(2000 + rand(2000))
       .type(inputs.username, login)
       .type(inputs.password, pass)
       .evaluate((captcha) => {
-        setTimeout(() => {
-          window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
-        }, 1000 * 30);
+        window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
       }, captcha)
 
-    const error = await nightmare
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        let warning = '.alert.alert-warning'
-        return document.querySelector(warning) && document.querySelector(warning).innerHTML
-      })
-
-    if (error) {
-      throw 'out'
-    }
+    await nightmare
+      .wait('.user-details')
 
     const loop = async () => {
       try {
