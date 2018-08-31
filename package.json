@@ -4,8 +4,8 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "startp": "cross-env FILE=spotifyAccountPremium.txt xvfb-run -a node favS",
-    "startn": "cross-env FILE=spotifyAccount.txt xvfb-run -a node favS",
+    "startp": "cross-env FILE=spotifyAccountPremium.txt node favS",
+    "startn": "cross-env FILE=spotifyAccount.txt node favS",
     "start": "concurrently \"npm run startp\" \"npm run startn\"",
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start"
   },
