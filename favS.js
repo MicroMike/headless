@@ -81,7 +81,7 @@ const main = async (restart) => {
     console.log(account)
   }
 
-  fs.writeFile(process.env.FILE, accounts.join(','), function (err) {
+  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
     if (err) return console.log(err);
   });
 
@@ -263,7 +263,7 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 30 + rand(1000 * 60))
+}, 1000 * 30 + rand(1000 * 30))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
