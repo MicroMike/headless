@@ -94,7 +94,7 @@ const main = async (restart) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
-    show: false,
+    show: true,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
