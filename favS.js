@@ -211,7 +211,7 @@ const main = async (restart) => {
     accountsValid.push(account)
     processing = false
 
-    inter = setInterval(loop, 1000 * 60 * 30 + rand(1000 * 60 * 10));
+    inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 10));
   }
   catch (e) {
     if (e.code) {
