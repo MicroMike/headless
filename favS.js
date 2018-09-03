@@ -18,7 +18,7 @@ const anticaptcha = (captchaisNew) => {
   // if (onecaptcha || processing) { return }
   processing = true;
   request({
-    url: 'https://api.solverecaptcha.com/scripts/ajax.php',
+    url: 'https://api.solverecaptcha.com/',
     method: 'GET',
     data: {
       user_id: 828,
@@ -27,11 +27,9 @@ const anticaptcha = (captchaisNew) => {
       pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
     }
   }, function (err, res, response) {
-    response = response.split('|')
-    const status = response[0]
 
-    if (status === 'OK') {
-      captcha = response[1]
+    if (response) {
+      captcha = response
       main()
     }
 
