@@ -3,6 +3,7 @@ var request = require('ajax-request');
 
 let accounts = []
 let accountsValid = []
+let accountsNotValid = []
 let processing = false;
 let onecaptcha = false;
 let total
@@ -184,7 +185,7 @@ const main = async (restart) => {
 
             setTimeout(() => {
               let like = '.spoticon-heart-24'
-              document.querySelector(like) && document.querySelector(like).click()
+              // document.querySelector(like) && document.querySelector(like).click()
             }, 5000);
           })
       }
@@ -225,8 +226,9 @@ const main = async (restart) => {
       }
     }
     else {
-      console.log(login + ' error login')
+      // console.log(login + ' error login')
     }
+    accountsNotValid.push(account)
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
@@ -266,8 +268,8 @@ setInterval(() => {
 }, 1000 * 30 + rand(1000 * 30))
 
 setInterval(() => {
-  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
-}, 1000 * 60 * 5);
+  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left / ' + accountsNotValid.length + ' errors')
+}, 1000 * 60 * 2);
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
