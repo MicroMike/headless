@@ -3,7 +3,6 @@ var request = require('ajax-request');
 
 let accounts = []
 let accountsValid = []
-let accountsNotValid = []
 let processing = false;
 let onecaptcha = false;
 let total
@@ -19,60 +18,24 @@ const anticaptcha = (captchaisNew) => {
   // if (onecaptcha || processing) { return }
   processing = true;
   request({
-    url: 'https://api.anti-captcha.com/createTask',
+    url: 'https://api.solverecaptcha.com/',
     method: 'POST',
     json: true,
     data: {
-      clientKey: '21648811563096fd1970c47f55b3d548',
-      task: {
-        type: 'NoCaptchaTaskProxyless',
-        websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-        websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
-        invisible: captchaisNew ? 0 : 1
-      }
+      user_id: 828,
+      clientKey: 'b1af193c-5b8d1484b09714.95530866',
+      sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+      pageurl: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
     }
   }, function (err, res, response) {
-    // console.log(response)
-    if (!response || response.errorId) {
-      console.log(response || 'no response')
-      processing = false
-      onecaptcha = false
-      return;
+    response = response.split('|')
+    const status = response[0]
+
+    if (status === 'OK') {
+      captcha = response[1]
+      main()
     }
-
-    onecaptcha = true;
-
-    const interval = setInterval(() => {
-      request({
-        url: 'https://api.anti-captcha.com/getTaskResult',
-        method: 'POST',
-        json: true,
-        data: {
-          clientKey: '21648811563096fd1970c47f55b3d548',
-          taskId: response.taskId
-        }
-      }, function (err, res, response) {
-        try {
-          if (response && response.status !== 'processing') {
-            clearInterval(interval)
-            onecaptcha = false;
-            captcha = response.solution.gRecaptchaResponse
-            main()
-          }
-          else if (!response) {
-            clearInterval(interval)
-            onecaptcha = false;
-            processing = false;
-          }
-        }
-        catch (e) {
-          clearInterval(interval)
-          onecaptcha = false;
-          processing = false;
-        }
-      });
-    }, 10000)
-  });
+  })
 }
 
 const main = async (restart) => {
@@ -95,7 +58,7 @@ const main = async (restart) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 30,
-    show: true,
+    show: false,
     width: 300,
     height: 300,
     typeInterval: 300,
@@ -211,7 +174,7 @@ const main = async (restart) => {
     accountsValid.push(account)
     processing = false
 
-    inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 10));
+    inter = setInterval(loop, 1000 * 60 * 30 + rand(1000 * 60 * 10));
   }
   catch (e) {
     if (e.code) {
@@ -226,9 +189,8 @@ const main = async (restart) => {
       }
     }
     else {
-      // console.log(login + ' error login')
+      console.log(login + ' error login')
     }
-    accountsNotValid.push(account)
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
@@ -268,8 +230,8 @@ setInterval(() => {
 }, 1000 * 30 + rand(1000 * 30))
 
 setInterval(() => {
-  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left / ' + accountsNotValid.length + ' errors')
-}, 1000 * 60 * 2);
+  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
+}, 1000 * 60 * 5);
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
