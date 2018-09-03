@@ -213,6 +213,8 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
+anticaptcha()
+
 setInterval(() => {
   if (accounts.length - 1) {
     anticaptcha()
@@ -231,7 +233,7 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 15)
+}, 1000 * 90)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
