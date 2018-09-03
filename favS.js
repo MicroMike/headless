@@ -59,7 +59,7 @@ const main = async (restart) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 30,
-    show: false,
+    show: true,
     width: 300,
     height: 300,
     typeInterval: 300,
