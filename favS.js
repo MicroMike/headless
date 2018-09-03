@@ -22,7 +22,7 @@ const anticaptcha = (captchaisNew) => {
     method: 'GET',
     data: {
       user_id: 828,
-      clientKey: 'b1af193c-5b8d1484b09714.95530866',
+      key: 'b1af193c-5b8d1484b09714.95530866',
       sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
       pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
     }
@@ -34,6 +34,8 @@ const anticaptcha = (captchaisNew) => {
       captcha = response[1]
       main()
     }
+
+    anticaptcha()
   })
 }
 
@@ -208,9 +210,11 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
+anticaptcha()
+
 setInterval(() => {
   if (accounts.length - 1) {
-    anticaptcha()
+    // anticaptcha()
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
