@@ -27,7 +27,7 @@ const anticaptcha = (captchaisNew) => {
       pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
     }
   }, function (err, res, response) {
-
+    console.log(response)
     if (response) {
       captcha = response
       main()
