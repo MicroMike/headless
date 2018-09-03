@@ -8,7 +8,6 @@ let onecaptcha = false;
 let total
 let errors = []
 let albums = []
-let captchaCount = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -16,25 +15,29 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
-  // if (onecaptcha || processing) { return }
-  captchaCount++
-  processing = true;
   request({
-    url: 'https://api.solverecaptcha.com/',
-    method: 'GET',
-    data: {
-      user_id: 828,
-      key: 'b1af193c-5b8d1484b09714.95530866',
-      sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-      pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
-    }
-  }, function (err, res, response) {
-    response = response.split('|')
-    captchaCount--
-    let status = response[0]
-    if (status) {
-      captcha = response[1]
-      main()
+    url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
+  }, (err, res, response) => {
+    if (response < 5) {
+      // if (onecaptcha || processing) { return }
+      processing = true;
+      request({
+        url: 'https://api.solverecaptcha.com/',
+        method: 'GET',
+        data: {
+          user_id: 828,
+          key: 'b1af193c-5b8d1484b09714.95530866',
+          sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+          pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
+        }
+      }, function (err, res, response) {
+        response = response.split('|')
+        let status = response[0]
+        if (status) {
+          captcha = response[1]
+          main()
+        }
+      })
     }
   })
 }
@@ -211,7 +214,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 });
 
 setInterval(() => {
-  if (accounts.length - 1 && captchaCount < 5) {
+  if (accounts.length - 1) {
     anticaptcha()
   }
 
