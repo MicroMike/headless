@@ -8,6 +8,7 @@ let onecaptcha = false;
 let total
 let errors = []
 let albums = []
+let captchaCount = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -16,6 +17,7 @@ const rand = (max, min) => {
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
   // if (onecaptcha || processing) { return }
+  captchaCount++
   processing = true;
   request({
     url: 'https://api.solverecaptcha.com/',
@@ -27,13 +29,13 @@ const anticaptcha = (captchaisNew) => {
       pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
     }
   }, function (err, res, response) {
-    console.log(response)
-    if (response) {
-      captcha = response
+    response = response.split('|')
+    captchaCount--
+    let status = response[0]
+    if (status) {
+      captcha = response[1]
       main()
     }
-
-    anticaptcha()
   })
 }
 
@@ -208,11 +210,9 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
-anticaptcha()
-
 setInterval(() => {
-  if (accounts.length - 1) {
-    // anticaptcha()
+  if (accounts.length - 1 && captchaCount < 5) {
+    anticaptcha()
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
@@ -228,11 +228,11 @@ setInterval(() => {
     if (err) return console.log(err);
     errors = data.split(',')
   });
-}, 1000 * 30 + rand(1000 * 30))
+}, 1000 * 15)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
-}, 1000 * 60 * 5);
+}, 1000 * 60 * 2);
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
