@@ -186,8 +186,11 @@ const main = async (isnew) => {
           .wait(2000 + rand(2000))
           .goto(nAl)
           .wait(2000 + rand(2000))
-          .wait('.nowPlayingBar-container')
           .evaluate(() => {
+            if (!document.querySelector('.nowPlayingBar-container')) {
+              return 'error'
+            }
+
             let playBtn = '.tracklist-play-pause.tracklist-middle-align'
             document.querySelector(playBtn) && document.querySelector(playBtn).click()
 
@@ -206,13 +209,19 @@ const main = async (isnew) => {
               // document.querySelector(like) && document.querySelector(like).click()
             }, 5000);
           })
+
+        if (like === 'error') {
+          throw 'error'
+        }
       }
       catch (e) {
         if (!e.code) {
           console.log('loop error ' + login + ' out ' + e)
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
-          await nightmare.end()
+          setTimeout(() => {
+            await nightmare.end()
+          }, 1000 * 60 * 10);
           processing = false
         }
         else {
