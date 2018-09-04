@@ -31,7 +31,7 @@ const anticaptcha = (captchaisNew) => {
           pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
         }
       }, function (err, res, response) {
-        response = response.split('|')
+        response = response && response.split('|')
         let status = response[0]
         if (status) {
           captcha = response[1]
