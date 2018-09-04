@@ -31,29 +31,19 @@ const anticaptcha = (captchaisNew) => {
           pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
         }
       }, function (err, res, response) {
+        console.log(response)
         response = response && response.split('|')
-        let status = response[0]
-        if (status) {
+        let status = response && response[0]
+        if (status === 'OK') {
           captcha = response[1]
-          main()
+          main(captchaisNew)
         }
       })
     }
   })
 }
 
-const main = async (restart) => {
-  let account = accounts.shift()
-
-  if (accountsValid.length < 5) {
-    console.log(account)
-  }
-
-  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-    if (err) return console.log(err);
-  });
-
-  let inter
+const main = async (isnew) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
@@ -74,6 +64,28 @@ const main = async (restart) => {
     }
   })
 
+  let account = isnew
+    ? await nightmare
+      .goto('https://www.tempmailaddress.com')
+      .wait(2000)
+      .evaluate(() => {
+        let email = document.getElementById('email').innerText
+        return 'spotify:' + email + ':' + email
+      })
+    : accounts.shift()
+
+  if (accountsValid.length < 5) {
+    console.log(account)
+  }
+
+  if (!isnew) {
+    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      if (err) return console.log(err);
+    });
+  }
+
+  let inter
+
   accountInfo = account.split(':')
   const player = accountInfo[0]
   const login = accountInfo[1]
@@ -87,7 +99,7 @@ const main = async (restart) => {
   let loginBtn
   let playBtn
 
-  url = 'https://accounts.spotify.com/dk/login'
+  url = 'https://accounts.spotify.com/login'
   loginBtn = '#login-button'
   playBtn = '.tracklist-play-pause.tracklist-middle-align'
   inputs.username = 'form input[name="username"]'
@@ -100,18 +112,57 @@ const main = async (restart) => {
   let nAl
 
   try {
-    const error = await nightmare
-      .goto(url)
-      .wait(2000 + rand(2000))
-      .type(inputs.username, login)
-      .type(inputs.password, pass)
-      .wait(2000 + rand(2000))
-      .evaluate((captcha) => {
-        window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
-      }, captcha)
+    if (isnew) {
+      await nightmare
+        .goto('https://spotify.com/signup')
+        .evaluate((captcha) => {
+          document.getElementById('g-recaptcha-response').value = captcha
+        }, captcha)
 
-    await nightmare
-      .wait('.user-details')
+      nightmare
+        .type('form input[name="email"]', currentmail)
+        .type('form input[name="confirm_email"]', currentmail)
+        .type('form input[name="password"]', currentmail)
+        .type('form input[name="displayname"]', currentmail.split('@')[0])
+        .type('form input[name="dob_day"]', getRandomInt(28))
+        .select('form select[name="dob_month"]', month)
+        .type('form input[name="dob_year"]', getRandomInt(32, 1963))
+        .click('form input[id="register-' + (rand(2) ? 'male' : 'female') + '"]')
+        .wait(10000)
+        .click('#register-button-email-submit')
+
+      await nightmare
+        .goto('https://www.tempmailaddress.com')
+
+      var urlactivate = await nightmare
+        .wait('#schranka tr.hidden-md[data-href="2"]')
+        .goto('https://www.tempmailaddress.com/email/id/2')
+        .forward()
+        .goto('https://www.tempmailaddress.com/email/id/2')
+        .forward()
+        .wait('.call-to-action-button')
+        .evaluate(() => {
+          return document.getElementsByClassName('call-to-action-button')[0].href;
+        })
+
+      await nightmare
+        .goto(urlactivate)
+        .wait(5000)
+    }
+    else {
+      const error = await nightmare
+        .goto(url)
+        .wait(2000 + rand(2000))
+        .type(inputs.username, login)
+        .type(inputs.password, pass)
+        .wait(2000 + rand(2000))
+        .evaluate((captcha) => {
+          window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+        }, captcha)
+
+      await nightmare
+        .wait('.user-details')
+    }
 
     const loop = async () => {
       try {
@@ -218,6 +269,7 @@ anticaptcha()
 setInterval(() => {
   if (accounts.length - 1) {
     anticaptcha()
+    // anticaptcha(rand(10) % 2 === 0)
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
