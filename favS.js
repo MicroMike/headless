@@ -61,7 +61,7 @@ const main = async (restart) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 10,
+    waitTimeout: 1000 * 30,
     show: true,
     width: 300,
     height: 300,
