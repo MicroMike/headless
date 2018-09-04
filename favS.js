@@ -220,7 +220,7 @@ const main = async (isnew) => {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           setTimeout(() => {
-            await nightmare.end()
+            nightmare.end()
           }, 1000 * 60 * 10);
           processing = false
         }
