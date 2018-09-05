@@ -222,6 +222,7 @@ const main = async (isnew) => {
         let like = await nightmare
           .wait(2000 + rand(2000))
           .goto(nAl)
+          .wait('.tracklist-play-pause.tracklist-middle-align')
           .wait(2000 + rand(2000))
           .evaluate(() => {
             if (!document.querySelector('.nowPlayingBar-container')) {
@@ -293,9 +294,7 @@ const main = async (isnew) => {
       console.log(login + ' error login', e)
     }
     accountsValid = accountsValid.filter(a => a !== account)
-    setTimeout(() => {
-      nightmare.end()
-    }, 1000 * 60 * 10);
+    await nightmare.end()
     processing = false
   }
 }
