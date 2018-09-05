@@ -291,14 +291,14 @@ const main = async (isnew) => {
 
     setInterval(async () => {
       time = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time')
+        return document.querySelector('.playback-bar__progress-time').innerHTML
       })
     }, 2000)
 
     setTimeout(() => {
       setInterval(async () => {
         time2 = await nightmare.evaluate(() => {
-          return document.querySelector('.playback-bar__progress-time')
+          return document.querySelector('.playback-bar__progress-time').innerHTML
         })
       }, 2000)
     }, 1000);
@@ -309,8 +309,6 @@ const main = async (isnew) => {
         loop(true)
       }
     }, 5000);
-
-
   }
   catch (e) {
     if (e.code) {
