@@ -257,9 +257,7 @@ const main = async (isnew) => {
           console.log('loop error ' + login + ' out ' + e)
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
-          setTimeout(() => {
-            nightmare.end()
-          }, 1000 * 60 * 10);
+          await nightmare.end()
           processing = false
         }
         else {
