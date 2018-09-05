@@ -152,7 +152,7 @@ const main = async (isnew) => {
         .type('#register-confirm-email', login)
         .type('#register-password', login)
         .type('#register-displayname', login.split('@')[0])
-        .type('#register-dob-day', rand(28))
+        .type('#register-dob-day', rand(28) + 1)
         .select('#register-dob-month', month)
         .type('#register-dob-year', rand(32) + 1963)
         .click('#register-' + (rand(2) ? 'male' : 'female'))
@@ -288,8 +288,11 @@ const main = async (isnew) => {
         accounts.unshift(account)
       }
     }
-    else {
+    else if (!/wait()/.test(e)) {
       console.log(login + ' error login', e)
+    }
+    else {
+      console.log('timeout')
     }
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
