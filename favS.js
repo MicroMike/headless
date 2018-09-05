@@ -290,20 +290,20 @@ const main = async (isnew) => {
     let time2
     let time3
 
-    setInterval(() => {
-      time = nightmare.evaluate(() => {
+    setInterval(async () => {
+      time = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
     }, 5000)
 
-    setInterval(() => {
-      time2 = nightmare.evaluate(() => {
+    setInterval(async () => {
+      time2 = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
     }, 8000)
 
-    setInterval(() => {
-      time3 = nightmare.evaluate(() => {
+    setInterval(async () => {
+      time3 = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
     }, 11000)
