@@ -285,7 +285,7 @@ const main = async (isnew) => {
     processing = false
 
     // inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
-    inter = setInterval(loop, 1000 * 60 * 1);
+    inter = setInterval(loop, 1000 * 60 * 5);
     let time
     let time2
     let time3
