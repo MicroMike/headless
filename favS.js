@@ -105,7 +105,7 @@ const main = async (isnew) => {
     : accounts.shift()
 
   if (accountsValid.length < 5) {
-    console.log(account)
+    // console.log(account)
   }
 
   fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
@@ -253,19 +253,19 @@ const main = async (isnew) => {
         }
       }
       catch (e) {
-        if (!e.code) {
-          console.log('loop error ' + login + ' out ' + e)
-          clearInterval(inter)
-          accountsValid = accountsValid.filter(a => a !== account)
-          await nightmare.end()
-          processing = false
-        }
-        else {
-          console.log('loop error (' + e.code + ') ' + login)
-          setTimeout(() => {
-            loop()
-          }, 1000 * 30);
-        }
+        // if (!e.code) {
+        //   console.log('loop error ' + login + ' out ' + e)
+        //   clearInterval(inter)
+        //   accountsValid = accountsValid.filter(a => a !== account)
+        //   await nightmare.end()
+        //   processing = false
+        // }
+        // else {
+        console.log('loop error (' + e.code + ') ' + login)
+        setTimeout(() => {
+          loop()
+        }, 1000 * 60);
+        // }
       }
     }
 
@@ -285,7 +285,7 @@ const main = async (isnew) => {
         console.log('error ' + login + ' ' + e.code)
       }
       if (errors.indexOf(e.code) >= 0) {
-        accounts.unshift(account)
+        // accounts.unshift(account)ca
       }
     }
     else if (!/wait/.test(e)) {
