@@ -9,6 +9,7 @@ let total
 let errors = []
 let albums = []
 let maxnb = 10
+let isPause = false
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -211,22 +212,30 @@ const main = async (isnew) => {
         .wait('.user-details')
     }
 
-    const loop = async () => {
+    const loop = async (refresh) => {
       try {
-        let aUrl = album()
+        if (refresh) {
+          await nightmare.refresh()
+        }
+        else {
+          let aUrl = album()
 
-        while (aUrl === nAl) {
-          aUrl = album()
+          while (aUrl === nAl) {
+            aUrl = album()
+          }
+
+          nAl = aUrl
+
+          if (++change > pause) {
+            change = 0
+            pause = rand(2) + 2
+            isPause = true
+            // console.log(account, 'change pause')
+            return
+          }
         }
 
-        nAl = aUrl
-
-        if (++change > pause) {
-          change = 0
-          pause = rand(2) + 2
-          // console.log(account, 'change pause')
-          return
-        }
+        isPause = false
 
         // console.log('change : ' + nAl)
         let like = await nightmare
@@ -263,19 +272,10 @@ const main = async (isnew) => {
         }
       }
       catch (e) {
-        // if (!e.code) {
-        //   console.log('loop error ' + login + ' out ' + e)
-        //   clearInterval(inter)
-        //   accountsValid = accountsValid.filter(a => a !== account)
-        //   await nightmare.end()
-        //   processing = false
-        // }
-        // else {
         console.log('loop error (' + e.code + ') ' + login)
         setTimeout(() => {
-          loop()
+          loop(true)
         }, 1000 * 60);
-        // }
       }
     }
 
@@ -284,7 +284,33 @@ const main = async (isnew) => {
     accountsValid.push(account)
     processing = false
 
-    inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
+    // inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
+    inter = setInterval(loop, 1000 * 60 * 1);
+    let time
+    let time2
+
+    setInterval(async () => {
+      time = await nightmare.evaluate(() => {
+        return document.querySelector('.playback-bar__progress-time')
+      })
+    }, 2000)
+
+    setTimeout(() => {
+      setInterval(async () => {
+        time2 = await nightmare.evaluate(() => {
+          return document.querySelector('.playback-bar__progress-time')
+        })
+      }, 2000)
+    }, 1000);
+
+    setInterval(() => {
+      console.log(isPause, time, time2)
+      if (!isPause && time === time2) {
+        loop(true)
+      }
+    }, 5000);
+
+
   }
   catch (e) {
     if (e.code) {
