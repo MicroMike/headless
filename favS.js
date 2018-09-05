@@ -100,6 +100,9 @@ const main = async (isnew) => {
       .goto('https://www.tempmailaddress.com')
       .wait(2000)
       .evaluate(() => {
+        if (!document.querySelector('body').innerHTML) {
+          return 'error'
+        }
         let email = document.getElementById('email').innerText
         return 'spotify:' + email + ':' + email
       })
@@ -107,6 +110,12 @@ const main = async (isnew) => {
 
   if (accountsValid.length < 5) {
     // console.log(account)
+  }
+
+  if (account === 'error') {
+    await nightmare.refresh()
+    main(isnew)
+    return
   }
 
   fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
