@@ -288,7 +288,7 @@ const main = async (isnew) => {
         accounts.unshift(account)
       }
     }
-    else if (!/wait()/.test(e)) {
+    else if (!/wait/.test(e)) {
       console.log(login + ' error login', e)
     }
     else {
