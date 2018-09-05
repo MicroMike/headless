@@ -288,27 +288,36 @@ const main = async (isnew) => {
     inter = setInterval(loop, 1000 * 60 * 1);
     let time
     let time2
+    let time3
 
     setInterval(async () => {
       time = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time').innerHTML
+        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
-    }, 10000)
+    }, 5000)
 
     setTimeout(() => {
       setInterval(async () => {
         time2 = await nightmare.evaluate(() => {
-          return document.querySelector('.playback-bar__progress-time').innerHTML
+          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
         })
-      }, 10000)
+      }, 5000)
     }, 5000);
 
+    setTimeout(() => {
+      setInterval(async () => {
+        time3 = await nightmare.evaluate(() => {
+          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+        })
+      }, 5000)
+    }, 10000);
+
     setInterval(() => {
-      console.log(isPause, time, time2)
-      if (!isPause && time === time2) {
+      console.log(isPause, time, time2, time3)
+      if (!isPause && time === time2 && time2 === time3) {
         loop(true)
       }
-    }, 10100);
+    }, 30000);
   }
   catch (e) {
     if (e.code) {
