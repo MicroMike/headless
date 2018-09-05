@@ -18,7 +18,8 @@ const anticaptcha = (captchaisNew) => {
   request({
     url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
   }, (err, res, response) => {
-    if (response < 5) {
+    console.log(response)
+    if (response < 3) {
       // if (onecaptcha || processing) { return }
       processing = true;
       request({
@@ -111,25 +112,31 @@ const main = async (isnew) => {
   const album = () => albums[rand(albums.length)]
   let nAl
 
+  let month = rand(12) + 1
+  month = month < 10 ? '0' + month : '' + month
+
   try {
     if (isnew) {
       await nightmare
         .goto('https://spotify.com/signup')
+
+      await nightmare
+        .type('#register-email', login)
+        .type('#register-confirm-email', login)
+        .type('#register-password', login)
+        .type('#register-displayname', login.split('@')[0])
+        .type('#register-dob-day', rand(28))
+        .select('#register-dob-month', month)
+        .type('#register-dob-year', rand(32) + 1963)
+        .click('#register-' + (rand(2) ? 'male' : 'female'))
+        .wait(10000)
         .evaluate((captcha) => {
           document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
-      nightmare
-        .type('form input[name="email"]', currentmail)
-        .type('form input[name="confirm_email"]', currentmail)
-        .type('form input[name="password"]', currentmail)
-        .type('form input[name="displayname"]', currentmail.split('@')[0])
-        .type('form input[name="dob_day"]', getRandomInt(28))
-        .select('form select[name="dob_month"]', month)
-        .type('form input[name="dob_year"]', getRandomInt(32, 1963))
-        .click('form input[id="register-' + (rand(2) ? 'male' : 'female') + '"]')
-        .wait(10000)
+      await nightmare
         .click('#register-button-email-submit')
+        .wait(1000 * 30)
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
@@ -253,10 +260,12 @@ const main = async (isnew) => {
       }
     }
     else {
-      console.log(login + ' error login')
+      console.log(login + ' error login', e)
     }
     accountsValid = accountsValid.filter(a => a !== account)
-    await nightmare.end()
+    setTimeout(() => {
+      nightmare.end()
+    }, 1000 * 60 * 10);
     processing = false
   }
 }
@@ -273,11 +282,11 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
-anticaptcha()
+anticaptcha(true)
 
 setInterval(() => {
   if (accounts.length - 1) {
-    anticaptcha()
+    anticaptcha(true)
     // anticaptcha(rand(10) % 2 === 0)
   }
 
