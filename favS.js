@@ -293,22 +293,22 @@ const main = async (isnew) => {
       time = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time').innerHTML
       })
-    }, 2000)
+    }, 10000)
 
     setTimeout(() => {
       setInterval(async () => {
         time2 = await nightmare.evaluate(() => {
           return document.querySelector('.playback-bar__progress-time').innerHTML
         })
-      }, 2000)
-    }, 1000);
+      }, 10000)
+    }, 5000);
 
     setInterval(() => {
       console.log(isPause, time, time2)
       if (!isPause && time === time2) {
         loop(true)
       }
-    }, 5000);
+    }, 10100);
   }
   catch (e) {
     if (e.code) {
