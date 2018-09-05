@@ -222,14 +222,14 @@ const main = async (isnew) => {
         let like = await nightmare
           .wait(2000 + rand(2000))
           .goto(nAl)
-          .wait('.tracklist-play-pause.tracklist-middle-align')
           .wait(2000 + rand(2000))
           .evaluate(() => {
-            if (!document.querySelector('.nowPlayingBar-container')) {
+            let playBtn = '.tracklist-play-pause.tracklist-middle-align'
+
+            if (!document.querySelector(playBtn)) {
               return 'error'
             }
 
-            let playBtn = '.tracklist-play-pause.tracklist-middle-align'
             document.querySelector(playBtn) && document.querySelector(playBtn).click()
 
             setTimeout(() => {
@@ -274,7 +274,7 @@ const main = async (isnew) => {
     accountsValid.push(account)
     processing = false
 
-    inter = setInterval(loop, 1000 * 60 * 30 + rand(1000 * 60 * 10));
+    inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
   }
   catch (e) {
     if (e.code) {
@@ -314,7 +314,7 @@ anticaptcha(true)
 setInterval(() => {
   if (accounts.length - 1 && accountsValid.length < 10) {
     // anticaptcha(true)
-    anticaptcha(rand(2) % 2 === 0)
+    anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {

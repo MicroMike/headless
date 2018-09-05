@@ -6,6 +6,7 @@
   "scripts": {
     "startp": "cross-env FILE=spotifyAccountPremium.txt node favS",
     "startn": "cross-env FILE=spotifyAccount.txt node favS",
+    "startnn": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
     "start": "concurrently \"npm run startp\" \"npm run startn\"",
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start"
   },
