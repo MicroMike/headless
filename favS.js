@@ -15,33 +15,62 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew) => {
+  processing = true;
   request({
-    url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
-  }, (err, res, response) => {
-    console.log(response)
-    if (response < 3) {
-      // if (onecaptcha || processing) { return }
-      processing = true;
+    url: 'https://api.anti-captcha.com/createTask',
+    method: 'POST',
+    json: true,
+    data: {
+      clientKey: '21648811563096fd1970c47f55b3d548',
+      task: {
+        type: 'NoCaptchaTaskProxyless',
+        websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+        websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
+        invisible: captchaisNew ? 0 : 1
+      }
+    }
+  }, function (err, res, response) {
+    // console.log(response)
+    if (response && response.errorId) {
+      setTimeout(() => {
+        anticaptcha()
+      }, 1000 * 60);
+      return;
+    }
+    else if (!response) {
+      console.log(err)
+      anticaptcha()
+      return
+    }
+
+    const interval = setInterval(() => {
       request({
-        url: 'https://api.solverecaptcha.com/',
-        method: 'GET',
+        url: 'https://api.anti-captcha.com/getTaskResult',
+        method: 'POST',
+        json: true,
         data: {
-          user_id: 828,
-          key: 'b1af193c-5b8d1484b09714.95530866',
-          sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-          pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
+          clientKey: '21648811563096fd1970c47f55b3d548',
+          taskId: response.taskId
         }
       }, function (err, res, response) {
-        console.log(response)
-        response = response && response.split('|')
-        let status = response && response[0]
-        if (status === 'OK') {
-          captcha = response[1]
-          main(captchaisNew)
+        try {
+          if (response && response.status !== 'processing') {
+            clearInterval(interval)
+            captcha = response.solution.gRecaptchaResponse
+            main(captchaisNew)
+          }
+          else if (!response) {
+            anticaptcha()
+            clearInterval(interval)
+          }
         }
-      })
-    }
-  })
+        catch (e) {
+          anticaptcha()
+          clearInterval(interval)
+        }
+      });
+    }, 10000)
+  });
 }
 
 const main = async (isnew) => {
@@ -52,7 +81,7 @@ const main = async (isnew) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 30,
+    waitTimeout: 1000 * 120,
     show: true,
     width: 300,
     height: 300,
@@ -79,11 +108,9 @@ const main = async (isnew) => {
     console.log(account)
   }
 
-  if (!isnew) {
-    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-      if (err) return console.log(err);
-    });
-  }
+  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+    if (err) return console.log(err);
+  });
 
   let inter
 
@@ -129,14 +156,17 @@ const main = async (isnew) => {
         .select('#register-dob-month', month)
         .type('#register-dob-year', rand(32) + 1963)
         .click('#register-' + (rand(2) ? 'male' : 'female'))
-        .wait(10000)
+        .wait(2000 + rand(2000))
         .evaluate((captcha) => {
+          console.log('CAPTCHA')
           document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
       await nightmare
+        .wait(2000 + rand(2000))
         .click('#register-button-email-submit')
-        .wait(1000 * 30)
+        .wait('.nowPlayingBar-container')
+        .wait(2000 + rand(2000))
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
@@ -285,9 +315,9 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 anticaptcha(true)
 
 setInterval(() => {
-  if (accounts.length - 1) {
-    anticaptcha(true)
-    // anticaptcha(rand(10) % 2 === 0)
+  if (accounts.length - 1 && accountsValid.length < 10) {
+    // anticaptcha(true)
+    anticaptcha(rand(2) % 2 === 0)
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
