@@ -8,6 +8,7 @@ let onecaptcha = false;
 let total
 let errors = []
 let albums = []
+let maxnb = 10
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -315,7 +316,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 anticaptcha(true)
 
 setInterval(() => {
-  if (accounts.length - 1 && accountsValid.length < 10) {
+  if (accounts.length - 1 && accountsValid.length < maxnb) {
     // anticaptcha(true)
     anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
   }
@@ -332,6 +333,11 @@ setInterval(() => {
   fs.readFile('errors.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     errors = data.split(',')
+  });
+
+  fs.readFile('maxnb.txt', 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    maxnb = data
   });
 }, 1000 * 90)
 
