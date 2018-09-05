@@ -353,7 +353,9 @@ anticaptcha(true)
 setInterval(() => {
   if (accounts.length - 1 && accountsValid.length < maxnb) {
     // anticaptcha(true)
-    anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
+    if (!process.env.TEST) {
+      anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
+    }
   }
 
   // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
