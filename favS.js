@@ -79,7 +79,7 @@ const anticaptcha = (captchaisNew) => {
   request({
     url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
   }, (err, res, response) => {
-    if (response < 4) {
+    if (response < 1) {
       // if (onecaptcha || processing) { return } 
       processing = true;
       request({
@@ -202,11 +202,19 @@ const main = async (isnew) => {
           document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
-      await nightmare
+      const logged = await nightmare
         .wait(2000 + rand(2000))
         .click('#register-button-email-submit')
-        .wait('.nowPlayingBar-container')
+        .evaluate(() => {
+          let selector = '.nowPlayingBar-container'
+          let selector2 = '.logout-link'
+          return document.querySelector(selector) || document.querySelector(selector2)
+        })
         .wait(2000 + rand(2000))
+
+      if (!logged) {
+        throw 'out'
+      }
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
@@ -319,6 +327,7 @@ const main = async (isnew) => {
     else {
       inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
     }
+
     let time
     let time2
     let time3
@@ -342,8 +351,8 @@ const main = async (isnew) => {
     }, 9000)
 
     setInterval(() => {
-      console.log(isPause, time, time2, time3)
       if (!isPause && time === time2 && time2 === time3) {
+        console.log('force loop')
         loop(true)
       }
     }, 9000);
