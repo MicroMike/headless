@@ -205,6 +205,7 @@ const main = async (isnew) => {
       const logged = await nightmare
         .wait(2000 + rand(2000))
         .click('#register-button-email-submit')
+        .wait(6000 + rand(2000))
         .evaluate(() => {
           let selector = '.nowPlayingBar-container'
           let selector2 = '.logout-link'
