@@ -108,14 +108,10 @@ const main = async (isnew) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    // openDevTools: {
-    //   mode: 'detach'
-    // },
+    openDevTools: true,
     alwaysOnTop: false,
     waitTimeout: 1000 * 120,
     show: true,
-    width: 300,
-    height: 300,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
