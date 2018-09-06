@@ -110,7 +110,7 @@ const main = async (isnew) => {
     electronPath: require('electron'),
     openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 5,
+    waitTimeout: 1000 * 90,
     show: true,
     typeInterval: 300,
     webPreferences: {
@@ -199,32 +199,30 @@ const main = async (isnew) => {
         }, captcha)
 
       const logged = await nightmare
-        .wait(2000 + rand(2000))
+        .wait(1000 * 90)
         // .click('#register-button-email-submit')
-        .wait(6000 + rand(2000))
-        .evaluate(() => {
-          let selector = '.nowPlayingBar-container'
-          let selector2 = '.logout-link'
-          return document.querySelector(selector) || document.querySelector(selector2)
-        })
-        .wait(2000 + rand(2000))
+        // .wait(6000 + rand(2000))
+        // .evaluate(() => {
+        //   let selector = '.nowPlayingBar-container'
+        //   let selector2 = '.logout-link'
+        //   return document.querySelector(selector) || document.querySelector(selector2)
+        // })
+        // .wait(2000 + rand(2000))
 
-      if (!logged) {
-        throw 'out'
-      }
+      // if (!logged) {
+      //   throw 'out'
+      // }
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
 
       var urlactivate = await nightmare
-        .wait(6000 + rand(2000))
-        // .wait('#schranka tr.hidden-md[data-href="2"]')
+        .wait('#schranka tr.hidden-md[data-href="2"]')
         .goto('https://www.tempmailaddress.com/email/id/2')
         .forward()
         .goto('https://www.tempmailaddress.com/email/id/2')
         .forward()
-        .wait(6000 + rand(2000))
-        // .wait('.call-to-action-button')
+        .wait('.call-to-action-button')
         .evaluate(() => {
           return document.getElementsByClassName('call-to-action-button')[0].href;
         })
@@ -245,8 +243,8 @@ const main = async (isnew) => {
         }, captcha)
 
       await nightmare
-        .wait(6000 + rand(2000))
-        // .wait('.user-details')
+        .wait(1000 * 90)
+      // .wait('.user-details')
     }
 
     const loop = async (refresh) => {
