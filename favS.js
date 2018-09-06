@@ -98,6 +98,7 @@ const anticaptcha = (captchaisNew) => {
           captcha = response[1]
           main(captchaisNew)
         }
+        console.log('nope')
       })
     }
   })
