@@ -110,7 +110,7 @@ const main = async (isnew) => {
     electronPath: require('electron'),
     openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 120,
+    waitTimeout: 1000 * 60 * 5,
     show: true,
     typeInterval: 300,
     webPreferences: {
@@ -195,12 +195,12 @@ const main = async (isnew) => {
         .wait(2000 + rand(2000))
         .evaluate((captcha) => {
           console.log('CAPTCHA')
-          document.getElementById('g-recaptcha-response').value = captcha
+          // document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
       const logged = await nightmare
         .wait(2000 + rand(2000))
-        .click('#register-button-email-submit')
+        // .click('#register-button-email-submit')
         .wait(6000 + rand(2000))
         .evaluate(() => {
           let selector = '.nowPlayingBar-container'
@@ -217,12 +217,14 @@ const main = async (isnew) => {
         .goto('https://www.tempmailaddress.com')
 
       var urlactivate = await nightmare
-        .wait('#schranka tr.hidden-md[data-href="2"]')
+        .wait(6000 + rand(2000))
+        // .wait('#schranka tr.hidden-md[data-href="2"]')
         .goto('https://www.tempmailaddress.com/email/id/2')
         .forward()
         .goto('https://www.tempmailaddress.com/email/id/2')
         .forward()
-        .wait('.call-to-action-button')
+        .wait(6000 + rand(2000))
+        // .wait('.call-to-action-button')
         .evaluate(() => {
           return document.getElementsByClassName('call-to-action-button')[0].href;
         })
@@ -239,11 +241,12 @@ const main = async (isnew) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .evaluate((captcha) => {
-          window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+          // window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
         }, captcha)
 
       await nightmare
-        .wait('.user-details')
+        .wait(6000 + rand(2000))
+        // .wait('.user-details')
     }
 
     const loop = async (refresh) => {
@@ -390,13 +393,13 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
-anticaptcha(true)
+main(true)
 
 setInterval(() => {
   if (accounts.length - 1 && accountsValid.length < maxnb) {
     // anticaptcha(true)
     if (!process.env.TEST) {
-      anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
+      main(process.env.ALLNEW || rand(2) % 2 === 0)
     }
   }
 
