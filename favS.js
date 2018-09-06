@@ -16,7 +16,7 @@ const rand = (max, min) => {
 }
 
 let captcha = ''
-const anticaptcha = (captchaisNew) => {
+const anticaptcha2 = (captchaisNew) => {
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -75,6 +75,33 @@ const anticaptcha = (captchaisNew) => {
   });
 }
 
+const anticaptcha = (captchaisNew) => {
+  request({
+    url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
+  }, (err, res, response) => {
+    if (response < 4) {
+      // if (onecaptcha || processing) { return } 
+      processing = true;
+      request({
+        url: 'https://api.solverecaptcha.com/',
+        method: 'GET',
+        data: {
+          user_id: 828,
+          key: 'b1af193c-5b8d1484b09714.95530866',
+          sitekey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+          pageurl: captchaisNew ? 'https://spotify.com/signup' : 'https://accounts.spotify.com/login',
+        }
+      }, function (err, res, response) {
+        response = response && response.split('|')
+        let status = response && response[0]
+        if (status) {
+          captcha = response[1]
+          main(captchaisNew)
+        }
+      })
+    }
+  })
+}
 const main = async (isnew) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
