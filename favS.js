@@ -110,7 +110,7 @@ const main = async (isnew) => {
     electronPath: require('electron'),
     openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 90,
+    waitTimeout: 1000 * 120,
     show: true,
     typeInterval: 300,
     webPreferences: {
