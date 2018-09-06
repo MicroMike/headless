@@ -321,26 +321,28 @@ const main = async (isnew) => {
       time = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
+      if (!isPause && time === time2 && time2 === time3) {
+        loop(true)
+      }
     }, 2000)
 
     setInterval(async () => {
       time2 = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
+      if (!isPause && time === time2 && time2 === time3) {
+        loop(true)
+      }
     }, 5000)
 
     setInterval(async () => {
       time3 = await nightmare.evaluate(() => {
         return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
       })
-    }, 9000)
-
-    setInterval(() => {
-      console.log(isPause, time, time2, time3)
       if (!isPause && time === time2 && time2 === time3) {
         loop(true)
       }
-    }, 9000);
+    }, 9000)
   }
   catch (e) {
     if (e.code) {
