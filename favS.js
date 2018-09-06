@@ -10,13 +10,14 @@ let errors = []
 let albums = []
 let maxnb = 10
 let isPause = false
+let freeze = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
 
 let captcha = ''
-const anticaptcha = (captchaisNew) => {
+const anticaptcha2 = (captchaisNew) => {
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -75,7 +76,7 @@ const anticaptcha = (captchaisNew) => {
   });
 }
 
-const anticaptcha2 = (captchaisNew) => {
+const anticaptcha = (captchaisNew) => {
   request({
     url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
   }, (err, res, response) => {
@@ -104,14 +105,19 @@ const anticaptcha2 = (captchaisNew) => {
     }
   })
 }
+
 const main = async (isnew) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    openDevTools: true,
+    // openDevTools: {
+    //   mode: 'detach'
+    // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 120,
     show: true,
+    width: 300,
+    height: 300,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -195,23 +201,20 @@ const main = async (isnew) => {
         .wait(2000 + rand(2000))
         .evaluate((captcha) => {
           console.log('CAPTCHA')
-          // document.getElementById('g-recaptcha-response').value = captcha
+          document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
       const logged = await nightmare
-        .wait(1000 * 90)
-        // .click('#register-button-email-submit')
-        // .wait(6000 + rand(2000))
-        // .evaluate(() => {
-        //   let selector = '.nowPlayingBar-container'
-        //   let selector2 = '.logout-link'
-        //   return document.querySelector(selector) || document.querySelector(selector2)
-        // })
-        // .wait(2000 + rand(2000))
+        .wait(2000 + rand(2000))
+        .click('#register-button-email-submit')
+        .wait(6000 + rand(2000))
+        .goto('https://www.spotify.com/account/overview/')
+        .wait('.logout-link')
+        .wait(2000 + rand(2000))
 
-      // if (!logged) {
-      //   throw 'out'
-      // }
+      if (!logged) {
+        throw 'out'
+      }
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
@@ -239,12 +242,11 @@ const main = async (isnew) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .evaluate((captcha) => {
-          // window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+          window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
         }, captcha)
 
       await nightmare
-        .wait(1000 * 90)
-      // .wait('.user-details')
+        .wait('.user-details')
     }
 
     const loop = async (refresh) => {
@@ -351,7 +353,10 @@ const main = async (isnew) => {
     setInterval(() => {
       if (!isPause && time === time2 && time2 === time3) {
         console.log('force loop')
-        loop(true)
+        if (++freeze > 5) {
+          freeze = 0
+          loop(true)
+        }
       }
     }, 9000);
   }
@@ -374,7 +379,7 @@ const main = async (isnew) => {
       console.log('timeout')
     }
     accountsValid = accountsValid.filter(a => a !== account)
-    await nightmare.end()
+    // await nightmare.end()
     processing = false
   }
 }
@@ -391,13 +396,13 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   // console.log(accounts.length)
 });
 
-main(true)
+anticaptcha(true)
 
 setInterval(() => {
   if (accounts.length - 1 && accountsValid.length < maxnb) {
     // anticaptcha(true)
     if (!process.env.TEST) {
-      main(process.env.ALLNEW || rand(2) % 2 === 0)
+      anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
     }
   }
 
