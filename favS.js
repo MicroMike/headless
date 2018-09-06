@@ -143,7 +143,7 @@ const main = async (isnew) => {
   }
 
   if (account === 'error') {
-    await nightmare.refresh()
+    await nightmare.end()
     main(isnew)
     return
   }
@@ -369,7 +369,7 @@ const main = async (isnew) => {
         // accounts.unshift(account)ca
       }
     }
-    else if (!/wait/.test(e)) {
+    else if (!/wait|navigation/.test(e)) {
       console.log(login + ' error login', e)
     }
     else {
