@@ -204,17 +204,13 @@ const main = async (isnew) => {
           document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
-      const logged = await nightmare
+      await nightmare
         .wait(2000 + rand(2000))
         .click('#register-button-email-submit')
         .wait(6000 + rand(2000))
         .goto('https://www.spotify.com/account/overview/')
         .wait('.logout-link')
         .wait(2000 + rand(2000))
-
-      if (!logged) {
-        throw 'out'
-      }
 
       await nightmare
         .goto('https://www.tempmailaddress.com')
