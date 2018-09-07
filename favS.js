@@ -1,5 +1,14 @@
 const fs = require('fs');
 var request = require('ajax-request');
+let tempLog
+
+// console.log = (log) => {
+//   if (tempLog === log) {
+//     return
+//   }
+//   tempLog = log
+//   console.log(log)
+// }
 
 let accounts = []
 let accountsValid = []
@@ -9,71 +18,64 @@ let total
 let errors = []
 let albums = []
 let maxnb = 10
-let isPause = false
-let freeze = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
 
 let captcha = ''
-const anticaptcha = (captchaisNew) => {
-  processing = true;
-  request({
-    url: 'https://api.anti-captcha.com/createTask',
-    method: 'POST',
-    json: true,
-    data: {
-      clientKey: '21648811563096fd1970c47f55b3d548',
-      task: {
-        type: 'NoCaptchaTaskProxyless',
-        websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-        websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
-        invisible: captchaisNew ? 0 : 1
+const anticaptcha = (captchaisNew, needResolve) => {
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'https://api.anti-captcha.com/createTask',
+      method: 'POST',
+      json: true,
+      data: {
+        clientKey: '21648811563096fd1970c47f55b3d548',
+        task: {
+          type: 'NoCaptchaTaskProxyless',
+          websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+          websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
+          invisible: captchaisNew ? 0 : 1
+        }
       }
-    }
-  }, function (err, res, response) {
-    // console.log(response)
-    if (response && response.errorId) {
-      setTimeout(() => {
-        anticaptcha()
-      }, 1000 * 60);
-      return;
-    }
-    else if (!response) {
-      console.log(err)
-      anticaptcha()
-      return
-    }
-
-    const interval = setInterval(() => {
-      request({
-        url: 'https://api.anti-captcha.com/getTaskResult',
-        method: 'POST',
-        json: true,
-        data: {
-          clientKey: '21648811563096fd1970c47f55b3d548',
-          taskId: response.taskId
-        }
-      }, function (err, res, response) {
-        try {
-          if (response && response.status !== 'processing') {
-            clearInterval(interval)
-            captcha = response.solution.gRecaptchaResponse
-            main(captchaisNew)
+    }, function (err, res, response) {
+      if (!response) {
+        return reject()
+      }
+      const interval = setInterval(() => {
+        request({
+          url: 'https://api.anti-captcha.com/getTaskResult',
+          method: 'POST',
+          json: true,
+          data: {
+            clientKey: '21648811563096fd1970c47f55b3d548',
+            taskId: response.taskId
           }
-          else if (!response) {
-            anticaptcha()
-            clearInterval(interval)
+        }, function (err, res, response) {
+          try {
+            if (response && response.status !== 'processing') {
+              clearInterval(interval)
+              captcha = response.solution.gRecaptchaResponse
+              if (!needResolve) {
+                main(captchaisNew)
+                return
+              }
+              resolve()
+            }
+            else if (!response) {
+              clearInterval(interval)
+              reject()
+            }
           }
-        }
-        catch (e) {
-          anticaptcha()
-          clearInterval(interval)
-        }
-      });
-    }, 10000)
-  });
+          catch (e) {
+            clearInterval(interval)
+            reject()
+          }
+        });
+      }, 10000)
+    });
+  })
 }
 
 const anticaptcha2 = (captchaisNew) => {
@@ -132,9 +134,6 @@ const main = async (isnew) => {
       .goto('https://www.tempmailaddress.com')
       .wait(2000)
       .evaluate(() => {
-        if (!document.querySelector('body').innerHTML) {
-          return 'error'
-        }
         let email = document.getElementById('email').innerText
         return 'spotify:' + email + ':' + email
       })
@@ -142,12 +141,6 @@ const main = async (isnew) => {
 
   if (accountsValid.length < 5) {
     // console.log(account)
-  }
-
-  if (account === 'error') {
-    await nightmare.end()
-    main(isnew)
-    return
   }
 
   fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
@@ -184,6 +177,9 @@ const main = async (isnew) => {
   let month = rand(12) + 1
   month = month < 10 ? '0' + month : '' + month
 
+  let isPause = false
+  let freeze = 0
+
   try {
     if (isnew) {
       await nightmare
@@ -204,10 +200,34 @@ const main = async (isnew) => {
           document.getElementById('g-recaptcha-response').value = captcha
         }, captcha)
 
-      await nightmare
+      let fail = await nightmare
         .wait(2000 + rand(2000))
         .click('#register-button-email-submit')
         .wait(6000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('#register-confirm-email')
+        })
+      /*
+            if (fail) {
+              console.log('try')
+              await anticaptcha(isnew, true)
+              fail = await nightmare
+                .wait(2000 + rand(2000))
+                .evaluate((captcha) => {
+                  console.log('CAPTCHA2')
+                  document.getElementById('g-recaptcha-response').value = captcha
+                }, captcha)
+                .wait(6000 + rand(2000))
+                .evaluate(() => {
+                  return document.querySelector('#register-confirm-email')
+                })
+            }
+      
+            if (fail) {
+              throw 'double test out'
+            }
+      */
+      await nightmare
         .goto('https://www.spotify.com/account/overview/')
         .wait('.logout-link')
         .wait(2000 + rand(2000))
@@ -360,23 +380,26 @@ const main = async (isnew) => {
     }, 9000);
   }
   catch (e) {
-    if (e.code) {
-      if (e.code === -1) {
-        console.log(e)
-      }
-      else {
-        console.log('error ' + login + ' ' + e.code)
-      }
-      if (errors.indexOf(e.code) >= 0) {
-        // accounts.unshift(account)ca
-      }
+    if (!e.code && !/wait|navigation/.test(e)) {
+      console.log(e)
     }
-    else if (!/wait|navigation/.test(e)) {
-      console.log(login + ' error login', e)
-    }
-    else {
-      console.log('timeout')
-    }
+    // if (e.code) {
+    //   if (e.code === -1) {
+    //     console.log(e)
+    //   }
+    //   else {
+    //     console.log('error ' + login + ' ' + e.code)
+    //   }
+    //   if (errors.indexOf(e.code) >= 0) {
+    //     // accounts.unshift(account)ca
+    //   }
+    // }
+    // else if (!/wait|navigation/.test(e)) {
+    //   console.log(login + ' error login', e)
+    // }
+    // else {
+    //   console.log('timeout')
+    // }
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
