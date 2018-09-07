@@ -17,7 +17,7 @@ const rand = (max, min) => {
 }
 
 let captcha = ''
-const anticaptcha2 = (captchaisNew) => {
+const anticaptcha = (captchaisNew) => {
   processing = true;
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -76,7 +76,7 @@ const anticaptcha2 = (captchaisNew) => {
   });
 }
 
-const anticaptcha = (captchaisNew) => {
+const anticaptcha2 = (captchaisNew) => {
   request({
     url: 'https://www.solverecaptcha.com/api2/scripts/ajax.php?q=threads&user_id=828'
   }, (err, res, response) => {
