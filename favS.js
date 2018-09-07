@@ -348,11 +348,14 @@ const main = async (isnew) => {
 
     setInterval(() => {
       if (!isPause && time === time2 && time2 === time3) {
-        console.log('force loop')
         if (++freeze > 5) {
+          console.log('force loop')
           freeze = 0
           loop(true)
         }
+      }
+      else {
+        freeze = 0
       }
     }, 9000);
   }
@@ -375,7 +378,7 @@ const main = async (isnew) => {
       console.log('timeout')
     }
     accountsValid = accountsValid.filter(a => a !== account)
-    // await nightmare.end()
+    await nightmare.end()
     processing = false
   }
 }
