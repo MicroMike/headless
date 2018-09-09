@@ -359,7 +359,7 @@ const main = async (isnew) => {
       })
     }, 9000)
 
-    setInterval(() => {
+    setInterval(async () => {
       if (!isPause && time === time2 && time2 === time3) {
         if (++freeze > 5) {
           console.log('force loop')
