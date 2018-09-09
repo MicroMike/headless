@@ -25,25 +25,23 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew, needResolve) => {
-  return new Promise((resolve, reject) => {
-    request({
-      url: 'https://api.anti-captcha.com/createTask',
-      method: 'POST',
-      json: true,
-      data: {
-        clientKey: '21648811563096fd1970c47f55b3d548',
-        task: {
-          type: 'NoCaptchaTaskProxyless',
-          websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-          websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
-          invisible: captchaisNew ? 0 : 1
-        }
+  // return new Promise((resolve, reject) => {
+  request({
+    url: 'https://api.anti-captcha.com/createTask',
+    method: 'POST',
+    json: true,
+    data: {
+      clientKey: '21648811563096fd1970c47f55b3d548',
+      task: {
+        type: 'NoCaptchaTaskProxyless',
+        websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+        websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
+        invisible: captchaisNew ? 0 : 1
       }
-    }, function (err, res, response) {
-      if (!response) {
-        return reject()
-      }
-      const interval = setInterval(() => {
+    }
+  }, function (err, res, response) {
+    const interval = setInterval(() => {
+      try {
         request({
           url: 'https://api.anti-captcha.com/getTaskResult',
           method: 'POST',
@@ -54,28 +52,23 @@ const anticaptcha = (captchaisNew, needResolve) => {
           }
         }, function (err, res, response) {
           try {
-            if (response && response.status !== 'processing') {
+            if (response.status !== 'processing') {
               clearInterval(interval)
               captcha = response.solution.gRecaptchaResponse
-              if (!needResolve) {
-                main(captchaisNew)
-                return
-              }
-              resolve()
-            }
-            else if (!response) {
-              clearInterval(interval)
-              reject()
+              main(captchaisNew)
             }
           }
           catch (e) {
             clearInterval(interval)
-            reject()
           }
         });
-      }, 10000)
-    });
-  })
+      }
+      catch (e) {
+        clearInterval(interval)
+      }
+    }, 10000)
+  });
+  // })
 }
 
 const anticaptcha2 = (captchaisNew) => {
@@ -371,6 +364,11 @@ const main = async (isnew) => {
         if (++freeze > 5) {
           console.log('force loop')
           freeze = 0
+
+          await nightmare
+            .goto('https://www.spotify.com/account/overview/')
+            .wait('.logout-link')
+
           loop(true)
         }
       }
