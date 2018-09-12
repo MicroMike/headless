@@ -428,7 +428,7 @@ setInterval(() => {
     if (err) return console.log(err);
     maxnb = data
   });
-}, 1000 * 90)
+}, 1000 * 30)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + trycount)
