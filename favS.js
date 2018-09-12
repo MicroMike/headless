@@ -18,6 +18,7 @@ let total
 let errors = []
 let albums = []
 let maxnb = 10
+let trycount = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -25,6 +26,7 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew, nightmare) => {
+  trycount++
   // return new Promise((resolve, reject) => {
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -429,7 +431,7 @@ setInterval(() => {
 }, 1000 * 90)
 
 setInterval(() => {
-  console.log('total ' + accountsValid.length + '/' + accounts.length + ' left')
+  console.log('total ' + accountsValid.length + '/' + trycount)
 }, 1000 * 60 * 2);
 
 setInterval(() => {
