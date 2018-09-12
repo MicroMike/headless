@@ -349,7 +349,7 @@ const main = async (isnew) => {
     let interloop = setInterval(async () => {
       if (!isPause && time && time === time2) {
         if (freeze === 3) {
-          console.log('soon ' + login)
+          console.log('soon ' + login + ' ' + time + ' ' + time2)
         }
         if (++freeze > 10) {
           console.log('force loop ' + login)
