@@ -294,12 +294,13 @@ const main = async (isnew) => {
           .goto(nAl)
           .wait(2000 + rand(2000))
           .wait('.tracklist-top-align')
+          .wait(2000 + rand(2000))
           .evaluate(() => {
             let playBtn = '.tracklist-top-align'
 
             setTimeout(() => {
               document.querySelector(playBtn) && document.querySelector(playBtn).click()
-            }, 3000);
+            }, 5000);
 
             setTimeout(() => {
               let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
