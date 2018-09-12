@@ -24,7 +24,7 @@ const rand = (max, min) => {
 }
 
 let captcha = ''
-const anticaptcha = (captchaisNew, needResolve) => {
+const anticaptcha = (captchaisNew, nightmare) => {
   // return new Promise((resolve, reject) => {
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -50,12 +50,30 @@ const anticaptcha = (captchaisNew, needResolve) => {
             clientKey: '21648811563096fd1970c47f55b3d548',
             taskId: response.taskId
           }
-        }, function (err, res, response) {
+        }, async (err, res, response) => {
           try {
             if (response.status !== 'processing') {
               clearInterval(interval)
               captcha = response.solution.gRecaptchaResponse
-              main(captchaisNew)
+              if (nightmare) {
+                await nightmare
+                  .wait(2000 + rand(2000))
+                  .evaluate((captcha) => {
+                    console.log('CAPTCHA2')
+                    document.getElementById('g-recaptcha-response').value = captcha
+                  }, captcha)
+
+                await nightmare
+                  .wait(2000 + rand(2000))
+                  .click('#register-button-email-submit')
+                  .wait(6000 + rand(2000))
+                  .evaluate(() => {
+                    document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="done_captcha">!!!</div>');
+                  })
+              }
+              else {
+                main(captchaisNew)
+              }
             }
           }
           catch (e) {
@@ -109,7 +127,7 @@ const main = async (isnew) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 120,
+    waitTimeout: 1000 * 60 * 3,
     show: true,
     width: 300,
     height: 300,
@@ -200,26 +218,14 @@ const main = async (isnew) => {
         .evaluate(() => {
           return document.querySelector('#register-confirm-email')
         })
-      /*
-            if (fail) {
-              console.log('try')
-              await anticaptcha(isnew, true)
-              fail = await nightmare
-                .wait(2000 + rand(2000))
-                .evaluate((captcha) => {
-                  console.log('CAPTCHA2')
-                  document.getElementById('g-recaptcha-response').value = captcha
-                }, captcha)
-                .wait(6000 + rand(2000))
-                .evaluate(() => {
-                  return document.querySelector('#register-confirm-email')
-                })
-            }
-      
-            if (fail) {
-              throw 'double test out'
-            }
-      */
+
+      if (fail) {
+        console.log('try')
+        anticaptcha(isnew, nightmare)
+        await nightmare.wait('#done_captcha')
+        console.log('wait or not ?')
+      }
+
       await nightmare
         .goto('https://www.spotify.com/account/overview/')
         .wait('.logout-link')
@@ -260,10 +266,7 @@ const main = async (isnew) => {
 
     const loop = async (refresh) => {
       try {
-        if (refresh) {
-          await nightmare.refresh()
-        }
-        else {
+        if (!refresh) {
           let aUrl = album()
 
           while (aUrl === nAl) {
@@ -271,14 +274,14 @@ const main = async (isnew) => {
           }
 
           nAl = aUrl
+        }
 
-          if (++change > pause) {
-            change = 0
-            pause = rand(2) + 2
-            isPause = true
-            // console.log(account, 'change pause')
-            return
-          }
+        if (++change > pause) {
+          change = 0
+          pause = rand(2) + 2
+          isPause = true
+          // console.log(account, 'change pause')
+          return
         }
 
         isPause = false
@@ -339,28 +342,9 @@ const main = async (isnew) => {
 
     let time
     let time2
-    let time3
 
     setInterval(async () => {
-      time = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-      })
-    }, 2000)
-
-    setInterval(async () => {
-      time2 = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-      })
-    }, 5000)
-
-    setInterval(async () => {
-      time3 = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-      })
-    }, 9000)
-
-    setInterval(async () => {
-      if (!isPause && time === time2 && time2 === time3) {
+      if (!isPause && time && time === time2) {
         if (++freeze > 5) {
           console.log('force loop')
           freeze = 0
@@ -374,30 +358,20 @@ const main = async (isnew) => {
       }
       else {
         freeze = 0
+        time2 = time
+        time = await nightmare.evaluate(() => {
+          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+        })
       }
-    }, 9000);
+    }, 10000);
   }
   catch (e) {
-    if (!e.code && !/wait|navigation/.test(e)) {
+    if (!e.code && !/30000/.test(e)) {
       console.log(e)
     }
-    // if (e.code) {
-    //   if (e.code === -1) {
-    //     console.log(e)
-    //   }
-    //   else {
-    //     console.log('error ' + login + ' ' + e.code)
-    //   }
-    //   if (errors.indexOf(e.code) >= 0) {
-    //     // accounts.unshift(account)ca
-    //   }
-    // }
-    // else if (!/wait|navigation/.test(e)) {
-    //   console.log(login + ' error login', e)
-    // }
-    // else {
-    //   console.log('timeout')
-    // }
+    else {
+      console.log('timeout')
+    }
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
     processing = false
@@ -435,10 +409,10 @@ setInterval(() => {
   //   }
   // });
 
-  fs.readFile('errors.txt', 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    errors = data.split(',')
-  });
+  // fs.readFile('errors.txt', 'utf8', function (err, data) {
+  //   if (err) return console.log(err);
+  //   errors = data.split(',')
+  // });
 
   fs.readFile('maxnb.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
