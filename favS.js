@@ -346,14 +346,22 @@ const main = async (isnew) => {
     setInterval(async () => {
       if (!isPause && time && time === time2) {
         if (++freeze > 5) {
-          console.log('force loop')
+          console.log('force loop ' + login)
           freeze = 0
 
-          await nightmare
-            .goto('https://www.spotify.com/account/overview/')
-            .wait('.logout-link')
+          try {
+            await nightmare
+              .goto('https://www.spotify.com/account/overview/')
+              .wait(2000 + rand(2000))
+              .wait('.logout-link')
 
-          loop(true)
+            loop(true)
+          }
+          catch (e) {
+            console.log('out')
+            accountsValid = accountsValid.filter(a => a !== account)
+            await nightmare.end()
+          }
         }
       }
       else {
