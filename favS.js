@@ -63,6 +63,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   .evaluate((captcha) => {
                     console.log('CAPTCHA2')
                     document.getElementById('g-recaptcha-response').value = captcha
+                    return true
                   }, captcha)
 
                 await nightmare
@@ -71,6 +72,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   .wait(6000 + rand(2000))
                   .evaluate(() => {
                     document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="done_captcha">!!!</div>');
+                    return true
                   })
               }
               else {
@@ -252,7 +254,7 @@ const main = async (isnew) => {
         .wait(5000)
     }
     else {
-      const error = await nightmare
+      await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
         .type(inputs.username, login)
@@ -265,6 +267,8 @@ const main = async (isnew) => {
       await nightmare
         .wait('.user-details')
     }
+
+    let needloop = false
 
     const loop = async (refresh) => {
       try {
@@ -316,6 +320,8 @@ const main = async (isnew) => {
               let like = '.spoticon-heart-24'
               // document.querySelector(like) && document.querySelector(like).click()
             }, 5000);
+
+            return true
           })
 
         if (like === 'error') {
@@ -324,9 +330,7 @@ const main = async (isnew) => {
       }
       catch (e) {
         console.log('loop error (' + e.code + ') ' + login)
-        setTimeout(() => {
-          loop(true)
-        }, 1000 * 25);
+        loop(true)
       }
     }
 
@@ -362,7 +366,7 @@ const main = async (isnew) => {
             loop(true)
           }
           catch (e) {
-            console.log('out')
+            console.log('out ' + login)
             clearInterval(interloop)
             accountsValid = accountsValid.filter(a => a !== account)
             await nightmare.end()
