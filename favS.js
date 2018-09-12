@@ -355,7 +355,7 @@ const main = async (isnew) => {
             await nightmare
               .goto('https://www.spotify.com/account/overview/')
               .wait(2000 + rand(2000))
-              .wait('.logout-link')
+              .wait('#card-profile-username')
 
             loop(true)
           }
