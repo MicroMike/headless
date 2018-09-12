@@ -133,8 +133,8 @@ const main = async (isnew) => {
     alwaysOnTop: false,
     waitTimeout: 1000 * 60 * 3,
     show: true,
-    width: 300,
-    height: 300,
+    width: 600,
+    height: 600,
     typeInterval: 300,
     webPreferences: {
       webSecurity: false,
@@ -434,7 +434,7 @@ setInterval(() => {
     if (err) return console.log(err);
     maxnb = data
   });
-}, 1000 * 30)
+}, 1000 * 60 + rand(1000 * 30))
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + trycount)
