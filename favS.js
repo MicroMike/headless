@@ -227,7 +227,6 @@ const main = async (isnew) => {
         console.log('try')
         anticaptcha(isnew, nightmare)
         await nightmare.wait('#done_captcha')
-        console.log('wait or not ?')
       }
 
       await nightmare
