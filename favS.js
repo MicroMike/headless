@@ -348,6 +348,11 @@ const main = async (isnew) => {
     let time2
 
     let interloop = setInterval(async () => {
+      time2 = time
+      time = await nightmare.evaluate(() => {
+        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+      })
+
       if (!isPause && time && time === time2) {
         if (freeze === 3) {
           console.log('soon ' + login + ' ' + time + ' ' + time2)
@@ -376,10 +381,6 @@ const main = async (isnew) => {
       }
       else {
         freeze = 0
-        time2 = time
-        time = await nightmare.evaluate(() => {
-          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-        })
       }
     }, 10000);
   }
