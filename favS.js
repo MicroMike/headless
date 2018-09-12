@@ -326,7 +326,7 @@ const main = async (isnew) => {
         console.log('loop error (' + e.code + ') ' + login)
         setTimeout(() => {
           loop(true)
-        }, 1000 * 60);
+        }, 1000 * 25);
       }
     }
 
@@ -349,6 +349,8 @@ const main = async (isnew) => {
       if (!isPause && time && time === time2) {
         if (++freeze > 5) {
           console.log('force loop ' + login)
+          time = null
+          time2 = null
           freeze = 0
 
           try {
