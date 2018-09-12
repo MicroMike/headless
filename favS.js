@@ -33,7 +33,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
     method: 'POST',
     json: true,
     data: {
-      clientKey: '21648811563096fd1970c47f55b3d548',
+      clientKey: '7b45c941a5b79b23935e9f43f56a39c7',
       task: {
         type: 'NoCaptchaTaskProxyless',
         websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
@@ -49,7 +49,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
           method: 'POST',
           json: true,
           data: {
-            clientKey: '21648811563096fd1970c47f55b3d548',
+            clientKey: '7b45c941a5b79b23935e9f43f56a39c7',
             taskId: response.taskId
           }
         }, async (err, res, response) => {
@@ -184,7 +184,7 @@ const main = async (isnew) => {
   inputs.password = 'form input[name="password"]'
 
   let change = 0
-  let pause = rand(2) + 2
+  let pause = rand(4) + 2
 
   const album = () => albums[rand(albums.length)]
   let nAl
@@ -267,23 +267,20 @@ const main = async (isnew) => {
         .wait('.user-details')
     }
 
-    let needloop = false
-
     const loop = async (refresh) => {
       try {
-        if (!refresh) {
-          let aUrl = album()
+        let aUrl = album()
 
-          while (aUrl === nAl) {
-            aUrl = album()
-          }
-
-          nAl = aUrl
+        while (aUrl === nAl) {
+          aUrl = album()
         }
 
-        if (++change > pause) {
+        nAl = aUrl
+
+        change = refresh ? change : change + 1
+        if (change > pause) {
           change = 0
-          pause = rand(2) + 2
+          pause = rand(4) + 2
           isPause = true
           // console.log(account, 'change pause')
           return
@@ -296,14 +293,13 @@ const main = async (isnew) => {
           .wait(2000 + rand(2000))
           .goto(nAl)
           .wait(2000 + rand(2000))
+          .wait('.tracklist-top-align')
           .evaluate(() => {
-            let playBtn = '.tracklist-play-pause.tracklist-middle-align'
+            let playBtn = '.tracklist-top-align'
 
-            if (!document.querySelector(playBtn)) {
-              return 'error'
-            }
-
-            document.querySelector(playBtn) && document.querySelector(playBtn).click()
+            setTimeout(() => {
+              document.querySelector(playBtn) && document.querySelector(playBtn).click()
+            }, 3000);
 
             setTimeout(() => {
               let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
@@ -315,21 +311,23 @@ const main = async (isnew) => {
               document.querySelector(repeat) && document.querySelector(repeat).click()
             }, 2000);
 
-            setTimeout(() => {
-              let like = '.spoticon-heart-24'
-              // document.querySelector(like) && document.querySelector(like).click()
-            }, 5000);
-
             return true
           })
-
-        if (like === 'error') {
-          throw 'error'
-        }
       }
       catch (e) {
+        if (/wait/.test(e)) {
+          console.log('need out no play btn ' + login)
+          clearInterval(inter)
+          clearInterval(interloop)
+          accountsValid = accountsValid.filter(a => a !== account)
+          await nightmare.end()
+          return
+        }
         console.log('loop error (' + e.code + ') ' + login)
-        loop(true)
+        setTimeout(() => {
+          loop(true)
+        }, 1000 * 60 * 2);
+        return
       }
     }
 
@@ -342,7 +340,7 @@ const main = async (isnew) => {
       inter = setInterval(loop, 1000 * 60 * 5);
     }
     else {
-      inter = setInterval(loop, 1000 * 60 * 25 + rand(1000 * 60 * 5));
+      inter = setInterval(loop, 1000 * 60 * 20 + rand(1000 * 60 * 40));
     }
 
     let time
@@ -350,7 +348,10 @@ const main = async (isnew) => {
 
     let interloop = setInterval(async () => {
       if (!isPause && time && time === time2) {
-        if (++freeze > 5) {
+        if (freeze === 3) {
+          console.log('soon ' + login)
+        }
+        if (++freeze > 10) {
           console.log('force loop ' + login)
           time = null
           time2 = null
@@ -358,15 +359,15 @@ const main = async (isnew) => {
 
           try {
             await nightmare
-              .goto('https://www.spotify.com/account/overview/')
-              .wait(2000 + rand(2000))
-              .wait('#card-profile-username')
+              .refresh()
+              .wait('.tracklist-top-align')
 
             loop(true)
           }
           catch (e) {
             console.log('out ' + login)
             clearInterval(interloop)
+            clearInterval(inter)
             accountsValid = accountsValid.filter(a => a !== account)
             await nightmare.end()
           }
@@ -444,6 +445,6 @@ setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     albums = data.split(',')
-    console.log('albums ' + albums.length)
+    // console.log('albums ' + albums.length)
   });
 }, 1000 * 60 * 60);
