@@ -345,7 +345,7 @@ const main = async (isnew) => {
     let time
     let time2
 
-    setInterval(async () => {
+    let interloop = setInterval(async () => {
       if (!isPause && time && time === time2) {
         if (++freeze > 5) {
           console.log('force loop ' + login)
@@ -361,6 +361,7 @@ const main = async (isnew) => {
           }
           catch (e) {
             console.log('out')
+            clearInterval(interloop)
             accountsValid = accountsValid.filter(a => a !== account)
             await nightmare.end()
           }
