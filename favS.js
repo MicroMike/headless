@@ -342,7 +342,7 @@ const main = async (isnew) => {
       inter = setInterval(loop, 1000 * 60 * 5);
     }
     else {
-      inter = setInterval(loop, 1000 * 60 * 15 + rand(1000 * 60 * 5));
+      inter = setInterval(loop, 1000 * 60 * 25 + rand(1000 * 60 * 5));
     }
 
     let time
