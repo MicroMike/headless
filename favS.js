@@ -376,7 +376,7 @@ const main = async (isnew) => {
     }, 10000);
   }
   catch (e) {
-    if (!e.code && !/30000/.test(e)) {
+    if (!e.code && !/wait/.test(e)) {
       console.log(e)
     }
     else {
