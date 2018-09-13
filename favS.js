@@ -207,8 +207,16 @@ const main = async (isnew) => {
       isPause = false
 
       // console.log('change : ' + nAl)
+      if (refresh) {
+        await nightmare
+          .refresh()
+      }
+      else {
+        await nightmare
+          .goto(nAl)
+      }
+
       let like = await nightmare
-        .goto(nAl)
         .wait(2000 + rand(2000))
         .wait('.tracklist-top-align')
         .click('.tracklist-top-align')
