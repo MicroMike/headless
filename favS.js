@@ -428,6 +428,8 @@ fs.readFile('albums.txt', 'utf8', function (err, data) {
 fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
+  accounts.sort()
+  accounts.sort(() => { return parseInt(Math.random() * 10, 10) % 2 === 0 })
   // console.log(accounts.length)
 });
 
