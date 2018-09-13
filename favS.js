@@ -89,7 +89,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
       catch (e) {
         clearInterval(interval)
         if (nightmare) {
-          await nightmare.end()
+          nightmare.end()
         }
       }
     }, 10000)
