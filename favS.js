@@ -415,7 +415,12 @@ const main = async (isnew) => {
       console.log(e)
     }
     else {
-      console.log('timeout')
+      if (isnew) {
+        console.log('timeout')
+      }
+      else {
+        console.log(e)
+      }
     }
     accountsValid = accountsValid.filter(a => a !== account)
     await nightmare.end()
