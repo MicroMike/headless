@@ -285,6 +285,23 @@ const main = async (isnew) => {
   }, 10000);
 
   try {
+
+    let catcherror = 0
+    await nightmare
+      .catch((e) => {
+        console.log('catcherror: ' + catcherror + ' ' + login)
+        if (++catcherror > 5) {
+          console.log('out' + login)
+          clearInterval(inter)
+          clearInterval(interloop)
+          accountsValid = accountsValid.filter(a => a !== account)
+          nightmare.end()
+        }
+        else {
+          loop(true)
+        }
+      })
+
     account = isnew
       ? await nightmare
         .goto('https://www.tempmailaddress.com')
@@ -385,22 +402,6 @@ const main = async (isnew) => {
     });
 
     processing = false
-
-    let catcherror = 0
-    nightmare
-      .catch((e) => {
-        console.log('catcherror: ' + catcherror + ' ' + login)
-        if (++catcherror > 5) {
-          console.log('out' + login)
-          clearInterval(inter)
-          clearInterval(interloop)
-          accountsValid = accountsValid.filter(a => a !== account)
-          nightmare.end()
-        }
-        else {
-          loop(true)
-        }
-      })
 
     if (process.env.TEST) {
       inter = setInterval(loop, 1000 * 60 * 5);
