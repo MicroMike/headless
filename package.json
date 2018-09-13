@@ -6,7 +6,7 @@
   "scripts": {
     "s5": "concurrently \"spotify\" \"spotify\" \"spotify\" \"spotify\" \"spotify\"",
     "s25": "concurrently \"npm run s5\" \"npm run s5\" \"npm run s5\" \"npm run s5\" \"npm run s5\"",
-    "s50": "concurrently \"npm run s25\" \"npm run s25\" \"npm run s25\" \"npm run s25\" \"npm run s25\"",
+    "s50": "concurrently \"npm run s25\" \"npm run s25\"",
     "50p": "cross-env FILE=spotifyAccount.txt node favS",
     "startn": "concurrently \"npm run startp\" \"npm run startn\"",
     "start": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
