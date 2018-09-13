@@ -295,10 +295,6 @@ const main = async (isnew) => {
         })
       : accounts.shift()
 
-    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-      if (err) return console.log(err);
-    });
-
     accountInfo = account.split(':')
     player = accountInfo[0]
     login = accountInfo[1]
@@ -380,6 +376,11 @@ const main = async (isnew) => {
     loop()
 
     accountsValid.push(account)
+
+    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      if (err) return console.log(err);
+    });
+
     processing = false
 
     let catcherror = 0
