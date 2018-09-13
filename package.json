@@ -4,7 +4,7 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "startp": "cross-env FILE=spotifyAccountPremium.txt node favS",
+    "50%": "cross-env FILE=spotifyAccount.txt node favS",
     "startn": "concurrently \"npm run startp\" \"npm run startn\"",
     "start": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
     "test": "cross-env FILE=spotifyAccount.txt TEST=true node favS",
