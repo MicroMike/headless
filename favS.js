@@ -370,7 +370,10 @@ const main = async (isnew) => {
         }, captcha)
 
       await nightmare
-        .wait('.user-details')
+        .wait(6000 + rand(2000))
+        .goto('https://www.spotify.com/account/overview/')
+        .wait('.logout-link')
+        .wait(2000 + rand(2000))
     }
 
     loop()
