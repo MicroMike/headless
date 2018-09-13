@@ -189,26 +189,25 @@ const main = async (isnew) => {
 
       nAl = aUrl
 
-      change = refresh ? change : change + 1
-      if (change > pause) {
-        change = 0
-        pause = rand(4) + 2
-        isPause = true
-        // console.log(account, 'change pause')
-        return
-      }
+      // change = refresh ? change : change + 1
+      // if (change > pause) {
+      //   change = 0
+      //   pause = rand(4) + 2
+      //   isPause = true
+      //   // console.log(account, 'change pause')
+      //   return
+      // }
 
       isPause = false
 
       // console.log('change : ' + nAl)
       let like = await nightmare
-        .wait(2000 + rand(2000))
         .goto(nAl)
         .wait(2000 + rand(2000))
         .wait('.tracklist-top-align')
+        .wait('.spoticon-repeat-16')
         .wait(2000 + rand(2000))
         .evaluate(() => {
-
           setTimeout(() => {
             let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
             document.querySelector(shuffle) && document.querySelector(shuffle).click()
@@ -387,7 +386,7 @@ const main = async (isnew) => {
       inter = setInterval(loop, 1000 * 60 * 5);
     }
     else {
-      inter = setInterval(loop, 1000 * 60 * 20 + rand(1000 * 60 * 40));
+      // inter = setInterval(loop, 1000 * 60 * 20 + rand(1000 * 60 * 40));
     }
   }
   catch (e) {
