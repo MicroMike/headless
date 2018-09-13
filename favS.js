@@ -271,20 +271,9 @@ const main = async (isnew) => {
         time2 = null
         freeze = 0
 
-        try {
-          await nightmare
-            .refresh()
-            .wait('.tracklist-top-align')
-
+        setTimeout(async () => {
           loop(true)
-        }
-        catch (e) {
-          console.log('out ' + login)
-          clearInterval(inter)
-          clearInterval(interloop)
-          accountsValid = accountsValid.filter(a => a !== account)
-          await nightmare.end()
-        }
+        }, 1000 * 60 * 3);
       }
     }
     else {
