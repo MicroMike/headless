@@ -273,7 +273,7 @@ const main = async (isnew) => {
 
         setTimeout(async () => {
           loop(true)
-        }, 1000 * 60 * 3);
+        }, 1000 * 60 + rand(1000 * 60));
       }
     }
     else {
