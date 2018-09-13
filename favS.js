@@ -68,8 +68,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
                 await nightmare
                   .wait(2000 + rand(2000))
-                  .click('#register-button-email-submit')
-                  .wait(6000 + rand(2000))
                   .evaluate(() => {
                     document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="done_captcha">!!!</div>');
                     return true
@@ -82,11 +80,17 @@ const anticaptcha = (captchaisNew, nightmare) => {
           }
           catch (e) {
             clearInterval(interval)
+            if (nightmare) {
+              await nightmare.end()
+            }
           }
         });
       }
       catch (e) {
         clearInterval(interval)
+        if (nightmare) {
+          await nightmare.end()
+        }
       }
     }, 10000)
   });
@@ -144,30 +148,10 @@ const main = async (isnew) => {
     }
   })
 
-  let account = isnew
-    ? await nightmare
-      .goto('https://www.tempmailaddress.com')
-      .wait(2000)
-      .evaluate(() => {
-        let email = document.getElementById('email').innerText
-        return 'spotify:' + email + ':' + email
-      })
-    : accounts.shift()
-
-  if (accountsValid.length < 5) {
-    // console.log(account)
-  }
-
-  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-    if (err) return console.log(err);
-  });
+  let account
 
   let inter
-
-  accountInfo = account.split(':')
-  const player = accountInfo[0]
-  const login = accountInfo[1]
-  const pass = accountInfo[2]
+  let interloop
 
   let inputs = {
     username: '#username',
@@ -195,7 +179,131 @@ const main = async (isnew) => {
   let isPause = false
   let freeze = 0
 
+  const loop = async (refresh) => {
+    try {
+      let aUrl = album()
+
+      while (aUrl === nAl) {
+        aUrl = album()
+      }
+
+      nAl = aUrl
+
+      change = refresh ? change : change + 1
+      if (change > pause) {
+        change = 0
+        pause = rand(4) + 2
+        isPause = true
+        // console.log(account, 'change pause')
+        return
+      }
+
+      isPause = false
+
+      // console.log('change : ' + nAl)
+      let like = await nightmare
+        .wait(2000 + rand(2000))
+        .goto(nAl)
+        .wait(2000 + rand(2000))
+        .wait('.tracklist-top-align')
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+
+          setTimeout(() => {
+            let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+            document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          }, 1000);
+
+          setTimeout(() => {
+            let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+            document.querySelector(repeat) && document.querySelector(repeat).click()
+          }, 2000);
+
+          setTimeout(() => {
+            let playBtn = '.tracklist-top-align'
+            document.querySelector(playBtn) && document.querySelector(playBtn).click()
+          }, 5000);
+
+          return true
+        })
+    }
+    catch (e) {
+      if (/wait/.test(e)) {
+        console.log('need out no play btn ' + login)
+        clearInterval(inter)
+        clearInterval(interloop)
+        accountsValid = accountsValid.filter(a => a !== account)
+        await nightmare.end()
+        return
+      }
+      console.log('loop error (' + e.code + ') ' + login)
+      setTimeout(() => {
+        loop(true)
+      }, 1000 * 60 * 2);
+      return
+    }
+  }
+
+  let time
+  let time2
+
+  interloop = setInterval(async () => {
+    time2 = time
+    time = await nightmare.evaluate(() => {
+      return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+    })
+
+    if (!isPause && time && time === time2) {
+      if (freeze === 3) {
+        console.log('soon ' + login + ' ' + time + ' ' + time2)
+      }
+      if (++freeze > 10) {
+        console.log('force loop ' + login)
+        time = null
+        time2 = null
+        freeze = 0
+
+        try {
+          await nightmare
+            .refresh()
+            .wait('.tracklist-top-align')
+
+          loop(true)
+        }
+        catch (e) {
+          console.log('out ' + login)
+          clearInterval(inter)
+          clearInterval(interloop)
+          accountsValid = accountsValid.filter(a => a !== account)
+          await nightmare.end()
+        }
+      }
+    }
+    else {
+      freeze = 0
+    }
+  }, 10000);
+
   try {
+    account = isnew
+      ? await nightmare
+        .goto('https://www.tempmailaddress.com')
+        .wait(2000)
+        .evaluate(() => {
+          let email = document.getElementById('email').innerText
+          return 'spotify:' + email + ':' + email
+        })
+      : accounts.shift()
+
+    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      if (err) return console.log(err);
+    });
+
+    accountInfo = account.split(':')
+    const player = accountInfo[0]
+    const login = accountInfo[1]
+    const pass = accountInfo[2]
+
     if (isnew) {
       await nightmare
         .goto('https://spotify.com/signup')
@@ -205,7 +313,7 @@ const main = async (isnew) => {
         .type('#register-confirm-email', login)
         .type('#register-password', login)
         .type('#register-displayname', login.split('@')[0])
-        .type('#register-dob-day', rand(28) + 1)
+        .type('#register-dob-day', rand(25) + 1)
         .select('#register-dob-month', month)
         .type('#register-dob-year', rand(32) + 1963)
         .click('#register-' + (rand(2) ? 'male' : 'female'))
@@ -226,7 +334,10 @@ const main = async (isnew) => {
       if (fail) {
         console.log('try')
         anticaptcha(isnew, nightmare)
-        await nightmare.wait('#done_captcha')
+        await nightmare
+          .wait('#done_captcha')
+          .click('#register-button-email-submit')
+          .wait(6000 + rand(2000))
       }
 
       await nightmare
@@ -267,71 +378,6 @@ const main = async (isnew) => {
         .wait('.user-details')
     }
 
-    const loop = async (refresh) => {
-      try {
-        let aUrl = album()
-
-        while (aUrl === nAl) {
-          aUrl = album()
-        }
-
-        nAl = aUrl
-
-        change = refresh ? change : change + 1
-        if (change > pause) {
-          change = 0
-          pause = rand(4) + 2
-          isPause = true
-          // console.log(account, 'change pause')
-          return
-        }
-
-        isPause = false
-
-        // console.log('change : ' + nAl)
-        let like = await nightmare
-          .wait(2000 + rand(2000))
-          .goto(nAl)
-          .wait(2000 + rand(2000))
-          .wait('.tracklist-top-align')
-          .wait(2000 + rand(2000))
-          .evaluate(() => {
-            let playBtn = '.tracklist-top-align'
-
-            setTimeout(() => {
-              document.querySelector(playBtn) && document.querySelector(playBtn).click()
-            }, 5000);
-
-            setTimeout(() => {
-              let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-              document.querySelector(shuffle) && document.querySelector(shuffle).click()
-            }, 1000);
-
-            setTimeout(() => {
-              let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-              document.querySelector(repeat) && document.querySelector(repeat).click()
-            }, 2000);
-
-            return true
-          })
-      }
-      catch (e) {
-        if (/wait/.test(e)) {
-          console.log('need out no play btn ' + login)
-          clearInterval(inter)
-          clearInterval(interloop)
-          accountsValid = accountsValid.filter(a => a !== account)
-          await nightmare.end()
-          return
-        }
-        console.log('loop error (' + e.code + ') ' + login)
-        setTimeout(() => {
-          loop(true)
-        }, 1000 * 60 * 2);
-        return
-      }
-    }
-
     loop()
 
     accountsValid.push(account)
@@ -343,46 +389,6 @@ const main = async (isnew) => {
     else {
       inter = setInterval(loop, 1000 * 60 * 20 + rand(1000 * 60 * 40));
     }
-
-    let time
-    let time2
-
-    let interloop = setInterval(async () => {
-      time2 = time
-      time = await nightmare.evaluate(() => {
-        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-      })
-
-      if (!isPause && time && time === time2) {
-        if (freeze === 3) {
-          console.log('soon ' + login + ' ' + time + ' ' + time2)
-        }
-        if (++freeze > 10) {
-          console.log('force loop ' + login)
-          time = null
-          time2 = null
-          freeze = 0
-
-          try {
-            await nightmare
-              .refresh()
-              .wait('.tracklist-top-align')
-
-            loop(true)
-          }
-          catch (e) {
-            console.log('out ' + login)
-            clearInterval(interloop)
-            clearInterval(inter)
-            accountsValid = accountsValid.filter(a => a !== account)
-            await nightmare.end()
-          }
-        }
-      }
-      else {
-        freeze = 0
-      }
-    }, 10000);
   }
   catch (e) {
     if (!e.code && !/wait/.test(e)) {
@@ -419,25 +425,11 @@ setInterval(() => {
     }
   }
 
-  // fs.readFile(process.env.FILE, 'utf8', function (err, data) {
-  //   if (err) return console.log(err);
-  //   let tempaccounts = data.split(',')
-  //   accounts = tempaccounts.filter(account => accountsValid.indexOf(account) === -1)
-  //   if (accountsValid.length < 5) {
-  //     console.log(accounts.length)
-  //   }
-  // });
-
-  // fs.readFile('errors.txt', 'utf8', function (err, data) {
-  //   if (err) return console.log(err);
-  //   errors = data.split(',')
-  // });
-
   fs.readFile('maxnb.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     maxnb = data
   });
-}, 1000 * 60 + rand(1000 * 30))
+}, 1000 * 120)
 
 setInterval(() => {
   console.log('total ' + accountsValid.length + '/' + trycount)
