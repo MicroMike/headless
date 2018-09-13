@@ -27,7 +27,6 @@ const rand = (max, min) => {
 
 let captcha = ''
 const anticaptcha = (captchaisNew, nightmare) => {
-  trycount++
   // return new Promise((resolve, reject) => {
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -56,9 +55,11 @@ const anticaptcha = (captchaisNew, nightmare) => {
         }, async (err, res, response) => {
           try {
             if (response.status !== 'processing') {
+              trycount++
               clearInterval(interval)
               captcha = response.solution.gRecaptchaResponse
               if (nightmare) {
+                retrycount++
                 await nightmare
                   .wait(2000 + rand(2000))
                   .evaluate((captcha) => {
@@ -331,8 +332,6 @@ const main = async (isnew) => {
         })
 
       if (fail) {
-        console.log('try')
-        retrycount++
         anticaptcha(isnew, nightmare)
         await nightmare
           .wait('#done_captcha')
