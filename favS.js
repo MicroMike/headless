@@ -383,6 +383,22 @@ const main = async (isnew) => {
     accountsValid.push(account)
     processing = false
 
+    let catcherror = 0
+    nightmare
+      .catch((e) => {
+        console.log('catcherror: ' + catcherror + ' ' + login)
+        if (++catcherror > 5) {
+          console.log('out' + login)
+          clearInterval(inter)
+          clearInterval(interloop)
+          accountsValid = accountsValid.filter(a => a !== account)
+          nightmare.end()
+        }
+        else {
+          loop(true)
+        }
+      })
+
     if (process.env.TEST) {
       inter = setInterval(loop, 1000 * 60 * 5);
     }
@@ -391,8 +407,8 @@ const main = async (isnew) => {
     }
   }
   catch (e) {
-    if (!e.code && !/wait/.test(e) && !/30000msec/.test(e)) {
-      console.log(e.split('at')[0])
+    if (!e.code && !/wait/.test(e)) {
+      console.log(e)
     }
     else {
       console.log('timeout')
@@ -432,13 +448,11 @@ setInterval(() => {
 }, 1000 * 120)
 
 let length1
-let length2
 setInterval(() => {
-  if (length1 !== accountsValid.length || length2 !== trycount) {
+  if (length1 !== accountsValid.length + trycount + retrycount) {
     console.log('total ' + length1 + '/' + length2 + ' retry: ' + retrycount)
   }
-  length1 = accountsValid.length
-  length2 = trycount
+  length1 = accountsValid.length + trycount + retrycount
 }, 1000 * 30);
 
 setInterval(() => {
