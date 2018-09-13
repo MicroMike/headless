@@ -179,6 +179,10 @@ const main = async (isnew) => {
   let isPause = false
   let freeze = 0
 
+  let player
+  let login
+  let pass
+
   const loop = async (refresh) => {
     try {
       let aUrl = album()
@@ -294,9 +298,9 @@ const main = async (isnew) => {
     });
 
     accountInfo = account.split(':')
-    const player = accountInfo[0]
-    const login = accountInfo[1]
-    const pass = accountInfo[2]
+    player = accountInfo[0]
+    login = accountInfo[1]
+    pass = accountInfo[2]
 
     if (isnew) {
       await nightmare
