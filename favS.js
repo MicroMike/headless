@@ -450,10 +450,10 @@ setInterval(() => {
 let length1
 setInterval(() => {
   if (length1 !== accountsValid.length + trycount + retrycount) {
-    console.log('total ' + length1 + '/' + length2 + ' retry: ' + retrycount)
+    console.log('total ' + accountsValid.length + '/' + trycount + ' retry: ' + retrycount)
   }
   length1 = accountsValid.length + trycount + retrycount
-}, 1000 * 30);
+}, 1000 * 5);
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
