@@ -18,6 +18,7 @@ let total
 let errors = []
 let albums = []
 let maxnb = 10
+let retrycount = 0
 let trycount = 0
 
 const rand = (max, min) => {
@@ -331,6 +332,7 @@ const main = async (isnew) => {
 
       if (fail) {
         console.log('try')
+        retrycount++
         anticaptcha(isnew, nightmare)
         await nightmare
           .wait('#done_captcha')
@@ -433,7 +435,7 @@ let length1
 let length2
 setInterval(() => {
   if (length1 !== accountsValid.length || length2 !== trycount) {
-    console.log('total ' + length1 + '/' + length2)
+    console.log('total ' + length1 + '/' + length2 + ' retry: ' + retrycount)
   }
   length1 = accountsValid.length
   length2 = trycount
