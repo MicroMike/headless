@@ -391,8 +391,8 @@ const main = async (isnew) => {
     }
   }
   catch (e) {
-    if (!e.code && !/wait/.test(e)) {
-      console.log(e)
+    if (!e.code && !/wait/.test(e) && !/30000msec/.test(e)) {
+      console.log(e.split('at')[0])
     }
     else {
       console.log('timeout')
