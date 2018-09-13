@@ -205,7 +205,7 @@ const main = async (isnew) => {
         .goto(nAl)
         .wait(2000 + rand(2000))
         .wait('.tracklist-top-align')
-        .wait('.spoticon-repeat-16')
+        .click('.tracklist-top-align')
         .wait(2000 + rand(2000))
         .evaluate(() => {
           setTimeout(() => {
@@ -217,11 +217,6 @@ const main = async (isnew) => {
             let repeat = '.spoticon-repeat-16:not(.control-button--active)'
             document.querySelector(repeat) && document.querySelector(repeat).click()
           }, 2000);
-
-          setTimeout(() => {
-            let playBtn = '.tracklist-top-align'
-            document.querySelector(playBtn) && document.querySelector(playBtn).click()
-          }, 5000);
 
           return true
         })
