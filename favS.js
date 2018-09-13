@@ -431,9 +431,15 @@ setInterval(() => {
   });
 }, 1000 * 120)
 
+let length1
+let length2
 setInterval(() => {
-  console.log('total ' + accountsValid.length + '/' + trycount)
-}, 1000 * 60 * 2);
+  if (length1 !== accountsValid.length || length2 !== trycount) {
+    console.log('total ' + length1 + '/' + length2)
+  }
+  length1 = accountsValid.length
+  length2 = trycount
+}, 1000 * 30);
 
 setInterval(() => {
   fs.readFile('albums.txt', 'utf8', function (err, data) {
