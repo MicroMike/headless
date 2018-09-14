@@ -205,6 +205,7 @@ const main = async (isnew) => {
       // }
 
       isPause = false
+      freeze = 0
 
       // console.log('change : ' + nAl)
       if (refresh) {
@@ -269,12 +270,11 @@ const main = async (isnew) => {
         console.log('force loop ' + login)
         time = null
         time2 = null
-        freeze = 0
         isPause = true
 
         setTimeout(async () => {
           loop(true)
-        }, 1000 * 60 + rand(1000 * 60));
+        }, 1000 * 60 + rand(1000 * 120));
       }
     }
     else {
