@@ -263,10 +263,10 @@ const main = async (isnew) => {
     })
 
     if (time && time === time2 && !isPause) {
-      if (freeze === 3) {
+      if (freeze === 2) {
         console.log('soon ' + login + ' ' + time + ' ' + time2)
       }
-      if (++freeze > 10) {
+      if (++freeze > 3) {
         console.log('force loop ' + login)
         time = null
         time2 = null
@@ -280,7 +280,7 @@ const main = async (isnew) => {
     else {
       freeze = 0
     }
-  }, 10000);
+  }, 1000 * 60);
 
   try {
 
@@ -464,10 +464,10 @@ setInterval(() => {
   length1 = accountsValid.length + trycount + retrycount
 }, 1000 * 5);
 
-setInterval(() => {
-  fs.readFile('albums.txt', 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    albums = data.split(',')
-    // console.log('albums ' + albums.length)
-  });
-}, 1000 * 60 * 60);
+// setInterval(() => {
+fs.readFile('albums.txt', 'utf8', function (err, data) {
+  if (err) return console.log(err);
+  albums = data.split(',')
+  // console.log('albums ' + albums.length)
+});
+// }, 1000 * 60 * 60);
