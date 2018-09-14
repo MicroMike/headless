@@ -261,15 +261,16 @@ const main = async (isnew) => {
       return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
     })
 
-    if (!isPause && time && time === time2) {
+    if (time && time === time2) {
       if (freeze === 3) {
         console.log('soon ' + login + ' ' + time + ' ' + time2)
       }
-      if (++freeze > 10) {
+      if (++freeze > 10 && !isPause) {
         console.log('force loop ' + login)
         time = null
         time2 = null
         freeze = 0
+        isPause = true
 
         setTimeout(async () => {
           loop(true)
