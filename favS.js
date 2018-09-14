@@ -262,11 +262,11 @@ const main = async (isnew) => {
       return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
     })
 
-    if (time && time === time2) {
+    if (time && time === time2 && !isPause) {
       if (freeze === 3) {
         console.log('soon ' + login + ' ' + time + ' ' + time2)
       }
-      if (++freeze > 10 && !isPause) {
+      if (++freeze > 10) {
         console.log('force loop ' + login)
         time = null
         time2 = null
