@@ -182,7 +182,7 @@ const main = async (session) => {
     setTimeout(async () => {
       console.log('repeat')
       await nightmare.end()
-      // main(persist)
+      main(persist)
     }, 1000 * 60 * 1);
   }
   catch (e) {
