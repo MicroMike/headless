@@ -157,15 +157,6 @@ const main = async (session) => {
       .wait(2000 + rand(2000))
       .wait('.tracklist-top-align')
       .click('.tracklist-top-align')
-      .then()
-      .catch(async (e) => {
-        console.log('catch play')
-        await nightmare.end(() => {
-          main(persist)
-        })
-      })
-
-    await nightmare
       .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
@@ -179,6 +170,13 @@ const main = async (session) => {
         }, 2000);
 
         return true
+      })
+      .then()
+      .catch(async (e) => {
+        console.log('catch play')
+        await nightmare.end(() => {
+          main(persist)
+        })
       })
 
     setTimeout(async () => {
