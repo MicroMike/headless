@@ -1,28 +1,6 @@
 const Nightmare = require('nightmare')
 const fs = require('fs');
 
-const opennightmare = Nightmare({
-  electronPath: require('electron'),
-  // openDevTools: {
-  //   mode: 'detach'
-  // },
-  alwaysOnTop: false,
-  waitTimeout: 1000 * 60,
-  show: true,
-  width: 600,
-  height: 600,
-  typeInterval: 300,
-  webPreferences: {
-    webSecurity: false,
-    allowRunningInsecureContent: true,
-    plugins: true,
-    experimentalFeatures: true
-  }
-})
-
-opennightmare
-  .goto('https://google.fr')
-
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
 let accounts = []
