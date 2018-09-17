@@ -150,6 +150,6 @@ try {
   });
 }
 catch (e) {
-  console.log('catch')
+  console.log(e)
   main()
 }
