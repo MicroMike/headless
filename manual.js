@@ -1,3 +1,8 @@
+process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
+
+let accounts = []
+let accountsValid = []
+
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
@@ -96,6 +101,12 @@ const main = async (session) => {
       .goto(urlactivate)
       .wait(2000 + rand(2000))
 
+    accountsValid.push(account)
+
+    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      if (err) return console.log(err);
+    });
+
     // main()
   }
 
@@ -127,12 +138,16 @@ const main = async (session) => {
   setTimeout(() => {
     nightmare.end()
     main(persist)
-  }, 1000 * 60 * 10);
+  }, 1000 * 60 * 3);
 
 }
 
 try {
-  main()
+  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    accounts = data.split(',')
+    main()
+  });
 }
 catch (e) {
   console.log('catch')
