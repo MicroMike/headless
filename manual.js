@@ -79,7 +79,7 @@ const main = async (session) => {
           })
           .then()
           .catch(async (e) => {
-            console.log('catch')
+            console.log('catch tempmail start')
             await nightmare.end(() => {
               main(persist)
             })
@@ -117,7 +117,7 @@ const main = async (session) => {
           })
           .then()
           .catch(async (e) => {
-            console.log('catch')
+            console.log('catch signup')
             await nightmare.end(() => {
               main(persist)
             })
@@ -137,7 +137,7 @@ const main = async (session) => {
           .wait(2000 + rand(2000))
           .then()
           .catch(async (e) => {
-            console.log('catch')
+            console.log('catch login')
             await nightmare.end(() => {
               main(persist)
             })
@@ -173,7 +173,7 @@ const main = async (session) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch')
+        console.log('catch play')
         await nightmare.end(() => {
           main(persist)
         })
