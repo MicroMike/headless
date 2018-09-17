@@ -13,7 +13,6 @@ const opennightmare = Nightmare({
   height: 600,
   typeInterval: 300,
   webPreferences: {
-    partition: persist,
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
