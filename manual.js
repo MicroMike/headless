@@ -1,4 +1,3 @@
-const Nightmare = require('nightmare')
 const fs = require('fs');
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
@@ -33,167 +32,167 @@ const main = async (session) => {
   let login
   let pass
 
-  const nightmare = Nightmare({
-    electronPath: require('electron'),
-    // openDevTools: {
-    //   mode: 'detach'
-    // },
-    alwaysOnTop: false,
-    waitTimeout: 1000 * 60,
-    show: true,
-    width: 600,
-    height: 600,
-    typeInterval: 300,
-    webPreferences: {
-      partition: persist,
-      webSecurity: false,
-      allowRunningInsecureContent: true,
-      plugins: true,
-      experimentalFeatures: true
-    }
-  })
+  try {
+    const Nightmare = require('nightmare')
+    const nightmare = Nightmare({
+      electronPath: require('electron'),
+      // openDevTools: {
+      //   mode: 'detach'
+      // },
+      alwaysOnTop: false,
+      waitTimeout: 1000 * 60,
+      show: true,
+      width: 600,
+      height: 600,
+      typeInterval: 300,
+      webPreferences: {
+        partition: persist,
+        webSecurity: false,
+        allowRunningInsecureContent: true,
+        plugins: true,
+        experimentalFeatures: true
+      }
+    })
 
-  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-    if (err) return console.log(err);
-  });
-
-  if (session) {
-    isconected = await nightmare
-      .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.tracklist-top-align')
-      })
-  }
-
-  if (!session || !isconected) {
-    const isnew = rand(2) === 0
-    const account = isnew
-      ? await nightmare
-        .goto('https://www.tempmailaddress.com')
-        .wait(2000)
-        .evaluate(() => {
-          let email = document.getElementById('email').innerText
-          return 'spotify:' + email + ':' + email
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch')
-          await nightmare.end(() => {
-            main(persist)
-          })
-        })
-      : accounts.shift()
-
-    accountInfo = account.split(':')
-    player = accountInfo[0]
-    login = accountInfo[1]
-    pass = accountInfo[2]
-
-    if (isnew) {
-      const urlactivate = await nightmare
-        .goto('https://spotify.com/signup')
-        .wait('#register-email')
-        .type('#register-email', login)
-        .type('#register-confirm-email', login)
-        .type('#register-password', login)
-        .type('#register-displayname', login.split('@')[0])
-        .type('#register-dob-day', rand(25) + 1)
-        .select('#register-dob-month', month)
-        .type('#register-dob-year', rand(32) + 1963)
-        .click('#register-' + (rand(2) ? 'male' : 'female'))
-        .wait('.logout-link')
-        .wait(2000 + rand(2000))
-        .goto('https://www.tempmailaddress.com')
-        .wait('#schranka tr.hidden-md[data-href="2"]')
-        .goto('https://www.tempmailaddress.com/email/id/2')
-        .forward()
-        .goto('https://www.tempmailaddress.com/email/id/2')
-        .forward()
-        .wait('.call-to-action-button')
-        .evaluate(() => {
-          return document.getElementsByClassName('call-to-action-button')[0].href;
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch')
-          await nightmare.end(() => {
-            main(persist)
-          })
-        })
-
-      await nightmare
-        .goto(urlactivate)
-        .wait(2000 + rand(2000))
-
-    }
-    else {
-      await nightmare
-        .goto('https://spotify.com/login')
-        .type(inputs.username, login)
-        .type(inputs.password, pass)
-        .wait('.logout-link')
-        .wait(2000 + rand(2000))
-        .then()
-        .catch(async (e) => {
-          console.log('catch')
-          await nightmare.end(() => {
-            main(persist)
-          })
-        })
-    }
-
-    accountsValid.push(account)
     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
       if (err) return console.log(err);
     });
 
-    // main()
-  }
+    if (session) {
+      isconected = await nightmare
+        .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.tracklist-top-align')
+        })
+    }
 
-  await nightmare
-    .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
-    .wait(2000 + rand(2000))
-    .wait('.tracklist-top-align')
-    .click('.tracklist-top-align')
-    .wait(2000 + rand(2000))
-    .evaluate(() => {
-      setTimeout(() => {
-        let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-        document.querySelector(shuffle) && document.querySelector(shuffle).click()
-      }, 1000);
+    if (!session || !isconected) {
+      const isnew = rand(2) === 0
+      const account = isnew
+        ? await nightmare
+          .goto('https://www.tempmailaddress.com')
+          .wait(2000)
+          .evaluate(() => {
+            let email = document.getElementById('email').innerText
+            return 'spotify:' + email + ':' + email
+          })
+          .then()
+          .catch(async (e) => {
+            console.log('catch')
+            await nightmare.end(() => {
+              main(persist)
+            })
+          })
+        : accounts.shift()
 
-      setTimeout(() => {
-        let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-        document.querySelector(repeat) && document.querySelector(repeat).click()
-      }, 2000);
+      accountInfo = account.split(':')
+      player = accountInfo[0]
+      login = accountInfo[1]
+      pass = accountInfo[2]
 
-      return true
-    })
-    .then()
-    .catch(async (e) => {
-      console.log('catch')
-      await nightmare.end(() => {
-        main(persist)
+      if (isnew) {
+        const urlactivate = await nightmare
+          .goto('https://spotify.com/signup')
+          .wait('#register-email')
+          .type('#register-email', login)
+          .type('#register-confirm-email', login)
+          .type('#register-password', login)
+          .type('#register-displayname', login.split('@')[0])
+          .type('#register-dob-day', rand(25) + 1)
+          .select('#register-dob-month', month)
+          .type('#register-dob-year', rand(32) + 1963)
+          .click('#register-' + (rand(2) ? 'male' : 'female'))
+          .wait('.logout-link')
+          .wait(2000 + rand(2000))
+          .goto('https://www.tempmailaddress.com')
+          .wait('#schranka tr.hidden-md[data-href="2"]')
+          .goto('https://www.tempmailaddress.com/email/id/2')
+          .forward()
+          .goto('https://www.tempmailaddress.com/email/id/2')
+          .forward()
+          .wait('.call-to-action-button')
+          .evaluate(() => {
+            return document.getElementsByClassName('call-to-action-button')[0].href;
+          })
+          .then()
+          .catch(async (e) => {
+            console.log('catch')
+            await nightmare.end(() => {
+              main(persist)
+            })
+          })
+
+        await nightmare
+          .goto(urlactivate)
+          .wait(2000 + rand(2000))
+
+      }
+      else {
+        await nightmare
+          .goto('https://spotify.com/login')
+          .type(inputs.username, login)
+          .type(inputs.password, pass)
+          .wait('.logout-link')
+          .wait(2000 + rand(2000))
+          .then()
+          .catch(async (e) => {
+            console.log('catch')
+            await nightmare.end(() => {
+              main(persist)
+            })
+          })
+      }
+
+      accountsValid.push(account)
+      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+        if (err) return console.log(err);
+      });
+
+      // main()
+    }
+
+    await nightmare
+      .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
+      .wait(2000 + rand(2000))
+      .wait('.tracklist-top-align')
+      .click('.tracklist-top-align')
+      .wait(2000 + rand(2000))
+      .evaluate(() => {
+        setTimeout(() => {
+          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+          document.querySelector(shuffle) && document.querySelector(shuffle).click()
+        }, 1000);
+
+        setTimeout(() => {
+          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+          document.querySelector(repeat) && document.querySelector(repeat).click()
+        }, 2000);
+
+        return true
       })
-    })
+      .then()
+      .catch(async (e) => {
+        console.log('catch')
+        await nightmare.end(() => {
+          main(persist)
+        })
+      })
 
-  setTimeout(async () => {
-    console.log('repeat')
-    await nightmare.end()
-    // main(persist)
-  }, 1000 * 60 * 1);
-
+    setTimeout(async () => {
+      console.log('repeat')
+      await nightmare.end()
+      // main(persist)
+    }, 1000 * 60 * 1);
+  }
+  catch (e) {
+    console.log('global catch')
+    main(persist)
+  }
 }
 
-try {
-  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    accounts = data.split(',')
-    main()
-  });
-}
-catch (e) {
-  console.log('catch')
+fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+  if (err) return console.log(err);
+  accounts = data.split(',')
   main()
-}
+});
