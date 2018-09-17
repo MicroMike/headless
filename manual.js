@@ -32,28 +32,28 @@ const main = async (session) => {
   let login
   let pass
 
-  try {
-    const Nightmare = require('nightmare')
-    const nightmare = Nightmare({
-      electronPath: require('electron'),
-      // openDevTools: {
-      //   mode: 'detach'
-      // },
-      alwaysOnTop: false,
-      waitTimeout: 1000 * 60,
-      show: true,
-      width: 600,
-      height: 600,
-      typeInterval: 300,
-      webPreferences: {
-        partition: persist,
-        webSecurity: false,
-        allowRunningInsecureContent: true,
-        plugins: true,
-        experimentalFeatures: true
-      }
-    })
+  const Nightmare = require('nightmare')
+  const nightmare = Nightmare({
+    electronPath: require('electron'),
+    // openDevTools: {
+    //   mode: 'detach'
+    // },
+    alwaysOnTop: false,
+    waitTimeout: 1000 * 60,
+    show: true,
+    width: 600,
+    height: 600,
+    typeInterval: 300,
+    webPreferences: {
+      partition: persist,
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      plugins: true,
+      experimentalFeatures: true
+    }
+  })
 
+  try {
     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
       if (err) return console.log(err);
     });
@@ -157,6 +157,15 @@ const main = async (session) => {
       .wait(2000 + rand(2000))
       .wait('.tracklist-top-align')
       .click('.tracklist-top-align')
+      .then()
+      .catch(async (e) => {
+        console.log('catch play')
+        await nightmare.end(() => {
+          main(persist)
+        })
+      })
+
+    await nightmare
       .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
@@ -170,13 +179,6 @@ const main = async (session) => {
         }, 2000);
 
         return true
-      })
-      .then()
-      .catch(async (e) => {
-        console.log('catch play')
-        await nightmare.end(() => {
-          main(persist)
-        })
       })
 
     setTimeout(async () => {
