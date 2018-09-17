@@ -74,8 +74,9 @@ const main = async (session) => {
         .then()
         .catch(async (e) => {
           console.log('catch')
-          await nightmare.end()
-          // main(persist)
+          await nightmare.end(() => {
+            main(persist)
+          })
         })
       : accounts.shift()
 
@@ -111,8 +112,9 @@ const main = async (session) => {
         .then()
         .catch(async (e) => {
           console.log('catch')
-          await nightmare.end()
-          // main(persist)
+          await nightmare.end(() => {
+            main(persist)
+          })
         })
 
       await nightmare
@@ -134,8 +136,9 @@ const main = async (session) => {
         .then()
         .catch(async (e) => {
           console.log('catch')
-          await nightmare.end()
-          // main(persist)
+          await nightmare.end(() => {
+            main(persist)
+          })
         })
     }
 
@@ -169,8 +172,9 @@ const main = async (session) => {
     .then()
     .catch(async (e) => {
       console.log('catch')
-      await nightmare.end()
-      // main(persist)
+      await nightmare.end(() => {
+        main(persist)
+      })
     })
 
   setTimeout(async () => {
