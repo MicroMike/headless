@@ -12,6 +12,7 @@ const rand = (max, min) => {
 
 const main = async (session) => {
   const persist = session || 'persist: ' + Date.now()
+  let step
   let inter
   let interloop
   let inputs = {
@@ -51,6 +52,10 @@ const main = async (session) => {
       experimentalFeatures: true
     }
   })
+
+  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+    if (err) return console.log(err);
+  });
 
   if (session) {
     isconected = await nightmare
@@ -123,10 +128,6 @@ const main = async (session) => {
 
     }
     else {
-      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-        if (err) return console.log(err);
-      });
-
       await nightmare
         .goto('https://spotify.com/login')
         .type(inputs.username, login)
