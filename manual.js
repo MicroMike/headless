@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
 let accounts = []
@@ -150,6 +152,6 @@ try {
   });
 }
 catch (e) {
-  console.log(e)
+  console.log('catch')
   main()
 }
