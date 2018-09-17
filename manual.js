@@ -21,7 +21,7 @@ const opennightmare = Nightmare({
   }
 })
 
-await opennightmare
+opennightmare
   .goto('https://google.fr')
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
