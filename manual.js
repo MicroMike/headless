@@ -38,7 +38,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 3,
+    waitTimeout: 1000 * 60,
     show: true,
     width: 600,
     height: 600,
@@ -73,6 +73,7 @@ const main = async (session) => {
         })
         .then()
         .catch((e) => {
+          console.log('catch')
           nightmare.end()
           main(persist)
         })
@@ -109,6 +110,7 @@ const main = async (session) => {
         })
         .then()
         .catch((e) => {
+          console.log('catch')
           nightmare.end()
           main(persist)
         })
@@ -116,8 +118,13 @@ const main = async (session) => {
       await nightmare
         .goto(urlactivate)
         .wait(2000 + rand(2000))
+
     }
     else {
+      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+        if (err) return console.log(err);
+      });
+
       await nightmare
         .goto('https://spotify.com/login')
         .type(inputs.username, login)
@@ -126,13 +133,13 @@ const main = async (session) => {
         .wait(2000 + rand(2000))
         .then()
         .catch((e) => {
+          console.log('catch')
           nightmare.end()
           main(persist)
         })
     }
 
     accountsValid.push(account)
-
     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
       if (err) return console.log(err);
     });
@@ -161,14 +168,16 @@ const main = async (session) => {
     })
     .then()
     .catch((e) => {
+      console.log('catch')
       nightmare.end()
       main(persist)
     })
 
   setTimeout(async () => {
+    console.log('repeat')
     await nightmare.end()
     main(persist)
-  }, 1000 * 60 * 3);
+  }, 1000 * 60 * 1);
 
 }
 
