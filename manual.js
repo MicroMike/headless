@@ -4,6 +4,7 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
 let accounts = []
 let accountsValid = []
+let isconected
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -52,13 +53,12 @@ const main = async (session) => {
   })
 
   if (session) {
-    let isconected = await nightmare
+    isconected = await nightmare
       .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
       .wait(2000 + rand(2000))
       .evaluate(() => {
         return document.querySelector('.tracklist-top-align')
       })
-
   }
 
   if (!session || !isconected) {
