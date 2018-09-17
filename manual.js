@@ -1,3 +1,7 @@
+const rand = (max, min) => {
+  return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
+}
+
 const main = async (session) => {
   const persist = session || 'persist: ' + Date.now()
   let inter
@@ -12,14 +16,8 @@ const main = async (session) => {
   let change = 0
   let pause = rand(4) + 2
 
-  const album = () => albums[rand(albums.length)]
-  let nAl
-
   let month = rand(12) + 1
   month = month < 10 ? '0' + month : '' + month
-
-  let isPause = false
-  let freeze = 0
 
   let player
   let login
