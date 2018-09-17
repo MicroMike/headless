@@ -72,10 +72,10 @@ const main = async (session) => {
           return 'spotify:' + email + ':' + email
         })
         .then()
-        .catch((e) => {
+        .catch(async (e) => {
           console.log('catch')
-          nightmare.end()
-          main(persist)
+          await nightmare.end()
+          // main(persist)
         })
       : accounts.shift()
 
@@ -109,10 +109,10 @@ const main = async (session) => {
           return document.getElementsByClassName('call-to-action-button')[0].href;
         })
         .then()
-        .catch((e) => {
+        .catch(async (e) => {
           console.log('catch')
-          nightmare.end()
-          main(persist)
+          await nightmare.end()
+          // main(persist)
         })
 
       await nightmare
@@ -132,10 +132,10 @@ const main = async (session) => {
         .wait('.logout-link')
         .wait(2000 + rand(2000))
         .then()
-        .catch((e) => {
+        .catch(async (e) => {
           console.log('catch')
-          nightmare.end()
-          main(persist)
+          await nightmare.end()
+          // main(persist)
         })
     }
 
@@ -167,16 +167,16 @@ const main = async (session) => {
       return true
     })
     .then()
-    .catch((e) => {
+    .catch(async (e) => {
       console.log('catch')
-      nightmare.end()
-      main(persist)
+      await nightmare.end()
+      // main(persist)
     })
 
   setTimeout(async () => {
     console.log('repeat')
     await nightmare.end()
-    main(persist)
+    // main(persist)
   }, 1000 * 60 * 1);
 
 }
