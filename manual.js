@@ -37,7 +37,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 5,
+    waitTimeout: 1000 * 60 * 3,
     show: true,
     width: 600,
     height: 600,
@@ -51,57 +51,85 @@ const main = async (session) => {
     }
   })
 
-  if (!session) {
-    const account = await nightmare
-      .goto('https://www.tempmailaddress.com')
-      .wait(2000)
+  if (session) {
+    let isconected = await nightmare
+      .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
+      .wait(2000 + rand(2000))
       .evaluate(() => {
-        let email = document.getElementById('email').innerText
-        return 'spotify:' + email + ':' + email
+        return document.querySelector('.tracklist-top-align')
       })
-      .then()
-      .catch((e) => {
-        nightmare.end()
-        main(persist)
-      })
+
+  }
+
+  if (!session || !isconected) {
+    const isnew = rand(2) === 0
+    const account = isnew
+      ? await nightmare
+        .goto('https://www.tempmailaddress.com')
+        .wait(2000)
+        .evaluate(() => {
+          let email = document.getElementById('email').innerText
+          return 'spotify:' + email + ':' + email
+        })
+        .then()
+        .catch((e) => {
+          nightmare.end()
+          main(persist)
+        })
+      : accounts.shift()
 
     accountInfo = account.split(':')
     player = accountInfo[0]
     login = accountInfo[1]
     pass = accountInfo[2]
 
-    const urlactivate = await nightmare
-      .goto('https://spotify.com/signup')
-      .wait('#register-email')
-      .type('#register-email', login)
-      .type('#register-confirm-email', login)
-      .type('#register-password', login)
-      .type('#register-displayname', login.split('@')[0])
-      .type('#register-dob-day', rand(25) + 1)
-      .select('#register-dob-month', month)
-      .type('#register-dob-year', rand(32) + 1963)
-      .click('#register-' + (rand(2) ? 'male' : 'female'))
-      .wait('.logout-link')
-      .wait(2000 + rand(2000))
-      .goto('https://www.tempmailaddress.com')
-      .wait('#schranka tr.hidden-md[data-href="2"]')
-      .goto('https://www.tempmailaddress.com/email/id/2')
-      .forward()
-      .goto('https://www.tempmailaddress.com/email/id/2')
-      .forward()
-      .wait('.call-to-action-button')
-      .evaluate(() => {
-        return document.getElementsByClassName('call-to-action-button')[0].href;
-      })
-      .then()
-      .catch((e) => {
-        nightmare.end()
-        main(persist)
-      })
+    if (isnew) {
+      const urlactivate = await nightmare
+        .goto('https://spotify.com/signup')
+        .wait('#register-email')
+        .type('#register-email', login)
+        .type('#register-confirm-email', login)
+        .type('#register-password', login)
+        .type('#register-displayname', login.split('@')[0])
+        .type('#register-dob-day', rand(25) + 1)
+        .select('#register-dob-month', month)
+        .type('#register-dob-year', rand(32) + 1963)
+        .click('#register-' + (rand(2) ? 'male' : 'female'))
+        .wait('.logout-link')
+        .wait(2000 + rand(2000))
+        .goto('https://www.tempmailaddress.com')
+        .wait('#schranka tr.hidden-md[data-href="2"]')
+        .goto('https://www.tempmailaddress.com/email/id/2')
+        .forward()
+        .goto('https://www.tempmailaddress.com/email/id/2')
+        .forward()
+        .wait('.call-to-action-button')
+        .evaluate(() => {
+          return document.getElementsByClassName('call-to-action-button')[0].href;
+        })
+        .then()
+        .catch((e) => {
+          nightmare.end()
+          main(persist)
+        })
 
-    await nightmare
-      .goto(urlactivate)
-      .wait(2000 + rand(2000))
+      await nightmare
+        .goto(urlactivate)
+        .wait(2000 + rand(2000))
+    }
+    else {
+      await nightmare
+        .goto('https://spotify.com/login')
+        .type(inputs.username, login)
+        .type(inputs.password, pass)
+        .wait('.logout-link')
+        .wait(2000 + rand(2000))
+        .then()
+        .catch((e) => {
+          nightmare.end()
+          main(persist)
+        })
+    }
 
     accountsValid.push(account)
 
@@ -137,8 +165,8 @@ const main = async (session) => {
       main(persist)
     })
 
-  setTimeout(() => {
-    nightmare.end()
+  setTimeout(async () => {
+    await nightmare.end()
     main(persist)
   }, 1000 * 60 * 3);
 
