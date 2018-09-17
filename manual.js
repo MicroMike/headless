@@ -60,10 +60,10 @@ const main = async (session) => {
 
     if (session) {
       isconected = await nightmare
-        .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
+        .goto('https://www.spotify.com/account/overview/')
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.tracklist-top-align')
+          return document.querySelector('.logout-link')
         })
     }
 
