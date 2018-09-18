@@ -88,7 +88,7 @@ const main = async (session) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
-      let log
+      let logError
 
       if (isnew) {
         const urlactivate = await nightmare
@@ -118,17 +118,18 @@ const main = async (session) => {
           .catch(async (e) => {
             console.log('catch signup')
             await nightmare.end(() => {
+              logError = true
               main()
             })
           })
 
-        log = await nightmare
+        await nightmare
           .goto(urlactivate)
           .wait(2000 + rand(2000))
 
       }
       else {
-        log = await nightmare
+        await nightmare
           .goto('https://spotify.com/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
@@ -138,23 +139,27 @@ const main = async (session) => {
           .catch(async (e) => {
             console.log('catch login')
             await nightmare.end(() => {
-              main()
+              logError = true
+              fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+                if (err) return console.log(err);
+                main()
+              });
             })
           })
       }
 
-      console.log(log, 'still doing')
-
-      accountsValid.push(account)
-      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-        if (err) return console.log(err);
-      });
-
-      if (!session) {
-        sessions.push(persist)
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+      if (!logError) {
+        accountsValid.push(account)
+        fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
           if (err) return console.log(err);
         });
+
+        if (!session) {
+          sessions.push(persist)
+          fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+            if (err) return console.log(err);
+          });
+        }
       }
 
       if (accountsValid.length < 15) {
