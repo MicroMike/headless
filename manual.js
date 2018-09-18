@@ -148,6 +148,8 @@ const main = async (session) => {
           })
       }
 
+      console.log(logError)
+
       if (!logError) {
         accountsValid.push(account)
         fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
