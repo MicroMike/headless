@@ -123,9 +123,8 @@ const main = async (session) => {
             })
           })
 
-        console.log(logError)
         if (logError) {
-          // return
+          return
         }
 
         await nightmare
@@ -151,11 +150,10 @@ const main = async (session) => {
               });
             })
           })
-      }
 
-      console.log(logError)
-      if (logError) {
-        return
+        if (logError) {
+          return
+        }
       }
 
       accountsValid.push(account)
