@@ -166,7 +166,7 @@ const main = async (session) => {
       .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
-          let play = '.tracklist-top-align'
+          let play = '.entity-name .btn-green'
           document.querySelector(play) && document.querySelector(play).click()
         }, 3000);
 
