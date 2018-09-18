@@ -235,6 +235,8 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       main(session)
     }
 
-    main()
+    if(!process.env.TEST){
+      main()
+    }
   });
 });

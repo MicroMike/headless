@@ -10,7 +10,7 @@
     "50p": "cross-env FILE=spotifyAccount.txt node favS",
     "startn": "concurrently \"npm run startp\" \"npm run startn\"",
     "start": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
-    "test": "cross-env FILE=spotifyAccount.txt TEST=true node favS",
+    "test": "cross-env TEST=true node manuel",
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start"
   },
   "repository": "https://github.com/electron/electron-quick-start",
