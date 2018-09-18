@@ -142,14 +142,17 @@ const main = async (session) => {
           .wait('.alert.alert-warning')
           .wait(2000 + rand(2000))
           .end(() => {
+            console.log('catch end')
             out()
           })
           .then()
           .catch(async (e) => {
+            console.log('catch out')
             await nightmare
               .wait('.logout-link')
               .then()
               .catch(async (e) => {
+                console.log('retry')
                 await nightmare.end(() => {
                   out()
                 })
@@ -229,7 +232,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     for (let session of sessions) {
-      main(session)
+      // main(session)
     }
 
     main()
