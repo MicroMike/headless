@@ -210,8 +210,10 @@ const main = async (session) => {
 fs.readFile('sessions.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   sessions = data.split(',')
-  for (let session of sessions) {
-    main(session)
+  if (sessions) {
+    for (let session of sessions) {
+      main(session)
+    }
   }
 
   fs.readFile(process.env.FILE, 'utf8', function (err, data) {
