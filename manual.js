@@ -156,18 +156,22 @@ const main = async (session) => {
       .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
       .wait(2000 + rand(2000))
       .wait('.tracklist-top-align')
-      .click('.tracklist-top-align')
       .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
+          let play = '.tracklist-top-align'
+          document.querySelector(play) && document.querySelector(play).click()
+        }, 3000);
+
+        setTimeout(() => {
           let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
           document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, 1000);
+        }, 4000);
 
         setTimeout(() => {
           let repeat = '.spoticon-repeat-16:not(.control-button--active)'
           document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, 2000);
+        }, 5000);
 
         return true
       })
