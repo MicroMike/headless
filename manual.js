@@ -153,27 +153,31 @@ const main = async (session) => {
         });
       }
 
-      // main()
+      if (accountsValid.length < 15) {
+        main()
+      }
     }
 
     await nightmare
       .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
       .wait(2000 + rand(2000))
       .evaluate(() => {
+        const timeout = 8000
+
         setTimeout(() => {
           let play = '.tracklist-top-align'
           document.querySelector(play) && document.querySelector(play).click()
-        }, 10000);
+        }, timeout);
 
         setTimeout(() => {
           let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
           document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, 11000);
+        }, timeout + 1000);
 
         setTimeout(() => {
           let repeat = '.spoticon-repeat-16:not(.control-button--active)'
           document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, 12000);
+        }, timeout + 2000);
 
         return true
       })
