@@ -146,7 +146,7 @@ const main = async (session) => {
             await nightmare.end(() => {
               fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
                 if (err) return console.log(err);
-                main()
+                main(persist)
               });
             })
           })
