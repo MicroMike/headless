@@ -117,8 +117,8 @@ const main = async (session) => {
           .then()
           .catch(async (e) => {
             console.log('catch signup')
+            logError = true
             await nightmare.end(() => {
-              logError = true
               main()
             })
           })
@@ -138,8 +138,8 @@ const main = async (session) => {
           .then()
           .catch(async (e) => {
             console.log('catch login')
+            logError = true
             await nightmare.end(() => {
-              logError = true
               fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
                 if (err) return console.log(err);
                 main()
