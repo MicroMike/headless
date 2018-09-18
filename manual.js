@@ -55,10 +55,6 @@ const main = async (session) => {
   })
 
   try {
-    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-      if (err) return console.log(err);
-    });
-
     if (session) {
       isconected = await nightmare
         .goto('https://www.spotify.com/account/overview/')
@@ -69,7 +65,7 @@ const main = async (session) => {
     }
 
     if (!session || !isconected) {
-      const isnew = rand(2) === 0
+      const isnew = false//rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -130,18 +126,34 @@ const main = async (session) => {
 
       }
       else {
+        const out = () => {
+          fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+            if (err) return console.log(err);
+          });
+
+          console.log('catch login')
+          main(persist)
+        }
+
         await nightmare
           .goto('https://spotify.com/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
-          .wait('.logout-link')
+          .wait('.alert.alert-warning')
           .wait(2000 + rand(2000))
+          .end(() => {
+            out()
+          })
           .then()
           .catch(async (e) => {
-            console.log('catch login')
-            await nightmare.end(() => {
-              main(persist)
-            })
+            await nightmare
+              .wait('.logout-link')
+              .then()
+              .catch(async (e) => {
+                await nightmare.end(() => {
+                  out()
+                })
+              })
           })
       }
 
@@ -167,17 +179,17 @@ const main = async (session) => {
         setTimeout(() => {
           let play = '.tracklist-top-align'
           document.querySelector(play) && document.querySelector(play).click()
-        }, 3000);
+        }, 10000);
 
         setTimeout(() => {
           let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
           document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, 4000);
+        }, 11000);
 
         setTimeout(() => {
           let repeat = '.spoticon-repeat-16:not(.control-button--active)'
           document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, 5000);
+        }, 12000);
 
         return true
       })
@@ -204,20 +216,22 @@ const main = async (session) => {
   }
 }
 
-fs.readFile('sessions.txt', 'utf8', function (err, data) {
+fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   if (err) return console.log(err);
   if (data) {
-    sessions = data.split(',')
-  }
-  for (let session of sessions) {
-    main(session)
+    accounts = data.split(',')
   }
 
-  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+  fs.readFile('sessions.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     if (data) {
-      accounts = data.split(',')
+      sessions = data.split(',')
     }
+
+    for (let session of sessions) {
+      main(session)
+    }
+
     main()
   });
 });
