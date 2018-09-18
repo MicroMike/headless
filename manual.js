@@ -34,6 +34,19 @@ const main = async (session) => {
   let pass
 
   const Nightmare = require('nightmare')
+  Nightmare.action(
+    'clearCache',
+    (name, options, parent, win, renderer, done) => {
+      parent.respondTo('clearCache', done => {
+        win.webContents.session.clearCache(done)
+      })
+      done()
+    },
+    function (done) {
+      this.child.call('clearCache', done)
+    }
+  )
+
   const nightmare = Nightmare({
     electronPath: require('electron'),
     // openDevTools: {
@@ -206,10 +219,8 @@ const main = async (session) => {
       })
 
     setTimeout(async () => {
-      await nightmare.end(() => {
-        main(persist)
-      })
-    }, 1000 * 60 * 15);
+      await nightmare.clearCache()
+    }, 1000 * 60 * 1);
   }
   catch (e) {
     console.log('global catch ' + e)
