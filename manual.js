@@ -39,7 +39,7 @@ const main = async (session) => {
     // openDevTools: {
     //   mode: 'detach'
     // },
-    alwaysOnTop: false,
+    alwaysOnTop: !session,
     waitTimeout: 1000 * 60,
     show: true,
     width: 600,
@@ -78,7 +78,7 @@ const main = async (session) => {
           .catch(async (e) => {
             console.log('catch tempmail start')
             await nightmare.end(() => {
-              main(persist)
+              main()
             })
           })
         : accounts.shift()
@@ -87,6 +87,8 @@ const main = async (session) => {
       player = accountInfo[0]
       login = accountInfo[1]
       pass = accountInfo[2]
+
+      let log
 
       if (isnew) {
         const urlactivate = await nightmare
@@ -116,17 +118,17 @@ const main = async (session) => {
           .catch(async (e) => {
             console.log('catch signup')
             await nightmare.end(() => {
-              main(persist)
+              main()
             })
           })
 
-        await nightmare
+        log = await nightmare
           .goto(urlactivate)
           .wait(2000 + rand(2000))
 
       }
       else {
-        await nightmare
+        log = await nightmare
           .goto('https://spotify.com/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
@@ -136,10 +138,12 @@ const main = async (session) => {
           .catch(async (e) => {
             console.log('catch login')
             await nightmare.end(() => {
-              main(persist)
+              main()
             })
           })
       }
+
+      console.log(log, 'still doing')
 
       accountsValid.push(account)
       fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
@@ -185,7 +189,8 @@ const main = async (session) => {
       .catch(async (e) => {
         console.log('catch play')
         await nightmare.end(() => {
-          main(persist)
+          accountsValid = accountsValid.filter(a => a !== account)
+          main()
         })
       })
 
