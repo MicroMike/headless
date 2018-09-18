@@ -123,6 +123,11 @@ const main = async (session) => {
             })
           })
 
+        console.log(logError)
+        if (logError) {
+          // return
+        }
+
         await nightmare
           .goto(urlactivate)
           .wait(2000 + rand(2000))
@@ -149,19 +154,20 @@ const main = async (session) => {
       }
 
       console.log(logError)
+      if (logError) {
+        return
+      }
 
-      if (!logError) {
-        accountsValid.push(account)
-        fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      accountsValid.push(account)
+      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+        if (err) return console.log(err);
+      });
+
+      if (!session) {
+        sessions.push(persist)
+        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
           if (err) return console.log(err);
         });
-
-        if (!session) {
-          sessions.push(persist)
-          fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-            if (err) return console.log(err);
-          });
-        }
       }
 
       if (accountsValid.length < 15) {
