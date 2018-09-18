@@ -5,6 +5,7 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 let accounts = []
 let accountsValid = []
 let isconected
+let sessions = []
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -12,6 +13,12 @@ const rand = (max, min) => {
 
 const main = async (session) => {
   const persist = session || 'persist: ' + Date.now()
+  if (!session) {
+    sessions.push(persist)
+    fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+      if (err) return console.log(err);
+    });
+  }
   let step
   let inter
   let interloop
@@ -198,8 +205,18 @@ const main = async (session) => {
   }
 }
 
-fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+
+
+fs.readFile('sessions.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
-  accounts = data.split(',')
-  main()
+  sessions = data.split(',')
+  for (let session of sessions) {
+    main(session)
+  }
+
+  fs.readFile(process.env.FILE, 'utf8', function (err, data) {
+    if (err) return console.log(err);
+    accounts = data.split(',')
+    main()
+  });
 });
