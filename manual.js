@@ -163,8 +163,6 @@ const main = async (session) => {
     await nightmare
       .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
       .wait(2000 + rand(2000))
-      .wait('.entity-name .btn-green')
-      .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
           let play = '.entity-name .btn-green'
