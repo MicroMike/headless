@@ -150,14 +150,14 @@ const main = async (session) => {
         if (err) return console.log(err);
       });
 
-      if (!session) {
-        sessions.push(persist)
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-          if (err) return console.log(err);
-        });
-      }
-
       // main()
+    }
+
+    if (!session) {
+      sessions.push(persist)
+      fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+        if (err) return console.log(err);
+      });
     }
 
     await nightmare
