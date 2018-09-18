@@ -190,11 +190,10 @@ const main = async (session) => {
       })
 
     setTimeout(async () => {
-      console.log('repeat')
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 60 * 1);
+    }, 1000 * 60 * 15);
   }
   catch (e) {
     console.log('global catch ' + e)
