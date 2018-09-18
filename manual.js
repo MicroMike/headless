@@ -13,12 +13,6 @@ const rand = (max, min) => {
 
 const main = async (session) => {
   const persist = session || 'persist: ' + Date.now()
-  if (!session) {
-    sessions.push(persist)
-    fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-      if (err) return console.log(err);
-    });
-  }
   let step
   let inter
   let interloop
@@ -156,13 +150,20 @@ const main = async (session) => {
         if (err) return console.log(err);
       });
 
+      if (!session) {
+        sessions.push(persist)
+        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+          if (err) return console.log(err);
+        });
+      }
+
       // main()
     }
 
     await nightmare
       .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
       .wait(2000 + rand(2000))
-      .wait('.tracklist-top-align')
+      .wait('.entity-name .btn-green')
       .wait(2000 + rand(2000))
       .evaluate(() => {
         setTimeout(() => {
