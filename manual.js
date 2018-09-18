@@ -40,7 +40,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: 1000 * 60,
+    waitTimeout: 1000 * 90,
     show: true,
     width: 600,
     height: 600,
