@@ -65,7 +65,7 @@ const main = async (session) => {
     }
 
     if (!session || !isconected) {
-      const isnew = false//rand(2) === 0
+      const isnew = rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -126,37 +126,18 @@ const main = async (session) => {
 
       }
       else {
-        const out = () => {
-          fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-            if (err) return console.log(err);
-          });
-
-          console.log('catch login')
-          main(persist)
-        }
-
         await nightmare
           .goto('https://spotify.com/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
-          .wait('.alert.alert-warning')
+          .wait('.logout-link')
           .wait(2000 + rand(2000))
-          .end(() => {
-            console.log('catch end')
-            out()
-          })
           .then()
           .catch(async (e) => {
-            console.log('catch out')
-            await nightmare
-              .wait('.logout-link')
-              .then()
-              .catch(async (e) => {
-                console.log('retry')
-                await nightmare.end(() => {
-                  out()
-                })
-              })
+            console.log('catch login')
+            await nightmare.end(() => {
+              main(persist)
+            })
           })
       }
 
@@ -232,7 +213,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     for (let session of sessions) {
-      // main(session)
+      main(session)
     }
 
     main()
