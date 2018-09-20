@@ -165,7 +165,7 @@ const main = async (isnew) => {
   let loginBtn
   let playBtn
 
-  url = 'https://accounts.spotify.com/login'
+  url = 'https://accounts.spotify.com/ie/login'
   loginBtn = '#login-button'
   playBtn = '.tracklist-play-pause.tracklist-middle-align'
   inputs.username = 'form input[name="username"]'
@@ -319,7 +319,7 @@ const main = async (isnew) => {
 
     if (isnew) {
       await nightmare
-        .goto('https://spotify.com/signup')
+        .goto('https://spotify.com/ie/signup')
 
       await nightmare
         .type('#register-email', login)
