@@ -37,7 +37,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
       task: {
         type: 'NoCaptchaTaskProxyless',
         websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
-        websiteURL: captchaisNew ? 'https://spotify.com/dk/signup' : 'https://accounts.spotify.com/dk/login',
+        websiteURL: captchaisNew ? 'https://spotify.com/ie/signup' : 'https://accounts.spotify.com/ie/login',
         invisible: captchaisNew ? 0 : 1
       }
     }
