@@ -33,7 +33,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
     method: 'POST',
     json: true,
     data: {
-      clientKey: '7b45c941a5b79b23935e9f43f56a39c7',
+      clientKey: 'f1213d40248d190dc8c0c8155af57700',
       task: {
         type: 'NoCaptchaTaskProxyless',
         websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
@@ -49,7 +49,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
           method: 'POST',
           json: true,
           data: {
-            clientKey: '7b45c941a5b79b23935e9f43f56a39c7',
+            clientKey: 'f1213d40248d190dc8c0c8155af57700',
             taskId: response.taskId
           }
         }, async (err, res, response) => {
