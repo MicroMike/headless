@@ -1,5 +1,4 @@
-import { connect } from 'tls';
-
+const request = require('ajax-request');
 const fs = require('fs');
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
