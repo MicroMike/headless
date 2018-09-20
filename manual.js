@@ -64,7 +64,9 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 }
                 else {
                   tryCaptcha = 0
-                  main()
+                  await nightmare.end(() => {
+                    main()
+                  })
                 }
               }
             }
