@@ -240,11 +240,13 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       sessions = data.split(',')
     }
 
-    for (let session of sessions) {
-      main(session)
+    if (process.env.TEST) {
+      for (let session of sessions) {
+        main(session)
+      }
     }
 
-    if (!process.env.TEST) {
+    if (process.env.ADD) {
       main()
     }
   });
