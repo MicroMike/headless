@@ -121,7 +121,7 @@ const main = async (session) => {
     // },
     alwaysOnTop: !session,
     waitTimeout: 1000 * 60 * 10,
-    show: true,
+    show: !process.env.TEST,
     width: 600,
     height: 600,
     typeInterval: 300,
