@@ -50,7 +50,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   return true
                 }, captcha)
 
-              const conected = await nightmare
+              const notconected = await nightmare
                 .wait(2000 + rand(2000))
                 .click('#register-button-email-submit')
                 .wait(4000 + rand(2000))
@@ -58,7 +58,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   return document.querySelector('#register-confirm-email')
                 })
 
-              if (!conected) {
+              if (notconected) {
                 if (++tryCaptcha < 3) {
                   anticaptcha(true, nightmare)
                 }
