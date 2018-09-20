@@ -101,7 +101,7 @@ const main = async (session) => {
 
       if (isnew) {
         const urlactivate = await nightmare
-          .goto('https://spotify.com/signup')
+          .goto('https://spotify.com/ie/signup')
           .wait('#register-email')
           .type('#register-email', login)
           .type('#register-confirm-email', login)
@@ -143,7 +143,7 @@ const main = async (session) => {
       }
       else {
         await nightmare
-          .goto('https://spotify.com/login')
+          .goto('https://spotify.com/ie/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
           .wait('.logout-link')
