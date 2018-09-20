@@ -1,18 +1,97 @@
+import { connect } from 'tls';
+
 const fs = require('fs');
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
 let accounts = []
 let accountsValid = []
-let isconected
 let sessions = []
+let tryCaptcha = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
 
+const anticaptcha = (captchaisNew, nightmare) => {
+  request({
+    url: 'https://api.anti-captcha.com/createTask',
+    method: 'POST',
+    json: true,
+    data: {
+      clientKey: '0cab7e41bab98900c321592426ec2183',
+      task: {
+        type: 'NoCaptchaTaskProxyless',
+        websiteKey: captchaisNew ? '6LdaGwcTAAAAAJfb0xQdr3FqU4ZzfAc_QZvIPby5' : '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo',
+        websiteURL: captchaisNew ? 'https://spotify.com/ie/signup' : 'https://accounts.spotify.com/ie/login',
+        invisible: captchaisNew ? 0 : 1
+      }
+    }
+  }, function (err, res, response) {
+    const interval = setInterval(() => {
+      try {
+        request({
+          url: 'https://api.anti-captcha.com/getTaskResult',
+          method: 'POST',
+          json: true,
+          data: {
+            clientKey: '0cab7e41bab98900c321592426ec2183',
+            taskId: response.taskId
+          }
+        }, async (err, res, response) => {
+          try {
+            if (response.status !== 'processing') {
+              clearInterval(interval)
+              const captcha = response.solution.gRecaptchaResponse
+              await nightmare
+                .wait(2000 + rand(2000))
+                .evaluate((captcha) => {
+                  console.log('CAPTCHA')
+                  document.getElementById('g-recaptcha-response').value = captcha
+                  return true
+                }, captcha)
+
+              const conected = await nightmare
+                .wait(2000 + rand(2000))
+                .click('#register-button-email-submit')
+                .wait(4000 + rand(2000))
+                .evaluate(() => {
+                  return document.querySelector('#register-confirm-email')
+                })
+
+              if (!conected) {
+                if (++tryCaptcha < 3) {
+                  anticaptcha(true, nightmare)
+                }
+                else {
+                  tryCaptcha = 0
+                  main()
+                }
+              }
+            }
+          }
+          catch (e) {
+            clearInterval(interval)
+            if (nightmare) {
+              await nightmare.end()
+            }
+          }
+        });
+      }
+      catch (e) {
+        clearInterval(interval)
+        if (nightmare) {
+          nightmare.end()
+        }
+      }
+    }, 10000)
+  });
+}
+
 const main = async (session) => {
+  tryCaptcha = 0
   const persist = session || 'persist: ' + Date.now()
+  let isconected
   let step
   let inter
   let interloop
@@ -40,7 +119,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: 1000 * 90,
+    waitTimeout: 1000 * 60 * 10,
     show: true,
     width: 600,
     height: 600,
@@ -74,7 +153,7 @@ const main = async (session) => {
     }
 
     if (!session || !isconected) {
-      const isnew = rand(2) === 0
+      const isnew = true//rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -100,6 +179,8 @@ const main = async (session) => {
       let logError
 
       if (isnew) {
+        anticaptcha(true, nightmare)
+
         const urlactivate = await nightmare
           .goto('https://spotify.com/ie/signup')
           .wait('#register-email')
@@ -125,7 +206,7 @@ const main = async (session) => {
           })
           .then()
           .catch(async (e) => {
-            console.log('catch signup')
+            console.log('catch signup 2')
             logError = true
             await nightmare.end(() => {
               main()
