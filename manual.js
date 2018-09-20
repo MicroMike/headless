@@ -62,6 +62,15 @@ const main = async (session) => {
         .evaluate(() => {
           return document.querySelector('.logout-link')
         })
+
+      if (process.env.TEST && !isconected) {
+        sessions = sessions.filter(a => a !== session)
+        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+          if (err) return console.log(err);
+        });
+
+        return
+      }
     }
 
     if (!session || !isconected) {
@@ -235,7 +244,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       main(session)
     }
 
-    if(!process.env.TEST){
+    if (!process.env.TEST) {
       main()
     }
   });
