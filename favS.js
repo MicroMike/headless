@@ -398,6 +398,7 @@ const main = async (isnew) => {
     })
 
     accountsValid.push(account)
+    console.log('total ' + accountsValid.length + '/' + trycount + ' retry: ' + retrycount)
     nightmare.end(() => {
       anticaptcha()
     })
@@ -453,27 +454,27 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 
 anticaptcha(true)
 
-setInterval(() => {
-  if (accounts.length - 1 && accountsValid.length < maxnb) {
-    // anticaptcha(true)
-    if (!process.env.TEST) {
-      anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
-    }
-  }
+// setInterval(() => {
+//   if (accounts.length - 1 && accountsValid.length < maxnb) {
+//     // anticaptcha(true)
+//     if (!process.env.TEST) {
+//       anticaptcha(process.env.ALLNEW || rand(2) % 2 === 0)
+//     }
+//   }
 
-  fs.readFile('maxnb.txt', 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    maxnb = data
-  });
-}, 1000 * 120)
+// }, 1000 * 120)
+fs.readFile('maxnb.txt', 'utf8', function (err, data) {
+  if (err) return console.log(err);
+  maxnb = data
+});
 
-let length1
-setInterval(() => {
-  if (length1 !== accountsValid.length + trycount + retrycount) {
-    console.log('total ' + accountsValid.length + '/' + trycount + ' retry: ' + retrycount)
-  }
-  length1 = accountsValid.length + trycount + retrycount
-}, 1000 * 5);
+// let length1
+// setInterval(() => {
+//   if (length1 !== accountsValid.length + trycount + retrycount) {
+//     console.log('total ' + accountsValid.length + '/' + trycount + ' retry: ' + retrycount)
+//   }
+//   length1 = accountsValid.length + trycount + retrycount
+// }, 1000 * 5);
 
 // setInterval(() => {
 fs.readFile('albums.txt', 'utf8', function (err, data) {
