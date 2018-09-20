@@ -11,7 +11,8 @@
     "startn": "concurrently \"npm run startp\" \"npm run startn\"",
     "start": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
     "test": "cross-env TEST=true node manual",
-    "s": "git reset --hard && git pull && chmod -R 777 . && npm run start"
+    "s": "git reset --hard && git pull && chmod -R 777 . && npm run start",
+    "vpn": "apt-get install nordvpn-release_1.0.0_all.deb && apt-get update && apt-get install nordvpn"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
