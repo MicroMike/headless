@@ -397,10 +397,13 @@ const main = async (isnew) => {
       if (err) return console.log(err);
     })
 
+    accountsValid.push(account)
+    nightmare.end(() => {
+      anticaptcha()
+    })
     return
     loop()
 
-    accountsValid.push(account)
 
     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
       if (err) return console.log(err);
