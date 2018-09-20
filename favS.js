@@ -397,6 +397,7 @@ const main = async (isnew) => {
       if (err) return console.log(err);
     })
 
+    return
     loop()
 
     accountsValid.push(account)
@@ -404,6 +405,7 @@ const main = async (isnew) => {
     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
       if (err) return console.log(err);
     });
+
 
     processing = false
 
