@@ -130,6 +130,7 @@ const anticaptcha2 = (captchaisNew) => {
 }
 
 const main = async (isnew) => {
+  const session = 'persist: ' + Date.now()
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
@@ -143,6 +144,7 @@ const main = async (isnew) => {
     height: 600,
     typeInterval: 300,
     webPreferences: {
+      partition: session,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -390,6 +392,10 @@ const main = async (isnew) => {
         .wait('.logout-link')
         .wait(2000 + rand(2000))
     }
+
+    fs.appendFile('sessions.txt', ',' + session, function (err, data) {
+      if (err) return console.log(err);
+    })
 
     loop()
 
