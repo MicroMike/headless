@@ -121,6 +121,7 @@ const main = async (session) => {
   let player
   let login
   let pass
+  let album = album()
 
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -129,7 +130,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60,
+    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60 * 2,
     show: true,
     width: 600,
     height: 600,
@@ -143,28 +144,32 @@ const main = async (session) => {
     }
   })
 
+
   try {
     if (session) {
-      isconected = await nightmare
-        .goto(album())
-        .wait('.tracklist-middle-align')
-        .evaluate(() => {
-          return document.querySelector('.tracklist-middle-align')
-        })
+      isconected = true
+
+      await nightmare
+        .goto(album)
+        .wait('.nowPlayingBar-container')
         .then()
         .catch(async (e) => {
+          isconected = false
           console.log('catch connect ' + e)
+
+          if (process.env.TEST) {
+            sessions = sessions.filter(a => a !== session)
+            fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+              if (err) return console.log(err);
+            });
+          }
+
           await nightmare.end(() => {
             main(persist)
           })
         })
 
-      if (process.env.TEST && !isconected) {
-        sessions = sessions.filter(a => a !== session)
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-          if (err) return console.log(err);
-        });
-
+      if (!isconected) {
         return
       }
     }
