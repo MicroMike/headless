@@ -143,7 +143,7 @@ const main = async (session) => {
     }
   })
 
-  const play = () => {
+  const play = async () => {
     await nightmare
       .wait(2000 + rand(2000))
       .evaluate(() => {
