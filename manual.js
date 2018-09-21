@@ -188,7 +188,7 @@ const main = async (session) => {
         })
         .then()
         .catch(async (e) => {
-          console.log('catch connect')
+          console.log('catch connect ' + e)
           await nightmare.end(() => {
             main(persist)
           })
