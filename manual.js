@@ -143,13 +143,55 @@ const main = async (session) => {
     }
   })
 
+  const play = () => {
+    await nightmare
+      .wait(2000 + rand(2000))
+      .evaluate(() => {
+        const timeout = 8000
+
+        setTimeout(() => {
+          let play = '.tracklist-top-align'
+          let play2 = '.tracklist-middle-align'
+          let play3 = '.btn-green'
+          document.querySelector(play3) && document.querySelector(play3).click()
+        }, timeout);
+
+        setTimeout(() => {
+          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+          document.querySelector(shuffle) && document.querySelector(shuffle).click()
+        }, timeout + 1000);
+
+        setTimeout(() => {
+          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+          document.querySelector(repeat) && document.querySelector(repeat).click()
+        }, timeout + 2000);
+
+        return true
+      })
+      .then()
+      .catch(async (e) => {
+        console.log('catch play ' + e)
+        await nightmare.end(() => {
+          // accountsValid = accountsValid.filter(a => a !== account)
+          main(persist)
+        })
+      })
+  }
+
   try {
     if (session) {
       isconected = await nightmare
-        .goto('https://www.spotify.com/account/overview/')
+        .goto(album())
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.logout-link')
+          return document.querySelector('.btn-green')
+        })
+        .then()
+        .catch(async (e) => {
+          console.log('catch connect')
+          await nightmare.end(() => {
+            main(persist)
+          })
         })
 
       if (process.env.TEST && !isconected) {
@@ -273,40 +315,12 @@ const main = async (session) => {
       }
     }
 
-    const aUrl = album()
-    await nightmare
-      .goto(aUrl)
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        const timeout = 8000
+    if (!isconected) {
+      await nightmare
+        .goto(album())
 
-        setTimeout(() => {
-          let play = '.tracklist-top-align'
-          let play2 = '.tracklist-middle-align'
-          document.querySelector(play) && document.querySelector(play).click()
-          document.querySelector(play2) && document.querySelector(play2).click()
-        }, timeout);
-
-        setTimeout(() => {
-          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, timeout + 1000);
-
-        setTimeout(() => {
-          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-          document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, timeout + 2000);
-
-        return true
-      })
-      .then()
-      .catch(async (e) => {
-        console.log('catch play ' + e)
-        await nightmare.end(() => {
-          // accountsValid = accountsValid.filter(a => a !== account)
-          main(persist)
-        })
-      })
+      play()
+    }
 
     setTimeout(async () => {
       await nightmare.end(() => {
@@ -321,6 +335,7 @@ const main = async (session) => {
     })
   }
 }
+
 
 fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   if (err) return console.log(err);
