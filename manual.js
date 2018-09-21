@@ -312,7 +312,7 @@ const main = async (session) => {
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 60 * 10 + rand(1000 * 60 * 10));
+    }, 1000 * 60 * 10 + rand(1000 * 60 * 20));
   }
   catch (e) {
     console.log('global catch ' + e)
@@ -338,7 +338,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       for (let session of sessions) {
         setTimeout(() => {
           main(session)
-        }, rand(1000 * 60 * 10));
+        }, rand(1000 * 60 * 20));
       }
     }
 
