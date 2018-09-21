@@ -144,14 +144,15 @@ const main = async (session) => {
   })
 
   const play = async () => {
-    await nightmare
+    return await nightmare
+      .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
         const timeout = 8000
+        let play2 = '.tracklist-middle-align'
 
         setTimeout(() => {
           let play = '.tracklist-top-align'
-          let play2 = '.tracklist-middle-align'
           let play3 = '.btn-green'
           document.querySelector(play2) && document.querySelector(play2).click()
         }, timeout);
@@ -166,7 +167,7 @@ const main = async (session) => {
           document.querySelector(repeat) && document.querySelector(repeat).click()
         }, timeout + 2000);
 
-        return true
+        return document.querySelector(play2)
       })
       .then()
       .catch(async (e) => {
@@ -180,19 +181,7 @@ const main = async (session) => {
 
   try {
     if (session) {
-      isconected = await nightmare
-        .goto(album())
-        .wait(2000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.tracklist-middle-align')
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch connect ' + e)
-          await nightmare.end(() => {
-            main(persist)
-          })
-        })
+      isconected = play()
 
       if (process.env.TEST && !isconected) {
         sessions = sessions.filter(a => a !== session)
@@ -316,11 +305,9 @@ const main = async (session) => {
     }
 
     if (!isconected) {
-      await nightmare
-        .goto(album())
+      play()
     }
 
-    play()
 
     setTimeout(async () => {
       await nightmare.end(() => {
