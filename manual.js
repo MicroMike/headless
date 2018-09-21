@@ -8,6 +8,10 @@ let accountsValid = []
 let sessions = []
 let tryCaptcha = 0
 
+const rand = (max, min) => {
+  return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
+}
+
 const albums = [
   'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
   'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
@@ -16,10 +20,6 @@ const albums = [
   'https://open.spotify.com/album/45is933jCRlQOt6km073H5'
 ]
 const album = () => albums[rand(albums.length)]
-
-const rand = (max, min) => {
-  return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
-}
 
 const anticaptcha = (captchaisNew, nightmare) => {
   request({
