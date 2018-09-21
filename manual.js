@@ -292,7 +292,7 @@ const main = async (session) => {
         console.log('catch play')
         await nightmare.end(() => {
           accountsValid = accountsValid.filter(a => a !== account)
-          main()
+          main(persist)
         })
       })
 
@@ -324,9 +324,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 
     if (process.env.TEST) {
       for (let session of sessions) {
-        setTimeout(() => {
-          main(session)
-        }, rand(1000 * 120));
+        main(session)
       }
     }
 
