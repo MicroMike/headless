@@ -8,6 +8,15 @@ let accountsValid = []
 let sessions = []
 let tryCaptcha = 0
 
+const albums = [
+  'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
+  'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
+  'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
+  'https://open.spotify.com/album/3OCGq91kV8ZtN5qDUI1XA9',
+  'https://open.spotify.com/album/45is933jCRlQOt6km073H5'
+]
+const album = () => albums[rand(albums.length)]
+
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
@@ -264,15 +273,18 @@ const main = async (session) => {
       }
     }
 
+    const aUrl = album()
     await nightmare
-      .goto('https://open.spotify.com/playlist/2d64R3iEY5cCDwTmLt9bwr')
+      .goto(aUrl)
       .wait(2000 + rand(2000))
       .evaluate(() => {
         const timeout = 8000
 
         setTimeout(() => {
           let play = '.tracklist-top-align'
+          let play2 = '.tracklist-middle-align'
           document.querySelector(play) && document.querySelector(play).click()
+          document.querySelector(play2) && document.querySelector(play2).click()
         }, timeout);
 
         setTimeout(() => {
@@ -289,7 +301,7 @@ const main = async (session) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch play')
+        console.log('catch play ' + e)
         await nightmare.end(() => {
           // accountsValid = accountsValid.filter(a => a !== account)
           main(persist)
