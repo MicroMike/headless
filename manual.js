@@ -318,9 +318,9 @@ const main = async (session) => {
     if (!isconected) {
       await nightmare
         .goto(album())
-
-      play()
     }
+
+    play()
 
     setTimeout(async () => {
       await nightmare.end(() => {
