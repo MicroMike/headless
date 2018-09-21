@@ -147,7 +147,7 @@ const main = async (session) => {
     if (session) {
       isconected = await nightmare
         .goto(album())
-        .wait(2000 + rand(2000))
+        .wait('.tracklist-middle-align')
         .evaluate(() => {
           return document.querySelector('.tracklist-middle-align')
         })
