@@ -146,10 +146,17 @@ const main = async (session) => {
   try {
     if (session) {
       isconected = await nightmare
-        .goto('https://www.spotify.com/account/overview/')
+        .goto(album())
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.logout-link')
+          return document.querySelector('.tracklist-middle-align')
+        })
+        .then()
+        .catch(async (e) => {
+          console.log('catch connect ' + e)
+          await nightmare.end(() => {
+            main(persist)
+          })
         })
 
       if (process.env.TEST && !isconected) {
@@ -230,7 +237,7 @@ const main = async (session) => {
         await nightmare
           .goto(urlactivate)
           .wait(2000 + rand(2000))
-
+          .goto(album())
       }
       else {
         await nightmare
@@ -274,18 +281,15 @@ const main = async (session) => {
     }
 
     await nightmare
-      .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
         const timeout = 8000
 
         setTimeout(() => {
-          let play = '.tracklist-top-align'
-          let play2 = '.tracklist-middle-align'
-          let play3 = '.btn-green'
-          // document.querySelector(play) && document.querySelector(play).click()
-          // document.querySelector(play2) && document.querySelector(play2).click()
-          document.querySelector(play3) && document.querySelector(play3).click()
+          // let play = '.tracklist-top-align'
+          let play = '.tracklist-middle-align'
+          // let play = '.btn-green'
+          document.querySelector(play) && document.querySelector(play).click()
         }, timeout);
 
         setTimeout(() => {
