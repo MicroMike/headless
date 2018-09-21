@@ -129,7 +129,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60,
+    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60 * 2,
     show: true,
     width: 600,
     height: 600,
@@ -153,7 +153,7 @@ const main = async (session) => {
           let play = '.tracklist-top-align'
           let play2 = '.tracklist-middle-align'
           let play3 = '.btn-green'
-          document.querySelector(play3) && document.querySelector(play3).click()
+          document.querySelector(play2) && document.querySelector(play2).click()
         }, timeout);
 
         setTimeout(() => {
@@ -184,7 +184,7 @@ const main = async (session) => {
         .goto(album())
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.btn-green')
+          return document.querySelector('.tracklist-middle-align')
         })
         .then()
         .catch(async (e) => {
