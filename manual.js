@@ -121,7 +121,6 @@ const main = async (session) => {
   let player
   let login
   let pass
-  let album = album()
 
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -130,7 +129,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60 * 2,
+    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60,
     show: true,
     width: 600,
     height: 600,
@@ -144,32 +143,28 @@ const main = async (session) => {
     }
   })
 
-
   try {
     if (session) {
-      isconected = true
-
-      await nightmare
-        .goto(album)
-        .wait('.nowPlayingBar-container')
+      isconected = await nightmare
+        .goto('https://www.spotify.com/account/overview/')
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.logout-link')
+        })
         .then()
         .catch(async (e) => {
-          isconected = false
           console.log('catch connect ' + e)
-
-          if (process.env.TEST) {
-            sessions = sessions.filter(a => a !== session)
-            fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-              if (err) return console.log(err);
-            });
-          }
-
           await nightmare.end(() => {
             main(persist)
           })
         })
 
-      if (!isconected) {
+      if (process.env.TEST && !isconected) {
+        sessions = sessions.filter(a => a !== session)
+        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+          if (err) return console.log(err);
+        });
+
         return
       }
     }
@@ -242,7 +237,7 @@ const main = async (session) => {
         await nightmare
           .goto(urlactivate)
           .wait(2000 + rand(2000))
-          .goto(album())
+
       }
       else {
         await nightmare
@@ -286,15 +281,18 @@ const main = async (session) => {
     }
 
     await nightmare
+      .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
         const timeout = 8000
 
         setTimeout(() => {
-          // let play = '.tracklist-top-align'
-          let play = '.tracklist-middle-align'
-          // let play = '.btn-green'
-          document.querySelector(play) && document.querySelector(play).click()
+          let play = '.tracklist-top-align'
+          let play2 = '.tracklist-middle-align'
+          let play3 = '.btn-green'
+          // document.querySelector(play) && document.querySelector(play).click()
+          // document.querySelector(play2) && document.querySelector(play2).click()
+          document.querySelector(play3) && document.querySelector(play3).click()
         }, timeout);
 
         setTimeout(() => {
