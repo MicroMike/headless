@@ -324,7 +324,9 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 
     if (process.env.TEST) {
       for (let session of sessions) {
-        main(session)
+        setTimeout(() => {
+          main(session)
+        }, rand(1000 * 120));
       }
     }
 
