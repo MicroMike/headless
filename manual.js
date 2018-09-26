@@ -329,10 +329,10 @@ const main = async (session) => {
 
     setTimeout(async () => {
       if (process.env.TEST) {
-        let accoount = sessions.shift()
-        sessions.push(account)
+        let switchAccount = sessions.shift()
+        sessions.push(switchAccount)
         await nightmare.end(() => {
-          main(accoount)
+          main(switchAccount)
         })
         return
       }
@@ -365,10 +365,10 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       size = sessions.length
       console.log(size)
       while (dealer++ < size / 2) {
-        let accoount = sessions.shift()
-        sessions.push(account)
+        let switchAccount = sessions.shift()
+        sessions.push(switchAccount)
         setTimeout(() => {
-          main(accoount)
+          main(switchAccount)
         }, rand(1000 * 60 * 15));
       }
     }
