@@ -7,6 +7,8 @@ let accounts = []
 let accountsValid = []
 let sessions = []
 let tryCaptcha = 0
+let size
+let dealer = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -286,24 +288,33 @@ const main = async (session) => {
       .evaluate(() => {
         const timeout = 8000
 
-        setTimeout(() => {
-          let play = '.tracklist-top-align'
-          let play2 = '.tracklist-middle-align'
-          let play3 = '.btn-green'
-          // document.querySelector(play) && document.querySelector(play).click()
-          // document.querySelector(play2) && document.querySelector(play2).click()
-          document.querySelector(play3) && document.querySelector(play3).click()
-        }, timeout);
+        let inter = setInterval(() => {
+          if (document.querySelector('.cover-art-playback.playing')) {
+            clearInterval(inter)
+            return
+          }
 
-        setTimeout(() => {
-          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, timeout + 1000);
+          setTimeout(() => {
+            // let play = '.tracklist-top-align'
+            // let play = '.tracklist-middle-align'
+            // let play = '.btn-green'
+            let play = '.cover-art-playback:not(.playing)'
+            // document.querySelector(play) && document.querySelector(play).click()
+            // document.querySelector(play2) && document.querySelector(play2).click()
+            document.querySelector(play) && document.querySelector(play).click()
+          }, timeout);
 
-        setTimeout(() => {
-          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-          document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, timeout + 2000);
+          setTimeout(() => {
+            let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+            document.querySelector(shuffle) && document.querySelector(shuffle).click()
+          }, timeout + 1000);
+
+          setTimeout(() => {
+            let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+            document.querySelector(repeat) && document.querySelector(repeat).click()
+          }, timeout + 2000);
+
+        }, timeout)
 
         return true
       })
@@ -317,6 +328,14 @@ const main = async (session) => {
       })
 
     setTimeout(async () => {
+      if (process.env.TEST) {
+        let accoount = sessions.shift()
+        sessions.push(account)
+        await nightmare.end(() => {
+          main(accoount)
+        })
+        return
+      }
       await nightmare.end(() => {
         main(persist)
       })
@@ -343,10 +362,13 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.TEST) {
-      console.log(sessions.length)
-      for (let session of sessions) {
+      size = sessions.length
+      console.log(size)
+      while (dealer++ < size / 2) {
+        let accoount = sessions.shift()
+        sessions.push(account)
         setTimeout(() => {
-          main(session)
+          main(accoount)
         }, rand(1000 * 60 * 15));
       }
     }
