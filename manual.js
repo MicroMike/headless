@@ -148,17 +148,16 @@ const main = async (session) => {
   try {
     if (session) {
       isconected = await nightmare
-        .goto('https://www.spotify.com/account/overview/')
+        .goto('https://open.spotify.com')
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.logout-link')
+          return document.querySelector('.nowPlayingBar-container')
         })
         .then()
         .catch(async (e) => {
           console.log('catch connect ' + e)
-          await nightmare.end(() => {
-            main(persist)
-          })
+          main(persist)
+          await nightmare.end()
         })
 
       if (process.env.TEST && !isconected) {
@@ -321,10 +320,8 @@ const main = async (session) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        await nightmare.end(() => {
-          // accountsValid = accountsValid.filter(a => a !== account)
-          main(persist)
-        })
+        main(persist)
+        await nightmare.end()
       })
 
     setTimeout(async () => {
@@ -343,9 +340,8 @@ const main = async (session) => {
   }
   catch (e) {
     console.log('global catch ' + e)
-    await nightmare.end(() => {
-      main(persist)
-    })
+    main(persist)
+    await nightmare.end()
   }
 }
 
