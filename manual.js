@@ -148,10 +148,10 @@ const main = async (session) => {
   try {
     if (session) {
       isconected = await nightmare
-        .goto('https://open.spotify.com')
+        .goto('https://www.spotify.com/account/overview/')
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return document.querySelector('.nowPlayingBar-container')
+          return document.querySelector('.logout-link')
         })
         .then()
         .catch(async (e) => {
