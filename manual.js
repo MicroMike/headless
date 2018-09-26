@@ -343,6 +343,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.TEST) {
+      console.log(sessions.length)
       for (let session of sessions) {
         setTimeout(() => {
           main(session)
