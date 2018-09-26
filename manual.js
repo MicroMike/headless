@@ -275,7 +275,7 @@ const main = async (session) => {
         });
       }
 
-      if (accountsValid.length < 15) {
+      if (accountsValid.length < 20) {
         main()
       }
     }
@@ -351,6 +351,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.ADD) {
+      main()
       main()
     }
   });
