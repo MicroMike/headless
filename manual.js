@@ -141,6 +141,7 @@ const main = async (session) => {
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
+      images: false,
       experimentalFeatures: true
     }
   })
