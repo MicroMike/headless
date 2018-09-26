@@ -366,7 +366,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
         sessions.push(switchAccount)
         setTimeout(() => {
           main(switchAccount)
-        }, rand(1000 * 60 * 15));
+        }, rand(1000 * 60 * 10));
       }
     }
 
