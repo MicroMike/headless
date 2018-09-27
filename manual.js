@@ -328,7 +328,7 @@ const main = async (session) => {
     }
 
     loop()
-    const inter = setInterval(loop, 1000 * 60 * 5)
+    const inter = setInterval(loop, 1000 * 60 * 10)
 
     setTimeout(async () => {
       clearInterval(inter)
