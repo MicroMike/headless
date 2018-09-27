@@ -314,24 +314,23 @@ const main = async (session) => {
     }
 
     const loop = async () => {
-      await nightmare.end(() => {
-        await nightmare
-          .goto(album())
-          .wait('.cover-art-playback')
-          .evaluate(play)
-          .then()
-          .catch(async (e) => {
-            console.log('catch play ' + e)
-            open = false
-            await nightmare.end()
-          })
-      })
+      await nightmare
+        .goto(album())
+        .wait('.cover-art-playback')
+        .evaluate(play)
+        .then()
+        .catch(async (e) => {
+          console.log('catch play ' + e)
+          open = false
+          await nightmare.end()
+        })
     }
 
     loop()
-    setInterval(loop, 1000 * 60 * 5)
+    const inter = setInterval(loop, 1000 * 60 * 5)
 
     setTimeout(async () => {
+      clearInterval(inter)
       if (process.env.TEST) {
         let switchAccount = sessions.shift()
         sessions.push(switchAccount)
