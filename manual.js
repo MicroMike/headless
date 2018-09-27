@@ -338,7 +338,7 @@ const main = async (session) => {
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 60 * 10);
+    }, 1000 * 13 * (size / 1.5 + 1));
   }
   catch (e) {
     console.log('global catch ' + e)
