@@ -100,6 +100,38 @@ const anticaptcha = (captchaisNew, nightmare) => {
   });
 }
 
+const play = () => {
+  const timeout = 8000
+
+  let inter = setInterval(() => {
+    if (document.querySelector('.cover-art-playback.playing')) {
+      clearInterval(inter)
+      return
+    }
+
+    setTimeout(() => {
+      // let play = '.tracklist-top-align'
+      // let play = '.tracklist-middle-align'
+      // let play = '.btn-green'
+      let play = '.cover-art-playback:not(.playing)'
+      document.querySelector(play) && document.querySelector(play).click()
+    }, timeout);
+
+    setTimeout(() => {
+      let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
+      document.querySelector(shuffle) && document.querySelector(shuffle).click()
+    }, timeout + 1000);
+
+    setTimeout(() => {
+      let repeat = '.spoticon-repeat-16:not(.control-button--active)'
+      document.querySelector(repeat) && document.querySelector(repeat).click()
+    }, timeout + 2000);
+
+  }, timeout)
+
+  return true
+}
+
 const main = async (session) => {
   tryCaptcha = 0
   const persist = session || 'persist: ' + Date.now()
@@ -281,53 +313,26 @@ const main = async (session) => {
       }
     }
 
-    const play = () => {
-      const timeout = 8000
+    let open = false
 
-      let inter = setInterval(() => {
-        if (document.querySelector('.cover-art-playback.playing')) {
-          clearInterval(inter)
-          return
-        }
-
-        setTimeout(() => {
-          // let play = '.tracklist-top-align'
-          // let play = '.tracklist-middle-align'
-          // let play = '.btn-green'
-          let play = '.cover-art-playback:not(.playing)'
-          document.querySelector(play) && document.querySelector(play).click()
-        }, timeout);
-
-        setTimeout(() => {
-          let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
-          document.querySelector(shuffle) && document.querySelector(shuffle).click()
-        }, timeout + 1000);
-
-        setTimeout(() => {
-          let repeat = '.spoticon-repeat-16:not(.control-button--active)'
-          document.querySelector(repeat) && document.querySelector(repeat).click()
-        }, timeout + 2000);
-
-      }, timeout)
-
-      return true
-    }
-
-    await nightmare
-      .goto(album())
-      .wait('.cover-art-playback')
-      .evaluate(play)
-      .then()
-      .catch(async (e) => {
-        console.log('catch play ' + e)
-        logError = true
+    setInterval(async () => {
+      if (open) {
         await nightmare.end()
-      })
+      }
 
-    if (logError) {
-      main(persist)
-      return
-    }
+      open = true
+
+      await nightmare
+        .goto(album())
+        .wait('.cover-art-playback')
+        .evaluate(play)
+        .then()
+        .catch(async (e) => {
+          console.log('catch play ' + e)
+          open = false
+          await nightmare.end()
+        })
+    }, 1000 * 60 * 5)
 
     setTimeout(async () => {
       if (process.env.TEST) {
@@ -341,19 +346,7 @@ const main = async (session) => {
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 26 * (size / 1.5));
-
-    setTimeout(() => {
-      await nightmare
-        .goto(album())
-        .wait('.cover-art-playback')
-        .evaluate(play)
-        .then()
-        .catch(async (e) => {
-          console.log('catch play 2 ' + e)
-          await nightmare.end()
-        })
-    }, 1000 * 60 * 10);
+    }, 1000 * 26 * (size / 1.5 + 1));
   }
   catch (e) {
     console.log('global catch ' + e)
