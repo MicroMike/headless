@@ -315,21 +315,15 @@ const main = async (session) => {
       }
     }
 
-    const loop = async () => {
-      await nightmare
-        .goto(album())
-        .wait('.cover-art-playback')
-        .evaluate(play)
-        .then()
-        .catch(async (e) => {
-          console.log('catch play ' + e)
-          open = false
-          await nightmare.end()
-        })
-    }
-
-    loop()
-    const inter = setInterval(loop, 1000 * 60 * 10)
+    await nightmare
+      .goto(album())
+      .wait('.cover-art-playback')
+      .evaluate(play)
+      .then()
+      .catch(async (e) => {
+        console.log('catch play ' + e)
+        await nightmare.end()
+      })
 
     setTimeout(async () => {
       clearInterval(inter)
@@ -344,7 +338,7 @@ const main = async (session) => {
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 26 * (size / 1.5 + 1));
+    }, 1000 * 60 * 10);
   }
   catch (e) {
     console.log('global catch ' + e)
@@ -376,7 +370,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
         sessions.push(switchAccount)
         setTimeout(() => {
           main(switchAccount)
-        }, 1000 * 26 * time++);
+        }, 1000 * 13 * time++);
       }
     }
 
