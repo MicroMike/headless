@@ -315,7 +315,7 @@ const main = async (session) => {
 
     let open = false
 
-    setInterval(async () => {
+    const loop = async () => {
       if (open) {
         await nightmare.end()
       }
@@ -332,7 +332,9 @@ const main = async (session) => {
           open = false
           await nightmare.end()
         })
-    }, 1000 * 60 * 5)
+    }
+    loop()
+    setInterval(loop, 1000 * 60 * 5)
 
     setTimeout(async () => {
       if (process.env.TEST) {
