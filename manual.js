@@ -347,7 +347,7 @@ const main = async (session) => {
     await nightmare.end()
     setTimeout(() => {
       main(persist)
-    }, 1000);
+    }, 2600);
   }
 }
 
