@@ -345,8 +345,8 @@ const main = async (session) => {
 
     setTimeout(() => {
       await nightmare
-        .refresh()
-        .wait(2000 + rand(2000))
+        .goto(album())
+        .wait('.cover-art-playback')
         .evaluate(play)
         .then()
         .catch(async (e) => {
@@ -380,7 +380,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       size = sessions.length
       console.log(size)
       let time = 0
-      while (dealer++ < size) {
+      while (dealer++ < size / 1.5) {
         let switchAccount = sessions.shift()
         sessions.push(switchAccount)
         setTimeout(() => {
