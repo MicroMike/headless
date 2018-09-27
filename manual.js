@@ -101,7 +101,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
 }
 
 const play = () => {
-  const timeout = 8000
+  const timeout = 1000
 
   let inter = setInterval(() => {
     if (document.querySelector('.cover-art-playback.playing')) {
@@ -109,13 +109,11 @@ const play = () => {
       return
     }
 
-    setTimeout(() => {
-      // let play = '.tracklist-top-align'
-      // let play = '.tracklist-middle-align'
-      // let play = '.btn-green'
-      let play = '.cover-art-playback:not(.playing)'
-      document.querySelector(play) && document.querySelector(play).click()
-    }, timeout);
+    // let play = '.tracklist-top-align'
+    // let play = '.tracklist-middle-align'
+    // let play = '.btn-green'
+    let play = '.cover-art-playback:not(.playing)'
+    document.querySelector(play) && document.querySelector(play).click()
 
     setTimeout(() => {
       let shuffle = '.spoticon-shuffle-16:not(.control-button--active)'
