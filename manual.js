@@ -106,6 +106,9 @@ const play = () => {
   let inter = setInterval(() => {
     if (document.querySelector('.cover-art-playback.playing')) {
       clearInterval(inter)
+      document.querySelector('.playback-bar__progress-time').style.position = 'fixed'
+      document.querySelector('.playback-bar__progress-time').style.fontSize = '300px'
+      document.querySelector('.playback-bar__progress-time').style.bottom = '300px'
       return
     }
 
