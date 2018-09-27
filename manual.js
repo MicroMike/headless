@@ -313,26 +313,21 @@ const main = async (session) => {
       }
     }
 
-    let open = false
-
     const loop = async () => {
-      if (open) {
-        await nightmare.end()
-      }
-
-      open = true
-
-      await nightmare
-        .goto(album())
-        .wait('.cover-art-playback')
-        .evaluate(play)
-        .then()
-        .catch(async (e) => {
-          console.log('catch play ' + e)
-          open = false
-          await nightmare.end()
-        })
+      await nightmare.end(() => {
+        await nightmare
+          .goto(album())
+          .wait('.cover-art-playback')
+          .evaluate(play)
+          .then()
+          .catch(async (e) => {
+            console.log('catch play ' + e)
+            open = false
+            await nightmare.end()
+          })
+      })
     }
+
     loop()
     setInterval(loop, 1000 * 60 * 5)
 
