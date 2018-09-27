@@ -299,8 +299,6 @@ const main = async (session) => {
             // let play = '.tracklist-middle-align'
             // let play = '.btn-green'
             let play = '.cover-art-playback:not(.playing)'
-            // document.querySelector(play) && document.querySelector(play).click()
-            // document.querySelector(play2) && document.querySelector(play2).click()
             document.querySelector(play) && document.querySelector(play).click()
           }, timeout);
 
@@ -321,9 +319,14 @@ const main = async (session) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        main(persist)
+        logError = true
         await nightmare.end()
       })
+
+    if (logError) {
+      main(persist)
+      return
+    }
 
     setTimeout(async () => {
       if (process.env.TEST) {
@@ -337,12 +340,14 @@ const main = async (session) => {
       await nightmare.end(() => {
         main(persist)
       })
-    }, 1000 * 60 * 10);
+    }, 1000 * 26 * size);
   }
   catch (e) {
     console.log('global catch ' + e)
-    main(persist)
     await nightmare.end()
+    setTimeout(() => {
+      main(persist)
+    }, 1000);
   }
 }
 
@@ -362,7 +367,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       size = sessions.length
       console.log(size)
       let time = 0
-      while (dealer++ < size / 1.5) {
+      while (dealer++ < size) {
         let switchAccount = sessions.shift()
         sessions.push(switchAccount)
         setTimeout(() => {
