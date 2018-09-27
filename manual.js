@@ -278,7 +278,7 @@ const main = async (session) => {
       }
 
       if (accountsValid.length < 20) {
-        main()
+        // main()
       }
     }
 
@@ -372,7 +372,12 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.ADD) {
-      main()
+      let time = 0
+      while (dealer++ < 20) {
+        setTimeout(() => {
+          main()
+        }, 1000 * 26 * time++);
+      }
     }
   });
 });
