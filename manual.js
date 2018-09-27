@@ -107,8 +107,8 @@ const play = () => {
     if (document.querySelector('.cover-art-playback.playing')) {
       clearInterval(inter)
       document.querySelector('.playback-bar__progress-time').style.position = 'fixed'
-      document.querySelector('.playback-bar__progress-time').style.fontSize = '400px'
-      document.querySelector('.playback-bar__progress-time').style.bottom = '200px'
+      document.querySelector('.playback-bar__progress-time').style.fontSize = '300px'
+      document.querySelector('.playback-bar__progress-time').style.bottom = '150px'
       document.querySelector('.playback-bar__progress-time').style.left = '10px'
       return
     }
