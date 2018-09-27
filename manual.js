@@ -123,6 +123,7 @@ const main = async (session) => {
   let player
   let login
   let pass
+  let logError
 
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -194,8 +195,6 @@ const main = async (session) => {
       player = accountInfo[0]
       login = accountInfo[1]
       pass = accountInfo[2]
-
-      let logError
 
       if (isnew) {
         anticaptcha(true, nightmare)
