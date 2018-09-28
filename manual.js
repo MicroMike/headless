@@ -66,7 +66,10 @@ const anticaptcha = (captchaisNew, nightmare) => {
                     }, 3000);
                   }
                   else {
-                    window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+                    let clients = window.___grecaptcha_cfg.clients[0]
+                    for (let client of clients) {
+                      client.l && client.l.callback(captcha)
+                    }
                   }
 
                   return true
