@@ -71,7 +71,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
                       let client = clients[key]
                       Object.keys(client).map(k => {
                         let l = client[k]
-                        console.log(l)
                         l && l.callback && l.callback(captcha)
                       })
                     })
@@ -205,7 +204,7 @@ const main = async (session) => {
 
   try {
     if (process.env.ADD) {
-      const isnew = false//rand(2) === 0
+      const isnew = rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -230,7 +229,7 @@ const main = async (session) => {
 
       if (process.env.ADD && dealer < 15) {
         setTimeout(() => {
-          // main()
+          main()
           dealer++
         }, 1000 * 30);
       }
