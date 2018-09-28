@@ -310,6 +310,10 @@ const main = async (session) => {
         })
       })
 
+    if (dealer < size) {
+      main(sessionsbis[dealer++])
+    }
+
     let time
     let time2
     let freeze = 0
