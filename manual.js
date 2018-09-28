@@ -87,8 +87,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
                 .evaluate(() => {
-                  console.log(document.querySelector('#register-confirm-email'))
-                  console.log(document.querySelector('form input[name="username"]'))
                   return !!document.querySelector('#register-confirm-email')
                     || !!document.querySelector('form input[name="username"]')
                     || !!document.querySelector('.alert-warning')
@@ -101,7 +99,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 else {
                   tryCaptcha = 0
                   await nightmare.end(() => {
-                    main()
+                    // main()
                   })
                 }
               }
@@ -229,7 +227,7 @@ const main = async (session) => {
 
       if (process.env.ADD && dealer < 15) {
         setTimeout(() => {
-          // main()
+          main()
           dealer++
         }, 1000 * 30);
       }
@@ -265,7 +263,7 @@ const main = async (session) => {
             console.log('catch signup 2')
             logError = true
             await nightmare.end(() => {
-              main()
+              // main()
             })
           })
 
@@ -282,10 +280,10 @@ const main = async (session) => {
         anticaptcha(false, nightmare)
 
         await nightmare
-          .goto('https://spotify.com/ie/login/?continue=%2Ffr%2Faccount%2Foverview%2F')
+          .goto('https://spotify.com/ie/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
-          .wait('.logout-link')
+          .wait('.btn-green')
           .wait(2000 + rand(2000))
           .then()
           .catch(async (e) => {
@@ -294,7 +292,7 @@ const main = async (session) => {
             await nightmare.end(() => {
               fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
                 if (err) return console.log(err);
-                main(persist)
+                // main(persist)
               });
             })
           })
