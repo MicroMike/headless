@@ -228,9 +228,9 @@ const main = async (session) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
-      if (process.env.ADD && dealer < 15) {
+      if (process.env.ADD && dealer < 5) {
         setTimeout(() => {
-          // main()
+          main()
           dealer++
         }, 1000 * 30);
       }
