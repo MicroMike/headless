@@ -58,16 +58,15 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .wait(2000 + rand(2000))
                 .evaluate(({ recaptcha, captchaisNew }) => {
                   console.log('CAPTCHA')
-                  let { recaptcha, captchaisNew } = data
 
-                  if (captchaisNew) {
-                    document.getElementById('g-recaptcha-response').value = recaptcha
+                  if (data.captchaisNew) {
+                    document.getElementById('g-recaptcha-response').value = data.recaptcha
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 2000 + rand(2000));
                   }
                   else {
-                    window.___grecaptcha_cfg.clients[0].aa.l.callback(recaptcha)
+                    window.___grecaptcha_cfg.clients[0].aa.l.callback(data.recaptcha)
                   }
 
                   return true
@@ -81,7 +80,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
               if (notconected) {
                 if (captchaisNew && ++tryCaptcha < 3) {
-                  anticaptcha(captchaisNew, nightmare)
+                  anticaptcha(true, nightmare)
                 }
                 else {
                   tryCaptcha = 0
