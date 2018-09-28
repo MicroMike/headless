@@ -78,6 +78,8 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   return document.querySelector('#register-confirm-email') || document.querySelector('form input[name="username"]')
                 })
 
+              console.log('notconected: ' + notconected)
+
               if (notconected) {
                 if (captchaisNew && ++tryCaptcha < 3) {
                   anticaptcha(true, nightmare)
@@ -215,7 +217,7 @@ const main = async (session) => {
 
       if (process.env.ADD && dealer < 15) {
         setTimeout(() => {
-          main()
+          // main()
           dealer++
         }, 1000 * 30);
       }
