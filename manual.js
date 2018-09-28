@@ -290,7 +290,7 @@ const main = async (session) => {
             console.log('catch login')
             logError = true
             await nightmare.end(() => {
-              fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+              fs.writeFile(process.env.FILE, accountsValid.concat(accounts).join(','), function (err) {
                 if (err) return console.log(err);
                 // main(persist)
               });
@@ -303,7 +303,7 @@ const main = async (session) => {
       }
 
       accountsValid.push(account)
-      fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+      fs.writeFile(process.env.FILE, accountsValid.concat(accounts).join(','), function (err) {
         if (err) return console.log(err);
       });
 
