@@ -97,6 +97,10 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   anticaptcha(true, nightmare)
                 }
                 else {
+                  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+                    if (err) return console.log(err);
+                    // main(persist)
+                  });
                   tryCaptcha = 0
                   await nightmare.end(() => {
                     // main()
