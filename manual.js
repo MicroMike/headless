@@ -367,6 +367,7 @@ const main = async (session) => {
         }, freezed)
         .then()
         .catch(async (e) => {
+          console.log(e)
           clearInterval(interloop)
         })
     }, 1000 * 30);
