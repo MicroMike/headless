@@ -79,7 +79,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   return true
                 }, captcha)
                 .then()
-                .catch((e) => {
+                .catch(async (e) => {
                   console.log('catch captcha ' + e)
                   await nightmare.end()
                 })
