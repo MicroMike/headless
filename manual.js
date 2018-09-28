@@ -296,6 +296,12 @@ const main = async (session) => {
 
     await nightmare
       .goto(album())
+
+    if (dealer < size) {
+      main(sessionsbis[dealer++])
+    }
+
+    await nightmare
       .wait('.cover-art-playback')
       .evaluate(play)
       .then()
@@ -309,10 +315,6 @@ const main = async (session) => {
           main()
         })
       })
-
-    if (dealer < size) {
-      main(sessionsbis[dealer++])
-    }
 
     let time
     let time2
