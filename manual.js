@@ -6,6 +6,7 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 let accounts = []
 let accountsValid = []
 let sessions = []
+let sessionsbis = []
 let tryCaptcha = 0
 let size
 let dealer = 0
@@ -55,23 +56,34 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const captcha = response.solution.gRecaptchaResponse
               await nightmare
                 .wait(2000 + rand(2000))
-                .evaluate((captcha) => {
+                .evaluate(({ captcha, captchaisNew }) => {
                   console.log('CAPTCHA')
-                  document.getElementById('g-recaptcha-response').value = captcha
+                  let { captcha, captchaisNew } = data
+
+                  if (captchaisNew) {
+                    document.getElementById('g-recaptcha-response').value = captcha
+                    setTimeout(() => {
+                      document.getElementById('register-button-email-submit').click()
+                    }, 2000 + rand(2000));
+                  }
+                  else {
+                    window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
+                  }
+
                   return true
+                }, data)
+                .evaluate((captcha) => {
                 }, captcha)
 
               const notconected = await nightmare
-                .wait(2000 + rand(2000))
-                .click('#register-button-email-submit')
                 .wait(4000 + rand(2000))
                 .evaluate(() => {
                   return document.querySelector('#register-confirm-email')
                 })
 
               if (notconected) {
-                if (++tryCaptcha < 3) {
-                  anticaptcha(true, nightmare)
+                if (captchaisNew && ++tryCaptcha < 3) {
+                  anticaptcha(captchaisNew, nightmare)
                 }
                 else {
                   tryCaptcha = 0
@@ -106,10 +118,6 @@ const play = () => {
   let inter = setInterval(() => {
     if (document.querySelector('.cover-art-playback.playing')) {
       clearInterval(inter)
-      document.querySelector('.playback-bar__progress-time').style.position = 'fixed'
-      document.querySelector('.playback-bar__progress-time').style.fontSize = '300px'
-      document.querySelector('.playback-bar__progress-time').style.bottom = '150px'
-      document.querySelector('.playback-bar__progress-time').style.left = '10px'
       return
     }
 
@@ -182,32 +190,8 @@ const main = async (session) => {
   })
 
   try {
-    if (false) {
-      isconected = await nightmare
-        .goto('https://www.spotify.com/account/overview/')
-        .wait(2000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.logout-link')
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch connect ' + e)
-          main(persist)
-          await nightmare.end()
-        })
-
-      if (process.env.TEST && !isconected) {
-        sessions = sessions.filter(a => a !== session)
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
-          if (err) return console.log(err);
-        });
-
-        return
-      }
-    }
-
-    if ((!session || !isconected) && process.env.ADD) {
-      const isnew = true//rand(2) === 0
+    if (process.env.ADD) {
+      const isnew = rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -275,6 +259,8 @@ const main = async (session) => {
 
       }
       else {
+        anticaptcha(false, nightmare)
+
         await nightmare
           .goto('https://spotify.com/ie/login')
           .type(inputs.username, login)
@@ -309,10 +295,6 @@ const main = async (session) => {
           if (err) return console.log(err);
         });
       }
-
-      if (accountsValid.length < 20) {
-        // main()
-      }
     }
 
     await nightmare
@@ -322,11 +304,46 @@ const main = async (session) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        await nightmare.end()
+        sessions = sessions.filter(a => a !== session)
+        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+          if (err) return console.log(err);
+        });
+        await nightmare.end(() => {
+          main()
+        })
       })
 
+    let time
+    let time2
+    let freeze = 0
+    let freezed
+
+    let interloop = setInterval(async () => {
+      if (time && time === time2) {
+        freeze++
+      }
+      else {
+        freeze = 0
+      }
+
+      if (freeze === 4) {
+        freezed = true
+        freeze = 0
+      }
+      else {
+        freezed = false
+      }
+
+      time2 = time
+      time = await nightmare.evaluate((freezed) => {
+        document.querySelector('.cover-art-playback.playing').style.backgroundColor = freezed ? 'red' : 'green'
+        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+      }, freezed)
+
+    }, 1000 * 30);
+
     setTimeout(async () => {
-      clearInterval(inter)
+      clearInterval(interloop)
       if (process.env.TEST) {
         let switchAccount = sessions.shift()
         sessions.push(switchAccount)
@@ -335,10 +352,7 @@ const main = async (session) => {
         })
         return
       }
-      await nightmare.end(() => {
-        main(persist)
-      })
-    }, 1000 * 13 * (size / 1.5 + 1));
+    }, 1000 * 60 * 15);
   }
   catch (e) {
     console.log('global catch ' + e)
@@ -359,24 +373,19 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     if (err) return console.log(err);
     if (data) {
       sessions = data.split(',')
+      sessionsbis = data.split(',')
     }
 
     if (process.env.TEST) {
       size = sessions.length
       console.log(size)
       let time = 0
-      while (dealer++ < 31) {
-        let switchAccount = sessions.shift()
-        sessions.push(switchAccount)
-        setTimeout(() => {
-          main(switchAccount)
-        }, 1000 * 13 * time++);
-      }
+      main(sessionsbis[dealer++])
     }
 
     if (process.env.ADD) {
       let time = 0
-      while (dealer++ < 20) {
+      while (time++ < 15) {
         setTimeout(() => {
           main()
         }, 1000 * 26 * time++);
