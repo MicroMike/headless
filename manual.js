@@ -63,7 +63,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                     document.getElementById('g-recaptcha-response').value = captcha
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
-                    }, 2000 + rand(2000));
+                    }, 3000);
                   }
                   else {
                     window.___grecaptcha_cfg.clients[0].aa.l.callback(captcha)
