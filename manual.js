@@ -71,7 +71,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                       let client = clients[key]
                       for (let k in client) {
                         let l = client[k]
-                        l.callback && l.callback(captcha)
+                        l && l.callback && l.callback(captcha)
                       }
                     }
                   }
