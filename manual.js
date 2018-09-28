@@ -59,7 +59,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .evaluate((captcha) => {
                   console.log('CAPTCHA')
 
-                  if (document.getElementById('#register-email')) {
+                  if (document.getElementById('register-email')) {
                     document.getElementById('g-recaptcha-response').value = data.recaptcha
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
