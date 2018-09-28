@@ -75,7 +75,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
                 .evaluate(() => {
-                  return document.querySelector('#register-confirm-email')
+                  return document.querySelector('#register-confirm-email') || document.querySelector('form input[name="username"]')
                 })
 
               if (notconected) {
@@ -297,8 +297,14 @@ const main = async (session) => {
     await nightmare
       .goto(album())
 
-    if (dealer < size) {
+    if (process.env.TEST && dealer < size) {
       main(sessionsbis[dealer++])
+    }
+    else if (dealer < 15) {
+      setTimeout(() => {
+        main()
+        dealer++
+      }, 1000 * 30);
     }
 
     await nightmare
@@ -391,12 +397,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.ADD) {
-      let time = 0
-      while (time++ < 15) {
-        setTimeout(() => {
-          main()
-        }, 1000 * 26 * time++);
-      }
+      main()
     }
   });
 });
