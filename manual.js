@@ -103,6 +103,9 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   })
                 }
               }
+              else {
+                await nightmare.goto('https://www.spotify.com/ie/account/overview')
+              }
             }
           }
           catch (e) {
@@ -280,7 +283,7 @@ const main = async (session) => {
         anticaptcha(false, nightmare)
 
         await nightmare
-          .goto('https://spotify.com/ie/login?continue=%2Fie%2Faccount%2Foverview%2F')
+          .goto('https://spotify.com/ie/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
           .wait('.logout-link')
