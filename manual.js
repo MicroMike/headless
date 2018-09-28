@@ -365,7 +365,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       size = sessions.length
       console.log(size)
       let time = 0
-      while (dealer++ < size / 1.5) {
+      while (dealer++ < 31) {
         let switchAccount = sessions.shift()
         sessions.push(switchAccount)
         setTimeout(() => {
