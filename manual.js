@@ -335,9 +335,7 @@ const main = async (session) => {
         fs.writeFile('sessions.txt', sessions.join(','), function (err) {
           if (err) return console.log(err);
         });
-        await nightmare.end(() => {
-          main()
-        })
+        await nightmare.end()
       })
 
     let time
