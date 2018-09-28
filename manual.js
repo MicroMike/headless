@@ -171,7 +171,7 @@ const main = async (session) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60,
+    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 5,
     show: true,
     width: 600,
     height: 600,
