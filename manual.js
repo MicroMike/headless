@@ -92,6 +92,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
             }
           }
           catch (e) {
+            console.log('AA ' + e)
             clearInterval(interval)
             if (nightmare) {
               await nightmare.end()
@@ -100,6 +101,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
         });
       }
       catch (e) {
+        console.log('BB ' + e)
         clearInterval(interval)
         if (nightmare) {
           nightmare.end()
