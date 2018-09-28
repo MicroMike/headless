@@ -56,10 +56,10 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const captcha = response.solution.gRecaptchaResponse
               await nightmare
                 .wait(2000 + rand(2000))
-                .evaluate(({ recaptcha, captchaisNew }) => {
+                .evaluate((captcha) => {
                   console.log('CAPTCHA')
 
-                  if (data.captchaisNew) {
+                  if (document.getElementById('#register-email')) {
                     document.getElementById('g-recaptcha-response').value = data.recaptcha
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
@@ -70,7 +70,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   }
 
                   return true
-                }, data)
+                }, captcha)
 
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
