@@ -227,7 +227,7 @@ const main = async (session) => {
 
       if (process.env.ADD && dealer < 15) {
         setTimeout(() => {
-          main()
+          // main()
           dealer++
         }, 1000 * 30);
       }
@@ -280,10 +280,10 @@ const main = async (session) => {
         anticaptcha(false, nightmare)
 
         await nightmare
-          .goto('https://spotify.com/ie/login')
+          .goto('https://spotify.com/ie/login?continue=%2Fie%2Faccount%2Foverview%2F')
           .type(inputs.username, login)
           .type(inputs.password, pass)
-          .wait('.btn-green')
+          .wait('.logout-link')
           .wait(2000 + rand(2000))
           .then()
           .catch(async (e) => {
