@@ -415,7 +415,6 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 
     if (process.env.ADD) {
       main()
-      main()
     }
   });
 });
