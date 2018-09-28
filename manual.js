@@ -362,6 +362,7 @@ const main = async (session) => {
       time2 = time
       time = await nightmare
         .evaluate((freezed) => {
+          document.querySelector('.cover-art-image').style.backgroundImage = ''
           document.querySelector('.cover-art-image').style.backgroundColor = freezed ? 'red' : 'green'
           return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
         }, freezed)
