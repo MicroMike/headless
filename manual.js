@@ -194,7 +194,7 @@ const main = async (session) => {
 
   try {
     if (process.env.ADD) {
-      const isnew = rand(2) === 0
+      const isnew = dealer++ === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -404,6 +404,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.ADD) {
+      main()
       main()
     }
   });
