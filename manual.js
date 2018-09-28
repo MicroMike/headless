@@ -89,9 +89,9 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .evaluate(() => {
                   console.log(document.querySelector('#register-confirm-email'))
                   console.log(document.querySelector('form input[name="username"]'))
-                  return document.querySelector('#register-confirm-email')
-                    || document.querySelector('form input[name="username"]')
-                    || document.querySelector('.alert-warning')
+                  return !!document.querySelector('#register-confirm-email')
+                    || !!document.querySelector('form input[name="username"]')
+                    || !!document.querySelector('.alert-warning')
                 })
 
               if (notconected) {
