@@ -211,6 +211,13 @@ const main = async (session) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
+      if (process.env.ADD && dealer < 15) {
+        setTimeout(() => {
+          main()
+          dealer++
+        }, 1000 * 30);
+      }
+
       if (isnew) {
         anticaptcha(true, nightmare)
 
@@ -299,12 +306,6 @@ const main = async (session) => {
 
     if (process.env.TEST && dealer < size) {
       main(sessionsbis[dealer++])
-    }
-    else if (dealer < 15) {
-      setTimeout(() => {
-        main()
-        dealer++
-      }, 1000 * 30);
     }
 
     await nightmare
