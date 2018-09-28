@@ -338,11 +338,15 @@ const main = async (session) => {
       }
 
       time2 = time
-      time = await nightmare.evaluate((freezed) => {
-        document.querySelector('.cover-art-playback.playing').style.backgroundColor = freezed ? 'red' : 'green'
-        return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-      }, freezed)
-
+      time = await nightmare
+        .evaluate((freezed) => {
+          document.querySelector('.cover-art-playback.playing').style.backgroundColor = freezed ? 'red' : 'green'
+          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+        }, freezed)
+        .then()
+        .catch(async (e) => {
+          clearInterval(interloop)
+        })
     }, 1000 * 30);
 
     setTimeout(async () => {
