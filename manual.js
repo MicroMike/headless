@@ -67,13 +67,14 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   }
                   else {
                     let clients = window.___grecaptcha_cfg.clients[0]
-                    for (let key in clients) {
+                    Object.keys(clients).map(key => {
                       let client = clients[key]
-                      for (let k in client) {
+                      Object.keys(client).map(k => {
                         let l = client[k]
+                        console.log(l)
                         l && l.callback && l.callback(captcha)
-                      }
-                    }
+                      })
+                    })
                   }
 
                   return true
