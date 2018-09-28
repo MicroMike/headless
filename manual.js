@@ -234,8 +234,8 @@ const main = async (session) => {
 
       if (process.env.ADD && dealer < 5) {
         setTimeout(() => {
-          main()
           dealer++
+          main()
         }, 1000 * 30);
       }
 
