@@ -72,8 +72,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
                   return true
                 }, data)
-                .evaluate((captcha) => {
-                }, captcha)
 
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
