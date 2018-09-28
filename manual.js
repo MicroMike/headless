@@ -67,17 +67,27 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   }
                   else {
                     let clients = window.___grecaptcha_cfg.clients[0]
-                    for (let client of clients) {
-                      client.l && client.l.callback(captcha)
+                    for (let key in clients) {
+                      let client = clients[key]
+                      for (let k in client) {
+                        let l = client[k]
+                        l.callback && l.callback(captcha)
+                      }
                     }
                   }
 
                   return true
                 }, captcha)
+                .then()
+                .catch(async (e) => {
+                  console.log('catch captcha')
+                })
 
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
                 .evaluate(() => {
+                  console.log(document.querySelector('#register-confirm-email'))
+                  console.log(document.querySelector('form input[name="username"]'))
                   return document.querySelector('#register-confirm-email') || document.querySelector('form input[name="username"]')
                 })
 
@@ -97,11 +107,10 @@ const anticaptcha = (captchaisNew, nightmare) => {
             }
           }
           catch (e) {
-            console.log('AA ' + e)
             clearInterval(interval)
-            // if (nightmare) {
-            //   await nightmare.end()
-            // }
+            if (nightmare) {
+              await nightmare.end()
+            }
           }
         });
       }
@@ -194,7 +203,7 @@ const main = async (session) => {
 
   try {
     if (process.env.ADD) {
-      const isnew = dealer++ === 0
+      const isnew = false//rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
