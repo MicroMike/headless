@@ -19,8 +19,8 @@ const albums = [
   'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
   'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
   'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
-  'https://open.spotify.com/album/3OCGq91kV8ZtN5qDUI1XA9',
-  'https://open.spotify.com/album/45is933jCRlQOt6km073H5'
+  // 'https://open.spotify.com/album/3OCGq91kV8ZtN5qDUI1XA9',
+  // 'https://open.spotify.com/album/45is933jCRlQOt6km073H5'
 ]
 const album = () => albums[rand(albums.length)]
 
