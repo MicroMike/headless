@@ -66,7 +66,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                     }, 3000);
                   }
                   else {
-                    let clients = window.___grecaptcha_cfg && window.___grecaptcha_cfg.clients[0]
+                    let clients = window.___grecaptcha_cfg.clients[0]
                     Object.keys(clients).map(key => {
                       let client = clients[key]
                       Object.keys(client).map(k => {
