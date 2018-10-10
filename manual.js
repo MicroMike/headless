@@ -91,9 +91,11 @@ const anticaptcha = (captchaisNew, nightmare) => {
               if (!error) {
                 const notconected = await nightmare
                   .wait('#micromike')
-                  .wait(2000 + rand(2000))
+                  .wait(4000 + rand(2000))
                   .evaluate(() => {
-                    return !!document.getElementById('g-recaptcha-response')
+                    return !!document.querySelector('#register-confirm-email')
+                      || !!document.querySelector('form input[name="username"]')
+                      || !!document.querySelector('.alert-warning')
                   })
 
                 await console.log(notconected)
