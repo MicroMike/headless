@@ -59,14 +59,14 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .evaluate((data) => {
                   console.log('CAPTCHA')
 
-                  if (data.captchaisNew) {
+                  if (data.captchaisNew && document.getElementById('g-recaptcha-response')) {
                     document.getElementById('g-recaptcha-response').value = data.captcha
                     document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 3000);
                   }
-                  else {
+                  else if (window.___grecaptcha_cfg) {
                     let clients = window.___grecaptcha_cfg.clients[0]
                     Object.keys(clients).map(key => {
                       let client = clients[key]
@@ -76,8 +76,9 @@ const anticaptcha = (captchaisNew, nightmare) => {
                       })
                     })
                   }
-
-                  return true
+                  else {
+                    throw 'error no captcha'
+                  }
                 }, { captcha, captchaisNew })
                 .then()
                 .catch(async (e) => {
@@ -92,7 +93,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   return !!document.getElementById('g-recaptcha-response')
                 })
 
-              console.log(notconected)
+              await console.log(notconected)
 
               if (notconected) {
                 if (captchaisNew && ++tryCaptcha < 3) {
