@@ -7,7 +7,6 @@ let accounts = []
 let accountsValid = []
 let sessions = []
 let sessionsbis = []
-let tryCaptcha = 0
 let size
 let dealer = 0
 
@@ -25,6 +24,7 @@ const albums = [
 const album = () => albums[rand(albums.length)]
 
 const anticaptcha = (captchaisNew, nightmare) => {
+  let tryCaptcha = 0
   request({
     url: 'https://api.anti-captcha.com/createTask',
     method: 'POST',
@@ -87,9 +87,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const notconected = await nightmare
                 .wait(4000 + rand(2000))
                 .evaluate(() => {
-                  return !!document.querySelector('#register-confirm-email')
-                    || !!document.querySelector('form input[name="username"]')
-                    || document.querySelector('.alert-warning').innerHTML
+                  return !!document.getElementById('g-recaptcha-response')
                 })
 
               console.log(notconected)
@@ -102,7 +100,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
                     if (err) return console.log(err);
                   });
-                  tryCaptcha = 0
                   await nightmare.end()
                 }
               }
