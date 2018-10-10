@@ -159,7 +159,7 @@ const play = () => {
   return true
 }
 
-const main = async (session) => {
+const main = async (session, currentDealer) => {
   tryCaptcha = 0
   const persist = session || 'persist: ' + Date.now()
   let isconected
@@ -206,7 +206,7 @@ const main = async (session) => {
     }
   })
 
-  let currentDealer = dealer
+  currentDealer = currentDealer || dealer
 
   try {
     if (process.env.ADD) {
@@ -396,7 +396,7 @@ const main = async (session) => {
       clearInterval(interloop)
       if (process.env.TEST) {
         await nightmare.end(() => {
-          main(sessions[currentDealer % 2 === 0 ? currentDealer + 1 : currentDealer - 1])
+          main(sessions[currentDealer % 2 === 0 ? ++currentDealer : --currentDealer], currentDealer)
         })
         return
       }
