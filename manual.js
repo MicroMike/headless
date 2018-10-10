@@ -6,7 +6,6 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 let accounts = []
 let accountsValid = []
 let sessions = []
-let sessions = []
 let size
 let dealer = 0
 
