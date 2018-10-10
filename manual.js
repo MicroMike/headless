@@ -56,6 +56,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
               clearInterval(interval)
               const captcha = response.solution.gRecaptchaResponse
               await nightmare
+                .wait('#doneform')
                 .wait(2000 + rand(2000))
                 .evaluate((data) => {
                   console.log('CAPTCHA')
@@ -246,7 +247,7 @@ const main = async (session) => {
           main()
         }
 
-        const urlactivate = await nightmare
+        await nightmare
           .goto('https://spotify.com/ie/signup')
           .wait('#register-email')
           .type('#register-email', login)
@@ -257,6 +258,11 @@ const main = async (session) => {
           .select('#register-dob-month', month)
           .type('#register-dob-year', rand(32) + 1963)
           .click('#register-' + (rand(2) ? 'male' : 'female'))
+          .evaluate(() => {
+            document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="doneform"></div>')
+          })
+
+        const urlactivate = await nightmare
           .wait('.logout-link')
           .wait(2000 + rand(2000))
           .goto('https://www.tempmailaddress.com')
