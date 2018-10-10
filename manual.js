@@ -6,7 +6,7 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 let accounts = []
 let accountsValid = []
 let sessions = []
-let sessionsbis = []
+let sessions = []
 let size
 let dealer = 0
 
@@ -207,6 +207,8 @@ const main = async (session) => {
     }
   })
 
+  let currentDealer = dealer
+
   try {
     if (process.env.ADD) {
       const isnew = true//rand(2) === 0
@@ -340,7 +342,8 @@ const main = async (session) => {
       .goto(album())
 
     if (process.env.TEST && dealer < size) {
-      main(sessionsbis[dealer++])
+      dealer += 2
+      main(sessions[dealer])
     }
 
     await nightmare
@@ -349,8 +352,8 @@ const main = async (session) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        sessions = sessions.filter(a => a !== session)
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+        let savesessions = sessions.filter(a => a !== session)
+        fs.writeFile('sessions.txt', savesessions.join(','), function (err) {
           if (err) return console.log(err);
         });
         await nightmare.end()
@@ -380,7 +383,7 @@ const main = async (session) => {
       time2 = time
       time = await nightmare
         .evaluate((freezed) => {
-          document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'green'
+          document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
           return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
         }, freezed)
         .then()
@@ -393,10 +396,8 @@ const main = async (session) => {
     setTimeout(async () => {
       clearInterval(interloop)
       if (process.env.TEST) {
-        let switchAccount = sessions.shift()
-        sessions.push(switchAccount)
         await nightmare.end(() => {
-          main(switchAccount)
+          main(sessions[currentDealer % 2 === 0 ? currentDealer + 1 : currentDealer - 1])
         })
         return
       }
@@ -421,14 +422,13 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     if (err) return console.log(err);
     if (data) {
       sessions = data.split(',')
-      sessionsbis = data.split(',')
     }
 
     if (process.env.TEST) {
-      size = sessions.length
-      console.log(size)
+      size = sessions.length % 2 !== 0 ? sessions.length : sessions.length - 1
+      console.log(sessions.length, size)
       let time = 0
-      main(sessionsbis[dealer++])
+      main(sessions[dealer])
     }
 
     if (process.env.ADD) {
