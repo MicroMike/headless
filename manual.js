@@ -96,7 +96,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   .wait('#micromike')
                   .evaluate(() => {
                     document.getElementById('micromike').remove()
-                    return document.getElementById('g-recaptcha-response')
+                    return !!document.getElementById('g-recaptcha-response')
                   })
 
                 await console.log(notconected)
