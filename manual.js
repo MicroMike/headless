@@ -62,10 +62,12 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
                   if (data.captchaisNew && document.getElementById('g-recaptcha-response')) {
                     document.getElementById('g-recaptcha-response').value = data.captcha
-                    document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 3000);
+                    setTimeout(() => {
+                      document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
+                    }, 6000);
                   }
                   else if (window.___grecaptcha_cfg) {
                     let clients = window.___grecaptcha_cfg.clients[0]
@@ -91,7 +93,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
               if (!error) {
                 const notconected = await nightmare
                   .wait('#micromike')
-                  .wait(4000 + rand(2000))
                   .evaluate(() => {
                     return !!document.querySelector('#register-confirm-email')
                       || !!document.querySelector('form input[name="username"]')
