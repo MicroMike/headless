@@ -56,7 +56,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const captcha = response.solution.gRecaptchaResponse
               await nightmare
                 .wait(2000 + rand(2000))
-                .evaluate(({ captcha, captchaisNew }) => {
+                .evaluate((data) => {
                   console.log('CAPTCHA')
 
                   if (data.captchaisNew) {
@@ -77,7 +77,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   }
 
                   return true
-                }, data)
+                }, { captcha, captchaisNew })
                 .then()
                 .catch(async (e) => {
                   console.log('catch captcha ' + e)
