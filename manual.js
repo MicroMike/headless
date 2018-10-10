@@ -95,9 +95,8 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 const notconected = await nightmare
                   .wait('#micromike')
                   .evaluate(() => {
-                    return !!document.querySelector('#register-confirm-email')
-                      || !!document.querySelector('form input[name="username"]')
-                      || !!document.querySelector('.alert-warning')
+                    document.getElementById('micromike').remove()
+                    return document.getElementById('g-recaptcha-response')
                   })
 
                 await console.log(notconected)
@@ -261,6 +260,18 @@ const main = async (session) => {
           .evaluate(() => {
             document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="doneform"></div>')
           })
+          .then()
+          .catch(async (e) => {
+            console.log('catch doneform')
+            logError = true
+            await nightmare.end(() => {
+              // main()
+            })
+          })
+
+        if (logError) {
+          return
+        }
 
         const urlactivate = await nightmare
           .wait('.logout-link')
