@@ -89,7 +89,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .evaluate(() => {
                   return !!document.querySelector('#register-confirm-email')
                     || !!document.querySelector('form input[name="username"]')
-                    || !!document.querySelector('.alert-warning')
+                    || document.querySelector('.alert-warning').innerHTML
                 })
 
               console.log(notconected)
