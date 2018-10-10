@@ -25,6 +25,7 @@ const album = () => albums[rand(albums.length)]
 
 const anticaptcha = (captchaisNew, nightmare) => {
   let tryCaptcha = 0
+  let error = false
   request({
     url: 'https://api.anti-captcha.com/createTask',
     method: 'POST',
@@ -83,31 +84,34 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .then()
                 .catch(async (e) => {
                   console.log('catch captcha ' + e)
+                  error = true
                   await nightmare.end()
                 })
 
-              const notconected = await nightmare
-                .wait('#micromike')
-                .wait(2000 + rand(2000))
-                .evaluate(() => {
-                  return !!document.getElementById('g-recaptcha-response')
-                })
+              if (!error) {
+                const notconected = await nightmare
+                  .wait('#micromike')
+                  .wait(2000 + rand(2000))
+                  .evaluate(() => {
+                    return !!document.getElementById('g-recaptcha-response')
+                  })
 
-              await console.log(notconected)
+                await console.log(notconected)
 
-              if (notconected) {
-                if (captchaisNew && ++tryCaptcha < 3) {
-                  anticaptcha(true, nightmare)
+                if (notconected) {
+                  if (captchaisNew && ++tryCaptcha < 3) {
+                    anticaptcha(true, nightmare)
+                  }
+                  else {
+                    fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
+                      if (err) return console.log(err);
+                    });
+                    await nightmare.end()
+                  }
                 }
                 else {
-                  fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
-                    if (err) return console.log(err);
-                  });
-                  await nightmare.end()
+                  await nightmare.goto('https://www.spotify.com/ie/account/overview')
                 }
-              }
-              else {
-                await nightmare.goto('https://www.spotify.com/ie/account/overview')
               }
             }
           }
