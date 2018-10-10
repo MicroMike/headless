@@ -87,6 +87,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
               const notconected = await nightmare
                 .wait('#micromike')
+                .wait(2000 + rand(2000))
                 .evaluate(() => {
                   return !!document.getElementById('g-recaptcha-response')
                 })
