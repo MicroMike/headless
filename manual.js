@@ -92,6 +92,8 @@ const anticaptcha = (captchaisNew, nightmare) => {
                     || !!document.querySelector('.alert-warning')
                 })
 
+              console.log(notconected)
+
               if (notconected) {
                 if (captchaisNew && ++tryCaptcha < 3) {
                   anticaptcha(true, nightmare)
