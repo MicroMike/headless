@@ -61,7 +61,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
                   if (data.captchaisNew) {
                     document.getElementById('g-recaptcha-response').value = data.captcha
-                    document.getElementsByTagName('body').insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
+                    document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 3000);
