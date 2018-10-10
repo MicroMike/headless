@@ -56,28 +56,28 @@ const anticaptcha = (captchaisNew, nightmare) => {
               const captcha = response.solution.gRecaptchaResponse
               await nightmare
                 .wait(2000 + rand(2000))
-                .evaluate((captcha) => {
+                .evaluate(({ captcha, captchaisNew }) => {
                   console.log('CAPTCHA')
 
-                  if (document.getElementById('register-email')) {
-                    document.getElementById('g-recaptcha-response').value = captcha
+                  if (data.captchaisNew) {
+                    document.getElementById('g-recaptcha-response').value = data.captcha
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 3000);
                   }
                   else {
-                    let clients = window.___grecaptcha_cfg.clients[0]
+                    let clients = window.___grecaptcha_cfg && window.___grecaptcha_cfg.clients[0]
                     Object.keys(clients).map(key => {
                       let client = clients[key]
                       Object.keys(client).map(k => {
                         let l = client[k]
-                        l && l.callback && l.callback(captcha)
+                        l && l.callback && l.callback(data.captcha)
                       })
                     })
                   }
 
                   return true
-                }, captcha)
+                }, data)
                 .then()
                 .catch(async (e) => {
                   console.log('catch captcha ' + e)
@@ -206,7 +206,7 @@ const main = async (session) => {
 
   try {
     if (process.env.ADD) {
-      const isnew = rand(2) === 0
+      const isnew = true//rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
@@ -229,15 +229,13 @@ const main = async (session) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
-      if (process.env.ADD && dealer < 5) {
-        setTimeout(() => {
-          dealer++
-          main()
-        }, 1000 * 30);
-      }
-
       if (isnew) {
         anticaptcha(true, nightmare)
+
+        if (dealer < 5) {
+          dealer++
+          main()
+        }
 
         const urlactivate = await nightmare
           .goto('https://spotify.com/ie/signup')
