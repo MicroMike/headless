@@ -61,6 +61,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
 
                   if (data.captchaisNew) {
                     document.getElementById('g-recaptcha-response').value = data.captcha
+                    document.getElementsByTagName('body').insertAdjacentHTML('beforeend', '<div id="micromike"></div>')
                     setTimeout(() => {
                       document.getElementById('register-button-email-submit').click()
                     }, 3000);
@@ -85,7 +86,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 })
 
               const notconected = await nightmare
-                .wait(4000 + rand(2000))
+                .wait('#micromike')
                 .evaluate(() => {
                   return !!document.getElementById('g-recaptcha-response')
                 })
