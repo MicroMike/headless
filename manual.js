@@ -359,9 +359,9 @@ const main = async (session, currentDealer) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        let savesessions = sessionsbis.filter(a => a !== session)
-        console.log(sessionsbis.length, savesessions.length)
-        fs.writeFile('sessions.txt', savesessions.join(','), function (err) {
+        let sessionsbis = sessionsbis.filter(a => a !== session)
+        console.log(sessionsbis.length, sessionsbis.length)
+        fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
           if (err) return console.log(err);
         });
         await nightmare.end(() => {
