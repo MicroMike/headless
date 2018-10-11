@@ -3,6 +3,7 @@ const fs = require('fs');
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
+let over = false
 let accounts = []
 let accountsValid = []
 let sessions = []
@@ -441,7 +442,7 @@ const main = async (session, currentDealer) => {
 
     setTimeout(async () => {
       clearInterval(interloop)
-      if (process.env.TEST) {
+      if (process.env.TEST && !over) {
         await nightmare.end()
         setTimeout(() => {
           console.log(currentDealer + '=>', increment(currentDealer))
@@ -488,4 +489,8 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       main()
     }
   });
+});
+
+process.on('exit', function (code) {
+  over = true
 });
