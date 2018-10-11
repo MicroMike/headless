@@ -9,6 +9,7 @@ let sessions = []
 let sessionsbis = []
 let size
 let dealer = 1
+let list = []
 let increment = (val) => {
   return val % 3 === 0
     ? val - 2
@@ -221,6 +222,10 @@ const main = async (session, currentDealer) => {
   })
 
   currentDealer = currentDealer || dealer
+  let id = Math.ceil(currentDealer % 3)
+  if (list[id] && list[id] === 3) {
+    return
+  }
 
   try {
     if (process.env.ADD) {
@@ -371,6 +376,7 @@ const main = async (session, currentDealer) => {
       if (out) {
         await nightmare.end(() => {
           console.log('out ' + session)
+          list[id] = list[id] ? list[id]++ : 1
           sessionsbis = sessionsbis.filter(a => a !== session)
           fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
             if (err) return console.log(err);
