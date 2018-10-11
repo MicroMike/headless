@@ -17,8 +17,8 @@ let increment = (val) => {
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
@@ -250,7 +250,7 @@ const main = async (session, currentDealer) => {
       if (isnew) {
         anticaptcha(true, nightmare)
 
-        if (dealer < 5) {
+        if (dealer < 15) {
           dealer++
           main()
         }
@@ -354,11 +354,31 @@ const main = async (session, currentDealer) => {
     await nightmare
       .goto(album())
 
-    if (process.env.TEST && dealer < size - 3) {
-      dealer += 3
-      setTimeout(() => {
-        main(sessions[dealer])
-      }, 1000);
+    if (process.env.TEST) {
+      const out = await nightmare
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          return !!document.getElementById('signup-spotify')
+        })
+
+      if (out) {
+        await nightmare.end(() => {
+          sessionsbis = sessionsbis.filter(a => a !== session)
+          fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
+            if (err) return console.log(err);
+          });
+          currentDealer = increment(currentDealer)
+          main(sessions[currentDealer], currentDealer)
+        })
+        return
+      }
+
+      if (dealer < size - 3) {
+        dealer += 3
+        setTimeout(() => {
+          main(sessions[dealer])
+        }, 1000);
+      }
     }
 
     await nightmare
@@ -367,15 +387,16 @@ const main = async (session, currentDealer) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        sessionsbis = sessionsbis.filter(a => a !== session)
-        fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
-          if (err) return console.log(err);
-        });
+        logError = true
         await nightmare.end(() => {
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
         })
       })
+
+    if (logError) {
+      return
+    }
 
     let time
     let time2
