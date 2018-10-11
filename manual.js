@@ -7,7 +7,12 @@ let accounts = []
 let accountsValid = []
 let sessions = []
 let size
-let dealer = 0
+let dealer = 1
+let increment = (val) => {
+  return val % 3 === 0
+    ? val - 2
+    : ++val
+}
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -341,7 +346,7 @@ const main = async (session, currentDealer) => {
       .goto(album())
 
     if (process.env.TEST && dealer < size) {
-      dealer += 2
+      dealer += 3
       main(sessions[dealer])
     }
 
@@ -382,7 +387,7 @@ const main = async (session, currentDealer) => {
       time2 = time
       time = await nightmare
         .evaluate((freezed) => {
-          document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
+          document.querySelector('.btn-green') && document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
           return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
         }, freezed)
         .then()
@@ -396,7 +401,8 @@ const main = async (session, currentDealer) => {
       clearInterval(interloop)
       if (process.env.TEST) {
         await nightmare.end(() => {
-          main(sessions[currentDealer % 2 === 0 ? ++currentDealer : --currentDealer], currentDealer)
+          currentDealer = increment(currentDealer)
+          main(sessions[currentDealer], currentDealer)
         })
         return
       }
@@ -424,8 +430,9 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     }
 
     if (process.env.TEST) {
-      size = sessions.length % 2 !== 0 ? sessions.length : sessions.length - 1
+      size = sessions.length - sessions.length % 3
       console.log(sessions.length, size)
+      sessions.unshift('')
       let time = 0
       main(sessions[dealer])
     }
