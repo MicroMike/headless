@@ -6,6 +6,7 @@ process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 let accounts = []
 let accountsValid = []
 let sessions = []
+let sessionsbis = []
 let size
 let dealer = 1
 let increment = (val) => {
@@ -345,7 +346,7 @@ const main = async (session, currentDealer) => {
     await nightmare
       .goto(album())
 
-    if (process.env.TEST && dealer < size - 1) {
+    if (process.env.TEST && dealer < size - 3) {
       dealer += 3
       main(sessions[dealer])
     }
@@ -356,8 +357,8 @@ const main = async (session, currentDealer) => {
       .then()
       .catch(async (e) => {
         console.log('catch play ' + e)
-        let savesessions = sessions.filter(a => a !== session)
-        console.log(sessions.length, savesessions.length)
+        let savesessions = sessionsbis.filter(a => a !== session)
+        console.log(sessionsbis.length, savesessions.length)
         fs.writeFile('sessions.txt', savesessions.join(','), function (err) {
           if (err) return console.log(err);
         });
@@ -428,11 +429,11 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
     if (err) return console.log(err);
     if (data) {
       sessions = data.split(',')
+      sessionsbis = data.split(',')
     }
 
     if (process.env.TEST) {
       size = sessions.length - sessions.length % 3
-      console.log(sessions.length, size)
       sessions.unshift('')
       let time = 0
       main(sessions[dealer])
