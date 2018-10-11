@@ -368,7 +368,6 @@ const main = async (session, currentDealer) => {
       .catch(async (e) => {
         console.log('catch play ' + e)
         sessionsbis = sessionsbis.filter(a => a !== session)
-        console.log(sessionsbis.length, sessionsbis.length)
         fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
           if (err) return console.log(err);
         });
