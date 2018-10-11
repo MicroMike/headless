@@ -438,6 +438,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 
     if (process.env.TEST) {
       size = sessions.length - sessions.length % 3
+      console.log(size)
       sessions.unshift('')
       let time = 0
       main(sessions[dealer])
