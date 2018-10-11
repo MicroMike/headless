@@ -387,7 +387,7 @@ const main = async (session, currentDealer) => {
       time2 = time
       time = await nightmare
         .evaluate((freezed) => {
-          document.querySelector('.btn-green') && document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
+          document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
           return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
         }, freezed)
         .then()
