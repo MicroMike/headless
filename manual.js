@@ -355,6 +355,13 @@ const main = async (session, currentDealer) => {
       .goto(album())
 
     if (process.env.TEST) {
+      if (dealer < size - 3) {
+        dealer += 3
+        setTimeout(() => {
+          main(sessions[dealer])
+        }, 1000);
+      }
+
       const out = await nightmare
         .wait(2000 + rand(2000))
         .evaluate(() => {
@@ -363,6 +370,7 @@ const main = async (session, currentDealer) => {
 
       if (out) {
         await nightmare.end(() => {
+          console.log('out ' + session)
           sessionsbis = sessionsbis.filter(a => a !== session)
           fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
             if (err) return console.log(err);
@@ -371,13 +379,6 @@ const main = async (session, currentDealer) => {
           main(sessions[currentDealer], currentDealer)
         })
         return
-      }
-
-      if (dealer < size - 3) {
-        dealer += 3
-        setTimeout(() => {
-          main(sessions[dealer])
-        }, 1000);
       }
     }
 
