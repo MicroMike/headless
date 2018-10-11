@@ -15,6 +15,14 @@ let increment = (val) => {
     : ++val
 }
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
@@ -436,6 +444,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   fs.readFile('sessions.txt', 'utf8', function (err, data) {
     if (err) return console.log(err);
     if (data) {
+      data = shuffle(data)
       sessions = data.split(',')
       sessionsbis = data.split(',')
     }
