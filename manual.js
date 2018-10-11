@@ -345,7 +345,7 @@ const main = async (session, currentDealer) => {
     await nightmare
       .goto(album())
 
-    if (process.env.TEST && dealer < size) {
+    if (process.env.TEST && dealer < size - 1) {
       dealer += 3
       main(sessions[dealer])
     }
