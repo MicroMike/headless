@@ -406,6 +406,7 @@ const main = async (session, currentDealer) => {
       clearInterval(interloop)
       if (process.env.TEST) {
         await nightmare.end(() => {
+          console.log(currentDealer + '=>', increment(currentDealer))
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
         })
