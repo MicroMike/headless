@@ -442,6 +442,9 @@ const main = async (session, currentDealer) => {
 
     setTimeout(async () => {
       clearInterval(interloop)
+      if (over) {
+        console.log('over loop')
+      }
       if (process.env.TEST && !over) {
         await nightmare.end()
         setTimeout(() => {
@@ -492,5 +495,6 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 });
 
 process.on('exit', function (code) {
+  console.log('OUUUUT')
   over = true
 });
