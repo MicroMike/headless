@@ -407,11 +407,12 @@ const main = async (session, currentDealer) => {
     setTimeout(async () => {
       clearInterval(interloop)
       if (process.env.TEST) {
-        await nightmare.end(() => {
+        await nightmare.end()
+        setTimeout(() => {
           console.log(currentDealer + '=>', increment(currentDealer))
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
-        })
+        }, 1000);
         return
       }
     }, 1000 * 60 * 15);
