@@ -350,7 +350,7 @@ const main = async (session, currentDealer) => {
       dealer += 3
       setTimeout(() => {
         main(sessions[dealer])
-      }, 1000 * 10);
+      }, 1000);
     }
 
     await nightmare
