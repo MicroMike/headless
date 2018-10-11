@@ -408,7 +408,7 @@ const main = async (session, currentDealer) => {
         })
         return
       }
-    }, 1000 * 60 * 15);
+    }, 1000 * 60 * 2);
   }
   catch (e) {
     console.log('global catch ' + e)
