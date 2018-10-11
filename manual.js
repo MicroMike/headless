@@ -348,7 +348,9 @@ const main = async (session, currentDealer) => {
 
     if (process.env.TEST && dealer < size - 3) {
       dealer += 3
-      main(sessions[dealer])
+      setTimeout(() => {
+        main(sessions[dealer])
+      }, 1000 * 10);
     }
 
     await nightmare
@@ -412,7 +414,7 @@ const main = async (session, currentDealer) => {
         })
         return
       }
-    }, 1000 * 60 * 5 + rand(15));
+    }, 1000 * 60 * 15);
   }
   catch (e) {
     console.log('global catch ' + e)
