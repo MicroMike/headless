@@ -362,7 +362,10 @@ const main = async (session, currentDealer) => {
         fs.writeFile('sessions.txt', savesessions.join(','), function (err) {
           if (err) return console.log(err);
         });
-        await nightmare.end()
+        await nightmare.end(() => {
+          currentDealer = increment(currentDealer)
+          main(sessions[currentDealer], currentDealer)
+        })
       })
 
     let time
@@ -408,13 +411,14 @@ const main = async (session, currentDealer) => {
         })
         return
       }
-    }, 1000 * 60 * 2);
+    }, 1000 * 60 * 5 + rand(15));
   }
   catch (e) {
     console.log('global catch ' + e)
     await nightmare.end()
     setTimeout(() => {
-      main(persist)
+      currentDealer = increment(currentDealer)
+      main(sessions[currentDealer], currentDealer)
     }, 2600);
   }
 }
