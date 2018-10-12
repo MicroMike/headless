@@ -492,6 +492,5 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
 });
 
 process.on('SIGINT', function (code) {
-  console.log('OUUUUT')
   over = true
 });
