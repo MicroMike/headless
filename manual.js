@@ -378,7 +378,7 @@ const main = async (session, currentDealer) => {
         })
 
       if (out) {
-        await nightmare.end(() => {
+        await nightmare.end((id) => {
           console.log('out ' + session)
           list[id] = list[id] ? list[id]++ : 1
           sessionsbis = sessionsbis.filter(a => a !== session)
@@ -387,7 +387,7 @@ const main = async (session, currentDealer) => {
           });
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
-        })
+        }, id)
         return
       }
     }
