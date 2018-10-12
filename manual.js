@@ -330,8 +330,24 @@ const main = async (session, currentDealer) => {
           .goto('https://spotify.com/ie/login')
           .type(inputs.username, login)
           .type(inputs.password, pass)
+          .evaluate(() => {
+            document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend', '<div id="doneform"></div>')
+          })
+          .then()
+          .catch(async (e) => {
+            console.log('catch doneform')
+            logError = true
+            await nightmare.end(() => {
+              // main()
+            })
+          })
+
+        if (logError) {
+          return
+        }
+
+        await nightmare
           .wait('.logout-link')
-          .wait(2000 + rand(2000))
           .then()
           .catch(async (e) => {
             console.log('catch login')
