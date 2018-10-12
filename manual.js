@@ -497,7 +497,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
         sessions = data.split(',')
         sessionsbis = data.split(',')
       }
-  
+
       if (process.env.TEST) {
         size = sessions.length - sessions.length % 3
         console.log(size)
@@ -506,12 +506,12 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
         list[dealer] = 0
         main(sessions[dealer])
       }
-  
+
       if (process.env.ADD) {
         main()
       }
     }
-    catch(e){
+    catch (e) {
       console.log(e)
     }
   });
