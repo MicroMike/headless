@@ -493,8 +493,6 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   if (err) return console.log(err);
   if (data) {
     accounts = data.split(',')
-    accounts = accounts.reverse(); 
-
   }
 
   fs.readFile('sessions.txt', 'utf8', function (err, data) {
