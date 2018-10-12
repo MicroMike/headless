@@ -128,7 +128,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
             }
           }
           catch (e) {
-            console.log('catch captcha 2' + e)
+            console.log('catch captcha 2 ' + e + ' ' + response)
             clearInterval(interval)
             if (nightmare) {
               await nightmare.end()
@@ -137,7 +137,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
         });
       }
       catch (e) {
-        console.log('catch captcha 3' + e)
+        console.log('catch captcha 3 ' + e)
         clearInterval(interval)
         if (nightmare) {
           nightmare.end()
