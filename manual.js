@@ -176,6 +176,7 @@ const play = () => {
 }
 
 const main = async (session, currentDealer) => {
+  if (over) { return }
   tryCaptcha = 0
   const persist = session || 'persist: ' + Date.now()
   let isconected
@@ -444,7 +445,7 @@ const main = async (session, currentDealer) => {
 
     setTimeout(async () => {
       clearInterval(interloop)
-      if (process.env.TEST && !over) {
+      if (process.env.TEST) {
         await nightmare.end()
         setTimeout(() => {
           console.log(currentDealer + '=>', increment(currentDealer))
