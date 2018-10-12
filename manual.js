@@ -227,6 +227,7 @@ const main = async (session, currentDealer) => {
   if (process.env.TEST) {
     currentDealer = currentDealer || dealer
     id = Math.ceil(currentDealer / 3)
+    console.log(list[id])
     if (list[id] && list[id] === 3) {
       return
     }
