@@ -227,7 +227,6 @@ const main = async (session, currentDealer) => {
   if (process.env.TEST) {
     currentDealer = currentDealer || dealer
     id = Math.ceil(currentDealer / 3)
-    console.log(list[id])
     if (list[id] && list[id] === 3) {
       return
     }
@@ -368,6 +367,7 @@ const main = async (session, currentDealer) => {
     if (process.env.TEST) {
       if (dealer < size - 3) {
         dealer += 3
+        list[dealer] = 0
         setTimeout(() => {
           main(sessions[dealer])
         }, 1000);
@@ -382,7 +382,7 @@ const main = async (session, currentDealer) => {
       if (out) {
         await nightmare.end(() => {
           console.log('out ' + id)
-          list[id] = id && list[id] ? list[id]++ : 1
+          list[id] = list[id] + 1
           sessionsbis = sessionsbis.filter(a => a !== session)
           fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
             if (err) return console.log(err);
@@ -487,6 +487,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       console.log(size)
       sessions.unshift('')
       let time = 0
+      list[dealer] = 0
       main(sessions[dealer])
     }
 
