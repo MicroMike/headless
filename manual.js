@@ -257,13 +257,13 @@ const main = async (session, currentDealer) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
+      if (dealer < 15) {
+        dealer++
+        main()
+      }
+
       if (isnew) {
         anticaptcha(true, nightmare)
-
-        if (dealer < 15) {
-          dealer++
-          main()
-        }
 
         await nightmare
           .goto('https://spotify.com/ie/signup')
