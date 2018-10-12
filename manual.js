@@ -490,24 +490,29 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
   }
 
   fs.readFile('sessions.txt', 'utf8', function (err, data) {
-    if (err) return console.log(err);
-    if (data) {
-      data = shuffle(data)
-      sessions = data.split(',')
-      sessionsbis = data.split(',')
+    try {
+      if (err) return console.log(err);
+      if (data) {
+        data = shuffle(data)
+        sessions = data.split(',')
+        sessionsbis = data.split(',')
+      }
+  
+      if (process.env.TEST) {
+        size = sessions.length - sessions.length % 3
+        console.log(size)
+        sessions.unshift('')
+        let time = 0
+        list[dealer] = 0
+        main(sessions[dealer])
+      }
+  
+      if (process.env.ADD) {
+        main()
+      }
     }
-
-    if (process.env.TEST) {
-      size = sessions.length - sessions.length % 3
-      console.log(size)
-      sessions.unshift('')
-      let time = 0
-      list[dealer] = 0
-      main(sessions[dealer])
-    }
-
-    if (process.env.ADD) {
-      main()
+    catch(e){
+      console.log(e)
     }
   });
 });
