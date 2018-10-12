@@ -240,7 +240,7 @@ const main = async (session, currentDealer) => {
 
   try {
     if (process.env.ADD) {
-      const isnew = rand(2) === 0
+      const isnew = true//rand(2) === 0
       const account = isnew
         ? await nightmare
           .goto('https://www.tempmailaddress.com')
