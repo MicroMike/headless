@@ -4,6 +4,7 @@ const util = require('util')
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
+let divided = 4
 let over = false
 let accounts = []
 let accountsValid = []
@@ -13,8 +14,8 @@ let size
 let dealer = 1
 let list = []
 let increment = (val) => {
-  return val % 3 === 0
-    ? val - 2
+  return val % divided === 0
+    ? val - (divided-1)
     : ++val
 }
 
@@ -231,8 +232,8 @@ const main = async (session, currentDealer) => {
 
   if (process.env.TEST) {
     currentDealer = currentDealer || dealer
-    id = Math.ceil(currentDealer / 3)
-    if (list[id] && list[id] === 3) {
+    id = Math.ceil(currentDealer / divided)
+    if (list[id] && list[id] === divided) {
       return
     }
   }
@@ -386,8 +387,8 @@ const main = async (session, currentDealer) => {
       .goto(album())
 
     if (process.env.TEST) {
-      if (dealer < size - 3) {
-        dealer += 3
+      if (dealer < size - divided) {
+        dealer += divided
         list[dealer] = 0
         setTimeout(() => {
           main(sessions[dealer])
@@ -476,7 +477,7 @@ const main = async (session, currentDealer) => {
         }, 1000);
         return
       }
-    }, 1000 * 60 * 15);
+    }, 1000 * 60 * (5 + rand(15)));
   }
   catch (e) {
     console.log('global catch ' + e)
@@ -504,7 +505,7 @@ fs.readFile(process.env.FILE, 'utf8', function (err, data) {
       }
 
       if (process.env.TEST) {
-        size = sessions.length - sessions.length % 3
+        size = sessions.length - sessions.length % divided
         console.log(size)
         sessions.unshift('')
         let time = 0
