@@ -1,5 +1,6 @@
 const request = require('ajax-request');
 const fs = require('fs');
+const util = require('util')
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
@@ -128,7 +129,8 @@ const anticaptcha = (captchaisNew, nightmare) => {
             }
           }
           catch (e) {
-            console.log('catch captcha 2 ' + e + ' ' + response)
+            console.log('catch captcha 2 ' + e)
+            console.log(util.inspect(response, false, null, true /* enable colors */))
             clearInterval(interval)
             if (nightmare) {
               await nightmare.end()
@@ -138,6 +140,7 @@ const anticaptcha = (captchaisNew, nightmare) => {
       }
       catch (e) {
         console.log('catch captcha 3 ' + e)
+        console.log(util.inspect(response, false, null, true /* enable colors */))
         clearInterval(interval)
         if (nightmare) {
           nightmare.end()
