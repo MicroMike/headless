@@ -450,7 +450,6 @@ const main = async (session, currentDealer) => {
       if (process.env.TEST) {
         await nightmare.end()
         setTimeout(() => {
-          console.log(currentDealer + '=>', increment(currentDealer))
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
         }, 1000);
