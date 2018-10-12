@@ -15,7 +15,7 @@ let dealer = 1
 let list = []
 let increment = (val) => {
   return val % divided === 0
-    ? val - (divided-1)
+    ? val - (divided - 1)
     : ++val
 }
 
@@ -413,6 +413,9 @@ const main = async (session, currentDealer) => {
           main(sessions[currentDealer], currentDealer)
         })
         return
+      }
+      else {
+        list[id] = 0
       }
     }
 
