@@ -200,6 +200,7 @@ const main = async (session, currentDealer) => {
   let login
   let pass
   let logError
+  let id
 
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
@@ -224,16 +225,10 @@ const main = async (session, currentDealer) => {
   })
 
   if (process.env.TEST) {
-    try {
-      currentDealer = currentDealer || dealer
-      let id = Math.ceil(currentDealer % 3)
-      if (list[id] && list[id] === 3) {
-        return
-      }
-    }
-    catch (e) {
-      console.log('A')
-      console.log(e)
+    currentDealer = currentDealer || dealer
+    id = Math.ceil(currentDealer % 3)
+    if (list[id] && list[id] === 3) {
+      return
     }
   }
 
@@ -385,20 +380,14 @@ const main = async (session, currentDealer) => {
 
       if (out) {
         await nightmare.end(() => {
-          try {
-            console.log('out ' + id)
-            list[id] = id && list[id] ? list[id]++ : 1
-            sessionsbis = sessionsbis.filter(a => a !== session)
-            fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
-              if (err) return console.log(err);
-            });
-            currentDealer = increment(currentDealer)
-            main(sessions[currentDealer], currentDealer)
-          }
-          catch (e) {
-            console.log('B')
-            console.log(e)
-          }
+          console.log('out ' + id)
+          list[id] = id && list[id] ? list[id]++ : 1
+          sessionsbis = sessionsbis.filter(a => a !== session)
+          fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
+            if (err) return console.log(err);
+          });
+          currentDealer = increment(currentDealer)
+          main(sessions[currentDealer], currentDealer)
         })
         return
       }
