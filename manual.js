@@ -378,16 +378,16 @@ const main = async (session, currentDealer) => {
         })
 
       if (out) {
-        await nightmare.end((id) => {
-          console.log('out ' + session)
-          list[id] = list[id] ? list[id]++ : 1
+        await nightmare.end(() => {
+          console.log('out ' + id)
+          list[id] = id && list[id] ? list[id]++ : 1
           sessionsbis = sessionsbis.filter(a => a !== session)
           fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
             if (err) return console.log(err);
           });
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
-        }, id)
+        })
         return
       }
     }
