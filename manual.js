@@ -181,7 +181,7 @@ const play = () => {
   return true
 }
 
-const main = async (session, currentDealer) => {
+const main = async (session, currentDealer, tempAdd) => {
   if (over) { return }
   tryCaptcha = 0
   const persist = session || 'persist: ' + Date.now()
@@ -415,7 +415,7 @@ const main = async (session, currentDealer) => {
           // fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
           //   if (err) return console.log(err);
           // });
-          replaceAdd(currentDealer)
+          main(null, currentDealer, true)
           // currentDealer = increment(currentDealer)
           // main(sessions[currentDealer], currentDealer)
         })
@@ -493,20 +493,12 @@ const main = async (session, currentDealer) => {
     console.log('global catch ' + e)
     await nightmare.end()
     setTimeout(() => {
-      if (tempAdd) {
-        main(session, currentDealer)
-      }
-      else {
+      if (!tempAdd) {
         currentDealer = increment(currentDealer)
-        main(sessions[currentDealer], currentDealer)
       }
+      main(sessions[currentDealer], currentDealer, tempAdd)
     }, 2600);
   }
-}
-
-const replaceAdd = (currentDealer) => {
-  const tempAdd = true
-  main(null, currentDealer)
 }
 
 fs.readFile(process.env.FILE, 'utf8', function (err, data) {
