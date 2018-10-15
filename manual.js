@@ -230,16 +230,17 @@ const main = async (session, currentDealer) => {
     }
   })
 
-  if (process.env.TEST) {
-    currentDealer = currentDealer || dealer
-    id = Math.ceil(currentDealer / divided)
-    if (list[id] && list[id] === divided) {
-      return
-    }
-  }
+  currentDealer = currentDealer || dealer
+
+  // if (process.env.TEST) {
+  //   id = Math.ceil(currentDealer / divided)
+  //   if (list[id] && list[id] === divided) {
+  //     return
+  //   }
+  // }
 
   try {
-    if (process.env.ADD) {
+    if (process.env.ADD || tempAdd) {
       const isnew = true//rand(2) === 0
       const account = isnew
         ? await nightmare
@@ -253,7 +254,7 @@ const main = async (session, currentDealer) => {
           .catch(async (e) => {
             console.log('catch tempmail start')
             await nightmare.end(() => {
-              main()
+              main(session, currentDealer)
             })
           })
         : accounts.shift()
@@ -263,7 +264,7 @@ const main = async (session, currentDealer) => {
       login = accountInfo[1]
       pass = accountInfo[2]
 
-      if (dealer < 15) {
+      if (dealer < 15 && !tempAdd) {
         dealer++
         main()
       }
@@ -376,7 +377,12 @@ const main = async (session, currentDealer) => {
       });
 
       if (!session) {
-        sessions.push(persist)
+        if (tempAdd) {
+          sessions[currentDealer] = persist
+        }
+        else {
+          sessions.push(persist)
+        }
         fs.writeFile('sessions.txt', sessions.join(','), function (err) {
           if (err) return console.log(err);
         });
@@ -386,7 +392,7 @@ const main = async (session, currentDealer) => {
     await nightmare
       .goto(album())
 
-    if (process.env.TEST) {
+    if (process.env.TEST && !tempAdd) {
       if (dealer < size - divided) {
         dealer += divided
         list[dealer] = 0
@@ -403,14 +409,15 @@ const main = async (session, currentDealer) => {
 
       if (out) {
         await nightmare.end(() => {
-          console.log('out ' + id)
-          list[id] = list[id] + 1
-          sessionsbis = sessionsbis.filter(a => a !== session)
-          fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
-            if (err) return console.log(err);
-          });
-          currentDealer = increment(currentDealer)
-          main(sessions[currentDealer], currentDealer)
+          // console.log('out ' + id)
+          // list[id] = list[id] + 1
+          // sessionsbis = sessionsbis.filter(a => a !== session)
+          // fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
+          //   if (err) return console.log(err);
+          // });
+          replaceAdd(currentDealer)
+          // currentDealer = increment(currentDealer)
+          // main(sessions[currentDealer], currentDealer)
         })
         return
       }
@@ -441,46 +448,46 @@ const main = async (session, currentDealer) => {
     let freeze = 0
     let freezed
 
-    let interloop = setInterval(async () => {
-      if (time && time === time2) {
-        freeze++
-      }
-      else {
-        freeze = 0
-      }
+    // let interloop = setInterval(async () => {
+    //   if (time && time === time2) {
+    //     freeze++
+    //   }
+    //   else {
+    //     freeze = 0
+    //   }
 
-      if (freeze === 4) {
-        freezed = true
-        freeze = 0
-      }
-      else {
-        freezed = false
-      }
+    //   if (freeze === 4) {
+    //     freezed = true
+    //     freeze = 0
+    //   }
+    //   else {
+    //     freezed = false
+    //   }
 
-      time2 = time
-      time = await nightmare
-        .evaluate((freezed) => {
-          document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
-          return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
-        }, freezed)
-        .then()
-        .catch(async (e) => {
-          console.log(e)
-          clearInterval(interloop)
-        })
-    }, 1000 * 30);
+    //   time2 = time
+    //   time = await nightmare
+    //     .evaluate((freezed) => {
+    //       document.querySelector('.btn-green').style.backgroundColor = freezed ? 'red' : 'blue'
+    //       return document.querySelector('.playback-bar__progress-time') && document.querySelector('.playback-bar__progress-time').innerHTML
+    //     }, freezed)
+    //     .then()
+    //     .catch(async (e) => {
+    //       console.log(e)
+    //       clearInterval(interloop)
+    //     })
+    // }, 1000 * 30);
 
-    setTimeout(async () => {
-      clearInterval(interloop)
-      if (process.env.TEST) {
+    if (process.env.TEST) {
+      setTimeout(async () => {
+        // clearInterval(interloop)
         await nightmare.end()
         setTimeout(() => {
           currentDealer = increment(currentDealer)
           main(sessions[currentDealer], currentDealer)
         }, 1000);
         return
-      }
-    }, 1000 * 60 * (5 + rand(15)));
+      }, 1000 * 60 * (10 + rand(10)));
+    }
   }
   catch (e) {
     console.log('global catch ' + e)
@@ -490,6 +497,11 @@ const main = async (session, currentDealer) => {
       main(sessions[currentDealer], currentDealer)
     }, 2600);
   }
+}
+
+const replaceAdd = (currentDealer) => {
+  const tempAdd = true
+  main(null, currentDealer)
 }
 
 fs.readFile(process.env.FILE, 'utf8', function (err, data) {
