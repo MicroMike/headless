@@ -493,8 +493,13 @@ const main = async (session, currentDealer) => {
     console.log('global catch ' + e)
     await nightmare.end()
     setTimeout(() => {
-      currentDealer = increment(currentDealer)
-      main(sessions[currentDealer], currentDealer)
+      if (tempAdd) {
+        main(session, currentDealer)
+      }
+      else {
+        currentDealer = increment(currentDealer)
+        main(sessions[currentDealer], currentDealer)
+      }
     }, 2600);
   }
 }
