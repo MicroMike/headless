@@ -378,6 +378,7 @@ const main = async (session, currentDealer, tempAdd) => {
 
       if (!session) {
         if (tempAdd) {
+          console.log('replace session')
           sessions[currentDealer] = persist
         }
         else {
@@ -415,6 +416,7 @@ const main = async (session, currentDealer, tempAdd) => {
           // fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
           //   if (err) return console.log(err);
           // });
+          console.log('out ' + persist)
           main(null, currentDealer, true)
           // currentDealer = increment(currentDealer)
           // main(sessions[currentDealer], currentDealer)
