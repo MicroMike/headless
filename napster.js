@@ -74,7 +74,9 @@ const main = async (restartAccount) => {
         console.log('catch login')
         await nightmare.end()
         errorLog = true
-        main(account)
+        setTimeout(() => {
+          main(account)
+        }, 1000);
       })
     // }
 
@@ -103,7 +105,9 @@ const main = async (restartAccount) => {
         console.log('catch album')
         await nightmare.end()
         errorLog = true
-        main()
+        setTimeout(() => {
+          main(account)
+        }, 1000);
       })
 
     if (errorLog) { return }
