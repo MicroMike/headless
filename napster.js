@@ -73,7 +73,9 @@ const main = async (restartAccount) => {
       .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
-        return document.querySelector('.unradio').text() || document.querySelector('.account-issue').text() || document.querySelector('.single-stream-error').text()
+        return document.querySelector('.unradio') && document.querySelector('.unradio').text() ||
+          document.querySelector('.account-issue') && document.querySelector('.account-issue').text() ||
+          document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').text()
       })
 
     if (unradio) {
