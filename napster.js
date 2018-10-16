@@ -62,16 +62,16 @@ const main = async (restartAccount) => {
     if (!restartAccount) {
       await nightmare
         .goto(url)
-        .wait(5000 + rand(2000))
+        .wait(2000 + rand(2000))
         .type(inputs.username, login)
         .type(inputs.password, pass)
         .click(loginBtn)
-        .wait(5000 + rand(2000))
+        .wait(2000 + rand(2000))
     }
 
     const unradio = await nightmare
       .goto(nAl)
-      .wait(5000 + rand(2000))
+      .wait(2000 + rand(2000))
       .evaluate(() => {
         return $('.unradio').text() || $('.account-issue').text() || $('.single-stream-error').text()
       })
@@ -84,9 +84,9 @@ const main = async (restartAccount) => {
 
     await nightmare
       .goto(album())
-      .wait(5000 + rand(2000))
+      .wait(2000 + rand(2000))
       .click(playBtn)
-      .wait(5000 + rand(2000))
+      .wait(2000 + rand(2000))
       .click(shuffle)
       .then()
       .catch(async (e) => {
