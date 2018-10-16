@@ -59,15 +59,21 @@ const main = async (restartAccount) => {
     shuffle = '.repeat-button'
 
 
-    if (!restartAccount) {
-      await nightmare
-        .goto(url)
-        .wait(2000 + rand(2000))
-        .type(inputs.username, login)
-        .type(inputs.password, pass)
-        .click(loginBtn)
-        .wait(2000 + rand(2000))
+    // if (!restartAccount) {
+    await nightmare
+      .goto(url)
+      .wait(2000 + rand(2000))
+
+    if (accounts.length && !restartAccount) {
+      main()
     }
+
+    await nightmare
+      .type(inputs.username, login)
+      .type(inputs.password, pass)
+      .click(loginBtn)
+      .wait(2000 + rand(2000))
+    // }
 
     const unradio = await nightmare
       .goto(album())
@@ -108,10 +114,6 @@ const main = async (restartAccount) => {
       await nightmare.end()
       main(account)
     }, 1000 * 60 * 15);
-
-    if (accounts.length && !restartAccount) {
-      main()
-    }
   }
   catch (e) {
     console.log("error", account, e)
