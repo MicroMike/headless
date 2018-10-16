@@ -70,7 +70,7 @@ const main = async (restartAccount) => {
     }
 
     const unradio = await nightmare
-      .goto(nAl)
+      .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
         return $('.unradio').text() || $('.account-issue').text() || $('.single-stream-error').text()
@@ -83,7 +83,6 @@ const main = async (restartAccount) => {
     let errorLog = false
 
     await nightmare
-      .goto(album())
       .wait(2000 + rand(2000))
       .click(playBtn)
       .wait(2000 + rand(2000))
