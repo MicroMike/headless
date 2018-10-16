@@ -17,7 +17,7 @@ const main = async (restartAccount) => {
       // },
       alwaysOnTop: false,
       waitTimeout: 10000,
-      show: false,
+      show: true,
       typeInterval: 300,
       webPreferences: {
         webSecurity: false,

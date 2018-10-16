@@ -416,7 +416,7 @@ const main = async (session, currentDealer, tempAdd) => {
           // fs.writeFile('sessions.txt', sessionsbis.join(','), function (err) {
           //   if (err) return console.log(err);
           // });
-          console.log('out ' + session)
+          console.log('out ' + session, currentDealer)
           main(null, currentDealer, true)
           // currentDealer = increment(currentDealer)
           // main(sessions[currentDealer], currentDealer)
