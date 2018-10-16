@@ -64,17 +64,15 @@ const main = async (restartAccount) => {
     await nightmare
       .goto(url)
       .wait(2000 + rand(2000))
-
-    if (++count < accounts.length && !restartAccount) {
-      main()
-    }
-
-    await nightmare
       .type(inputs.username, login)
       .type(inputs.password, pass)
       .click(loginBtn)
       .wait(2000 + rand(2000))
     // }
+
+    if (++count < accounts.length && !restartAccount) {
+      main()
+    }
 
     const unradio = await nightmare
       .goto(album())
