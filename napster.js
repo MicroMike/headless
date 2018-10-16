@@ -16,13 +16,15 @@ const main = async (restartAccount) => {
       //   mode: 'detach'
       // },
       alwaysOnTop: false,
-      waitTimeout: 10000,
+      waitTimeout: 1000 * 60,
       show: true,
       typeInterval: 300,
       webPreferences: {
+        // partition: persist,
         webSecurity: false,
         allowRunningInsecureContent: true,
         plugins: true,
+        images: false,
         experimentalFeatures: true
       }
     })
@@ -105,10 +107,20 @@ const main = async (restartAccount) => {
         throw 'getout';
       }
 
+      let errorLog = false
+
       await nightmare
         .click(playBtn)
         .wait(5000 + rand(2000))
         .click(shuffle)
+        .then()
+        .catch(async (e) => {
+          console.log('catch album')
+          errorLog = true
+          main()
+        })
+
+      if (errorLog) { return }
 
       await console.log('in : ' + account)
 
@@ -152,17 +164,17 @@ const main = async (restartAccount) => {
     }
     catch (e) {
       console.log("error", account, e)
-      clearInterval(inter)
-      // await nightmare.screenshot(login + '.png')
-      await nightmare.end()
-      if (account && e !== 'getout') {
-        push(e)
-        if (accounts.length) {
-          setTimeout(() => {
-            main(account)
-          }, rand(1000 * 60 * 5));
-        }
-      }
+      // clearInterval(inter)
+      // // await nightmare.screenshot(login + '.png')
+      // await nightmare.end()
+      // if (account && e !== 'getout') {
+      //   push(e)
+      //   if (accounts.length) {
+      //     setTimeout(() => {
+      //       main(account)
+      //     }, rand(1000 * 60 * 5));
+      //   }
+      // }
     }
   }, restartAccount ? rand(1000 * 60 * 60) : 0);
 }
