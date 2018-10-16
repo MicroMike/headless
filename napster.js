@@ -106,7 +106,7 @@ const main = async (restartAccount) => {
         await nightmare.end()
         errorLog = true
         setTimeout(() => {
-          main(account)
+          main()
         }, 1000);
       })
 
