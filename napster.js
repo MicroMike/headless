@@ -78,10 +78,6 @@ const main = async (restartAccount) => {
       })
     // }
 
-    if (++count < accounts.length && !restartAccount) {
-      main()
-    }
-
     if (errorLog) { return }
 
     const unradio = await nightmare
@@ -96,7 +92,6 @@ const main = async (restartAccount) => {
     if (unradio) {
       throw 'getout';
     }
-
 
     await nightmare
       .wait(2000 + rand(2000))
@@ -116,6 +111,9 @@ const main = async (restartAccount) => {
     accounts.push(account)
     fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
       if (err) return console.log(err);
+      if (++count < accounts.length && !restartAccount) {
+        main()
+      }
     });
 
     setTimeout(async () => {
