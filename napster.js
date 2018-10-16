@@ -59,6 +59,7 @@ const main = async (restartAccount) => {
     playBtn = '.track-list-header .shuffle-button'
     shuffle = '.repeat-button'
 
+    let errorLog = false
 
     // if (!restartAccount) {
     await nightmare
@@ -68,11 +69,20 @@ const main = async (restartAccount) => {
       .type(inputs.password, pass)
       .click(loginBtn)
       .wait(2000 + rand(2000))
+      .then()
+      .catch(async (e) => {
+        console.log('catch login')
+        await nightmare.end()
+        errorLog = true
+        main(account)
+      })
     // }
 
     if (++count < accounts.length && !restartAccount) {
       main()
     }
+
+    if (errorLog) { return }
 
     const unradio = await nightmare
       .goto(album())
@@ -87,7 +97,6 @@ const main = async (restartAccount) => {
       throw 'getout';
     }
 
-    let errorLog = false
 
     await nightmare
       .wait(2000 + rand(2000))
