@@ -2,6 +2,7 @@ const fs = require('fs');
 let accounts = []
 let over = false
 let albums
+let count = 0
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -64,7 +65,7 @@ const main = async (restartAccount) => {
       .goto(url)
       .wait(2000 + rand(2000))
 
-    if (accounts.length && !restartAccount) {
+    if (++count < accounts.length && !restartAccount) {
       main()
     }
 
