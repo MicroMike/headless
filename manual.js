@@ -215,7 +215,7 @@ const main = async (session, currentDealer, tempAdd) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: !session,
-    waitTimeout: process.env.ADD ? 1000 * 60 * 10 : 1000 * 60,
+    waitTimeout: process.env.ADD || tempAdd ? 1000 * 60 * 10 : 1000 * 60,
     show: true,
     width: 600,
     height: 600,
