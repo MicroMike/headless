@@ -40,7 +40,7 @@ const albums = [
 ]
 const album = () => albums[rand(albums.length)]
 
-const anticaptcha = (captchaisNew, nightmare) => {
+const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
   let tryCaptcha = 0
   let error = false
   request({
@@ -100,7 +100,11 @@ const anticaptcha = (captchaisNew, nightmare) => {
                 .catch(async (e) => {
                   console.log('catch captcha ' + e)
                   error = true
-                  await nightmare.end()
+                  await nightmare.end(() => {
+                    if (currentDealer) {
+                      main(null, currentDealer, true)
+                    }
+                  })
                 })
 
               if (!error) {
@@ -110,10 +114,8 @@ const anticaptcha = (captchaisNew, nightmare) => {
                     return !!document.getElementById('g-recaptcha-response')
                   })
 
-                await console.log(notconected)
-
                 if (notconected) {
-                  if (captchaisNew && ++tryCaptcha < 3) {
+                  if (captchaisNew && ++tryCaptcha < 5) {
                     anticaptcha(true, nightmare)
                   }
                   else {
@@ -124,6 +126,9 @@ const anticaptcha = (captchaisNew, nightmare) => {
                   }
                 }
                 else {
+                  if (tryCaptcha > 1) {
+                    console.log('pass with' + tryCaptcha + 'tries')
+                  }
                   await nightmare.goto('https://www.spotify.com/ie/account/overview')
                 }
               }
@@ -131,7 +136,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
           }
           catch (e) {
             console.log('catch captcha 2 ' + e)
-            console.log(util.inspect(response, false, null, true /* enable colors */))
             clearInterval(interval)
             if (nightmare) {
               await nightmare.end()
@@ -141,7 +145,6 @@ const anticaptcha = (captchaisNew, nightmare) => {
       }
       catch (e) {
         console.log('catch captcha 3 ' + e)
-        console.log(util.inspect(response, false, null, true /* enable colors */))
         clearInterval(interval)
         if (nightmare) {
           nightmare.end()
@@ -270,7 +273,7 @@ const main = async (session, currentDealer, tempAdd) => {
       }
 
       if (isnew) {
-        anticaptcha(true, nightmare)
+        anticaptcha(true, nightmare, currentDealer)
 
         await nightmare
           .goto('https://spotify.com/ie/signup')
@@ -384,7 +387,7 @@ const main = async (session, currentDealer, tempAdd) => {
         else {
           sessions.push(persist)
         }
-        fs.writeFile('sessions.txt', sessions.join(','), function (err) {
+        fs.writeFile('sessions.txt', sessions.filter(s => s).join(','), function (err) {
           if (err) return console.log(err);
         });
       }
@@ -498,7 +501,7 @@ const main = async (session, currentDealer, tempAdd) => {
       if (!tempAdd) {
         currentDealer = increment(currentDealer)
       }
-      main(sessions[currentDealer], currentDealer, tempAdd)
+      main(null, currentDealer, tempAdd)
     }, 2600);
   }
 }
