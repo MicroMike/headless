@@ -40,8 +40,7 @@ const albums = [
 ]
 const album = () => albums[rand(albums.length)]
 
-const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
-  let tryCaptcha = 0
+const anticaptcha = (captchaisNew, nightmare, currentDealer, tryCaptcha = 0) => {
   let error = false
   request({
     url: 'https://api.anti-captcha.com/createTask',
@@ -104,7 +103,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
                     if (currentDealer) {
                       setTimeout(() => {
                         main(null, currentDealer, true)
-                      }, 1000 * 60 * 5)
+                      }, 1000 * 60 * 15)
                     }
                   })
                 })
@@ -117,8 +116,8 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
                   })
 
                 if (notconected) {
-                  if (captchaisNew && ++tryCaptcha < 5) {
-                    anticaptcha(true, nightmare)
+                  if (captchaisNew && ++tryCaptcha < 3) {
+                    anticaptcha(true, nightmare, currentDealer, tryCaptcha)
                   }
                   else {
                     fs.writeFile(process.env.FILE, accounts.concat(accountsValid).join(','), function (err) {
@@ -143,7 +142,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
               await nightmare.end(() => {
                 setTimeout(() => {
                   main(null, currentDealer, true)
-                }, 1000 * 60 * 5)
+                }, 1000 * 60 * 15)
               })
             }
           }
@@ -156,7 +155,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer) => {
           nightmare.end(() => {
             setTimeout(() => {
               main(null, currentDealer, true)
-            }, 1000 * 60 * 5)
+            }, 1000 * 60 * 15)
           })
         }
       }
@@ -267,7 +266,7 @@ const main = async (session, currentDealer, tempAdd) => {
           .catch(async (e) => {
             console.log('catch tempmail start')
             await nightmare.end(() => {
-              main(session, currentDealer)
+              main(tempAdd ? null : session, currentDealer, tempAdd)
             })
           })
         : accounts.shift()
