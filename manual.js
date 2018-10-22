@@ -510,7 +510,7 @@ const main = async (session, currentDealer, tempAdd) => {
       if (!tempAdd) {
         currentDealer = increment(currentDealer)
       }
-      main(null, currentDealer, tempAdd)
+      main(sessions[currentDealer], currentDealer)
     }, 2600);
   }
 }
