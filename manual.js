@@ -4,7 +4,7 @@ const util = require('util')
 
 process.env.FILE = process.env.FILE || 'spotifyAccount.txt'
 
-let divided = 4
+let divided = 3
 let over = false
 let accounts = []
 let accountsValid = []
