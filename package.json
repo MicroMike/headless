@@ -9,7 +9,7 @@
     "s50": "concurrently \"npm run s25\" \"npm run s25\"",
     "50p": "cross-env FILE=spotifyAccount.txt node favS",
     "startn": "concurrently \"npm run startp\" \"npm run startn\"",
-    "start": "cross-env FILE=spotifyAccount.txt ALLNEW=true node favS",
+    "start": "cross-env TEST=true DIVIDED=1 node manual",
     "test": "cross-env TEST=true node manual",
     "add": "cross-env ADD=true node manual",
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start",
