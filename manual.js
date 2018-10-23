@@ -139,11 +139,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer, tryCaptcha = 0) => 
             console.log('catch captcha 2 ' + e)
             clearInterval(interval)
             if (nightmare) {
-              await nightmare.end(() => {
-                setTimeout(() => {
-                  main(null, currentDealer, true)
-                }, 1000 * 60 * 15)
-              })
+              anticaptcha(true, nightmare, currentDealer, tryCaptcha)
             }
           }
         });
@@ -152,11 +148,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer, tryCaptcha = 0) => 
         console.log('catch captcha 3 ' + e)
         clearInterval(interval)
         if (nightmare) {
-          nightmare.end(() => {
-            setTimeout(() => {
-              main(null, currentDealer, true)
-            }, 1000 * 60 * 15)
-          })
+          anticaptcha(true, nightmare, currentDealer, tryCaptcha)
         }
       }
     }, 10000)
