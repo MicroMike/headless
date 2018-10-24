@@ -110,22 +110,21 @@ const main = async (restartAccount) => {
       .then()
       .catch(async (e) => {
         console.log('catch account type' + e)
-        await nightmare.end()
         errorLog = true
-        setTimeout(() => {
+        await nightmare.end(() => {
           main(account)
-        }, 1000);
+        })
       })
 
-    await main()
 
     if (errorLog) { return save() }
 
     if (unradio) {
       console.log('out no premium')
-      await nightmare.end()
       save()
-      main()
+      await nightmare.end(() => {
+        main()
+      })
       return
     }
 
@@ -137,11 +136,10 @@ const main = async (restartAccount) => {
 
     if (used) {
       console.log('out used')
-      await nightmare.end()
       accounts.push(account)
-      setTimeout(() => {
+      await nightmare.end(() => {
         main(account)
-      }, 1000 * 60 * 15);
+      })
       return
     }
 
@@ -153,17 +151,18 @@ const main = async (restartAccount) => {
       .then()
       .catch(async (e) => {
         console.log('catch album')
-        await nightmare.end()
         errorLog = true
-        setTimeout(() => {
+        await nightmare.end(() => {
           main()
-        }, 1000);
+        })
       })
 
     if (errorLog) { return save() }
 
     accounts.push(account)
     save()
+
+    main()
 
     setTimeout(async () => {
       await nightmare.end(() => {
