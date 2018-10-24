@@ -95,9 +95,9 @@ const main = async (restartAccount) => {
       .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
-        return document.querySelector('.unradio') && document.querySelector('.unradio').text() ||
-          document.querySelector('.account-issue') && document.querySelector('.account-issue').text() ||
-          document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').text()
+        return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML() ||
+          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML() ||
+          document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML()
       })
       .then()
       .catch(async (e) => {
