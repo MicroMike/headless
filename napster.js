@@ -117,6 +117,8 @@ const main = async (restartAccount) => {
         }, 1000);
       })
 
+    main()
+
     if (errorLog) { return save() }
 
     if (unradio) {
@@ -163,11 +165,10 @@ const main = async (restartAccount) => {
     accounts.push(account)
     save()
 
-    main()
-
     setTimeout(async () => {
-      await nightmare.end()
-      main(account)
+      await nightmare.end(() => {
+        main(account)
+      })
     }, 1000 * 60 * 15);
   }
   catch (e) {
