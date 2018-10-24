@@ -90,15 +90,16 @@ const main = async (restartAccount, persist) => {
         .wait(2000 + rand(2000))
         .then()
         .catch(async (e) => {
-          console.log('catch login')
+          console.log('catch login' + e)
           await nightmare.end()
           errorLog = true
+          save()
           setTimeout(() => {
             main(account)
           }, 1000);
         })
 
-      if (errorLog) { return save() }
+      if (errorLog) { return }
     }
 
     const unradio = await nightmare
@@ -112,13 +113,14 @@ const main = async (restartAccount, persist) => {
       .catch(async (e) => {
         console.log('catch account type' + e)
         errorLog = true
+        save()
         await nightmare.end(() => {
           main(account)
         })
       })
 
 
-    if (errorLog) { return save() }
+    if (errorLog) { return }
 
     if (unradio) {
       console.log('out no premium')
@@ -154,14 +156,15 @@ const main = async (restartAccount, persist) => {
       .click(shuffle)
       .then()
       .catch(async (e) => {
-        console.log('catch album')
+        console.log('catch album' + e)
         errorLog = true
+        save()
         await nightmare.end(() => {
           main()
         })
       })
 
-    if (errorLog) { return save() }
+    if (errorLog) { return }
 
     accounts.push(account)
     save()
