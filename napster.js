@@ -163,7 +163,7 @@ const main = async (restartAccount, persist) => {
         errorLog = true
         save()
         await nightmare.end(() => {
-          main()
+          // main()
         })
       })
 
