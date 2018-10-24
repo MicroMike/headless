@@ -177,7 +177,7 @@ const main = async (restartAccount, persist) => {
       await nightmare.end(() => {
         main(account, session)
       })
-    }, 1000 * 60 * (2 + rand(8)));
+    }, 1000 * 60 * (15 + rand(15)));
   }
   catch (e) {
     console.log("error", account, e)
