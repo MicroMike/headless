@@ -83,6 +83,12 @@ const main = async (restartAccount, persist) => {
     if (!persist) {
       await nightmare
         .goto(url)
+
+      if (!restartAccount) {
+        main()
+      }
+
+      await nightmare
         .wait(2000 + rand(2000))
         .type(inputs.username, login)
         .type(inputs.password, pass)
@@ -100,10 +106,6 @@ const main = async (restartAccount, persist) => {
         })
 
       if (errorLog) { return }
-    }
-
-    if (!restartAccount) {
-      main()
     }
 
     const unradio = await nightmare
