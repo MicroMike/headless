@@ -166,7 +166,9 @@ const main = async (restartAccount, persist) => {
     accounts.push(account)
     save()
 
-    main()
+    if (!restartAccount) {
+      main()
+    }
 
     setTimeout(async () => {
       await nightmare.end(() => {
