@@ -120,6 +120,7 @@ const main = async (restartAccount) => {
     if (errorLog) { return save() }
 
     if (unradio) {
+      console.log('out no premium')
       await nightmare.end()
       save()
       main()
@@ -133,6 +134,7 @@ const main = async (restartAccount) => {
       })
 
     if (used) {
+      console.log('out used')
       await nightmare.end()
       accounts.push(account)
       setTimeout(() => {
