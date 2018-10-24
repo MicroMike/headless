@@ -4,6 +4,14 @@ let over = false
 let albums
 let count = 0
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
 }
@@ -154,6 +162,7 @@ const main = async (restartAccount) => {
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
+  data = shuffle(data)
   accounts = data.split(',')
   console.log(accounts.length)
   main()
