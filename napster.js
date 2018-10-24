@@ -108,6 +108,7 @@ const main = async (restartAccount) => {
       })
 
     if (unradio || errorLog) {
+      console.log(unradio)
       return save()
     }
 
