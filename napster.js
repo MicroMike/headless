@@ -26,6 +26,7 @@ const save = () => {
 
 const main = async (restartAccount) => {
   if (over) { return }
+  if (count >= accounts.length) { return }
   count = !restartAccount ? count + 1 : count;
   let account = restartAccount || accounts.shift()
   let inter
@@ -104,8 +105,7 @@ const main = async (restartAccount) => {
       .wait(2000 + rand(2000))
       .evaluate(() => {
         return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
-          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
-          document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML
+          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML
       })
       .then()
       .catch(async (e) => {
@@ -117,9 +117,28 @@ const main = async (restartAccount) => {
         }, 1000);
       })
 
-    if (unradio || errorLog) {
-      console.log(unradio)
-      return save()
+    if (errorLog) { return save() }
+
+    if (unradio) {
+      await nightmare.end()
+      save()
+      main()
+      return
+    }
+
+    const used = await nightmare
+      .wait(2000 + rand(2000))
+      .evaluate(() => {
+        return document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML
+      })
+
+    if (used) {
+      await nightmare.end()
+      accounts.push(account)
+      setTimeout(() => {
+        main(account)
+      }, 1000 * 60 * 15);
+      return
     }
 
     await nightmare
@@ -142,9 +161,7 @@ const main = async (restartAccount) => {
     accounts.push(account)
     save()
 
-    if (count < accounts.length) {
-      main()
-    }
+    main()
 
     setTimeout(async () => {
       await nightmare.end()
