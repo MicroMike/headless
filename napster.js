@@ -62,6 +62,8 @@ const main = async (restartAccount) => {
       'https://app.napster.com/artist/honey/album/just-another-emotion',
       'https://app.napster.com/artist/yokem/album/boombeats',
       'https://app.napster.com/artist/hanke/album/new-york-story',
+      'https://app.napster.com/artist/hanke/album/100-revenge',
+      'https://app.napster.com/artist/yonne/album/loser'
     ]
     playBtn = '.track-list-header .shuffle-button'
     shuffle = '.repeat-button'
@@ -99,7 +101,7 @@ const main = async (restartAccount) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch account type')
+        console.log('catch account type' + e)
         await nightmare.end()
         errorLog = true
         setTimeout(() => {
