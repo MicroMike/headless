@@ -136,7 +136,7 @@ const anticaptcha = (captchaisNew, nightmare, currentDealer, tryCaptcha = 0) => 
             }
           }
           catch (e) {
-            console.log('catch captcha 2 ' + e)
+            console.log('catch captcha 2 ' + e + response)
             clearInterval(interval)
             if (nightmare) {
               anticaptcha(true, nightmare, currentDealer, tryCaptcha)
