@@ -102,6 +102,10 @@ const main = async (restartAccount, persist) => {
       if (errorLog) { return }
     }
 
+    if (!restartAccount) {
+      main()
+    }
+
     const unradio = await nightmare
       .goto(album())
       .wait(2000 + rand(2000))
@@ -168,10 +172,6 @@ const main = async (restartAccount, persist) => {
 
     accounts.push(account)
     save()
-
-    if (!restartAccount) {
-      main()
-    }
 
     setTimeout(async () => {
       await nightmare.end(() => {
