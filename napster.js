@@ -80,7 +80,7 @@ const main = async (restartAccount, persist) => {
 
     let errorLog = false
 
-    if (!session) {
+    if (!persist) {
       await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
