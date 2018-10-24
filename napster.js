@@ -80,26 +80,26 @@ const main = async (restartAccount, persist) => {
 
     let errorLog = false
 
-    // if (!restartAccount) {
-    await nightmare
-      .goto(url)
-      .wait(2000 + rand(2000))
-      .type(inputs.username, login)
-      .type(inputs.password, pass)
-      .click(loginBtn)
-      .wait(2000 + rand(2000))
-      .then()
-      .catch(async (e) => {
-        console.log('catch login')
-        await nightmare.end()
-        errorLog = true
-        setTimeout(() => {
-          main(account)
-        }, 1000);
-      })
-    // }
+    if (!persist) {
+      await nightmare
+        .goto(url)
+        .wait(2000 + rand(2000))
+        .type(inputs.username, login)
+        .type(inputs.password, pass)
+        .click(loginBtn)
+        .wait(2000 + rand(2000))
+        .then()
+        .catch(async (e) => {
+          console.log('catch login')
+          await nightmare.end()
+          errorLog = true
+          setTimeout(() => {
+            main(account)
+          }, 1000);
+        })
 
-    if (errorLog) { return save() }
+      if (errorLog) { return save() }
+    }
 
     const unradio = await nightmare
       .goto(album())
