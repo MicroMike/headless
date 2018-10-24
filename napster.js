@@ -137,8 +137,11 @@ const main = async (restartAccount) => {
     if (used) {
       console.log('out used')
       accounts.push(account)
+      save()
       await nightmare.end(() => {
-        main(account)
+        setTimeout(() => {
+          main(account)
+        }, 1000 * 60 * 5);
       })
       return
     }
