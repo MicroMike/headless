@@ -24,10 +24,11 @@ const save = () => {
   });
 }
 
-const main = async (restartAccount) => {
+const main = async (restartAccount, persist) => {
   if (over) { return }
   if (count >= accounts.length) { return }
-  count = !restartAccount ? count + 1 : count;
+  count = !restartAccount ? count + 1 : count
+  persist = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
   const Nightmare = require('nightmare')
@@ -41,7 +42,7 @@ const main = async (restartAccount) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      // partition: persist,
+      partition: persist,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -169,7 +170,7 @@ const main = async (restartAccount) => {
 
     setTimeout(async () => {
       await nightmare.end(() => {
-        main(account)
+        main(account, persist)
       })
     }, 1000 * 60 * 15);
   }
