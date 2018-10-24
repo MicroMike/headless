@@ -10,8 +10,15 @@ const rand = (max, min) => {
 
 const album = () => albums[rand(albums.length)]
 
+const save = () => {
+  fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
+    if (err) return console.log(err);
+  });
+}
+
 const main = async (restartAccount) => {
   if (over) { return }
+  count = !restartAccount ? count + 1 : count;
   let account = restartAccount || accounts.shift()
   let inter
   const Nightmare = require('nightmare')
@@ -80,7 +87,7 @@ const main = async (restartAccount) => {
       })
     // }
 
-    if (errorLog) { return }
+    if (errorLog) { return save() }
 
     const unradio = await nightmare
       .goto(album())
@@ -90,9 +97,18 @@ const main = async (restartAccount) => {
           document.querySelector('.account-issue') && document.querySelector('.account-issue').text() ||
           document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').text()
       })
+      .then()
+      .catch(async (e) => {
+        console.log('catch account type')
+        await nightmare.end()
+        errorLog = true
+        setTimeout(() => {
+          main(account)
+        }, 1000);
+      })
 
-    if (unradio) {
-      throw 'getout';
+    if (unradio || errorLog) {
+      return save()
     }
 
     await nightmare
@@ -110,15 +126,14 @@ const main = async (restartAccount) => {
         }, 1000);
       })
 
-    if (errorLog) { return }
+    if (errorLog) { return save() }
 
     accounts.push(account)
-    fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
-      if (err) return console.log(err);
-      if (++count < accounts.length && !restartAccount) {
-        main()
-      }
-    });
+    save()
+
+    if (count < accounts.length) {
+      main()
+    }
 
     setTimeout(async () => {
       await nightmare.end()
@@ -127,15 +142,17 @@ const main = async (restartAccount) => {
   }
   catch (e) {
     console.log("error", account, e)
-    fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
-      if (err) return console.log(err);
-    });
+    main(account)
+    // fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
+    //   if (err) return console.log(err);
+    // });
   }
 }
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
+  console.log(accounts.length)
   main()
 });
 
