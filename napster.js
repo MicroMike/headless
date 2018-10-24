@@ -117,7 +117,7 @@ const main = async (restartAccount) => {
         }, 1000);
       })
 
-    main()
+    await main()
 
     if (errorLog) { return save() }
 
