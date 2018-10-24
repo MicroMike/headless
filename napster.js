@@ -28,7 +28,7 @@ const main = async (restartAccount, persist) => {
   if (over) { return }
   if (count >= accounts.length) { return }
   count = !restartAccount ? count + 1 : count
-  persist = persist || 'persist: ' + Date.now()
+  let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
   const Nightmare = require('nightmare')
@@ -42,7 +42,7 @@ const main = async (restartAccount, persist) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      partition: persist,
+      partition: session,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -80,7 +80,7 @@ const main = async (restartAccount, persist) => {
 
     let errorLog = false
 
-    if (!persist) {
+    if (!session) {
       await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
@@ -170,7 +170,7 @@ const main = async (restartAccount, persist) => {
 
     setTimeout(async () => {
       await nightmare.end(() => {
-        main(account, persist)
+        main(account, session)
       })
     }, 1000 * 60 * (2 + rand(8)));
   }
