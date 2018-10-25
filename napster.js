@@ -46,7 +46,7 @@ const main = async (restartAccount, persist) => {
   const pass = accountInfo[2]
   const logged = accountInfo[3] || null
 
-  account += !logged ? ':' + session : ''
+  // account += !logged ? ':' + session : ''
 
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
