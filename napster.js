@@ -146,7 +146,7 @@ const main = async (restartAccount, persist) => {
       if (errorLog) { throw 'out' }
 
       if (issue) {
-        console.log('out issue')
+        console.log('out issue', login)
         throw 'del'
       }
     }
@@ -207,13 +207,17 @@ const main = async (restartAccount, persist) => {
           if (errorLog) { throw 'reconnect' }
         }
         catch (e) {
-          accountsValid = accountsValid.filter(a => a !== account)
-          save()
+          await nightmare.end(() => {
+            accountsValid = accountsValid.filter(a => a !== account)
+            save()
 
-          if (e === 'reconnect') {
-            console.log("ERROR reco ", login, e)
-            main(account)
-          }
+            if (e === 'reconnect') {
+              console.log("ERROR reco ", login, e)
+              setTimeout(() => {
+                main(account)
+              }, 1000 * 60 * 5);
+            }
+          })
         }
       }, 1000 * 60 * (2 + rand(8)));
       // let time = setTimeout(async () => {
