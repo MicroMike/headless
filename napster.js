@@ -94,7 +94,7 @@ const main = async (restartAccount, persist) => {
           .goto(album())
           .wait(4000 + rand(2000))
           .evaluate(() => {
-            return document.querySelector(playBtn)
+            return document.querySelector('.track-list-header .shuffle-button')
               && !document.querySelector('.unradio')
               && !document.querySelector('.account-issue')
           })
@@ -133,7 +133,7 @@ const main = async (restartAccount, persist) => {
         .evaluate(() => {
           return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
             document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
-            !document.querySelector(playBtn)
+            !document.querySelector('.track-list-header .shuffle-button')
         })
         .then()
         .catch(async (e) => {
