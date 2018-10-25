@@ -26,7 +26,7 @@ const save = () => {
   });
 }
 
-const main = async (restartAccount, persist) => {
+const main = async (restartAccount, night) => {
   if (over) { return }
   if (!restartAccount) {
     console.log(accountsValid.length)
@@ -45,7 +45,7 @@ const main = async (restartAccount, persist) => {
   // account += !logged ? ':' + session : ''
 
   const Nightmare = require('nightmare')
-  const nightmare = Nightmare({
+  const nightmare = night || Nightmare({
     electronPath: require('electron'),
     // openDevTools: {
     //   mode: 'detach'
@@ -207,17 +207,15 @@ const main = async (restartAccount, persist) => {
           if (errorLog) { throw 'reconnect' }
         }
         catch (e) {
-          await nightmare.end(() => {
-            accountsValid = accountsValid.filter(a => a !== account)
-            save()
+          accountsValid = accountsValid.filter(a => a !== account)
+          save()
 
-            if (e === 'reconnect') {
-              console.log("ERROR reco ", login, e)
-              setTimeout(() => {
-                main(account)
-              }, 1000 * 60 * 5);
-            }
-          })
+          if (e === 'reconnect') {
+            console.log("ERROR reco ", login, e)
+            setTimeout(() => {
+              main(account, nightmare)
+            }, 1000 * 60 * 5);
+          }
         }
       }, 1000 * 60 * (2 + rand(8)));
       // let time = setTimeout(async () => {
@@ -230,19 +228,17 @@ const main = async (restartAccount, persist) => {
     }
   }
   catch (e) {
-    await nightmare.end(() => {
-      accountsValid = accountsValid.filter(a => a !== account)
-      save()
+    accountsValid = accountsValid.filter(a => a !== account)
+    save()
 
-      if (e === 'out') {
-        console.log("ERROR ", login, e)
-        main(account)
-      }
+    if (e === 'out') {
+      console.log("ERROR ", login, e)
+      main(account, nightmare)
+    }
 
-      if (!restartAccount) {
-        main()
-      }
-    })
+    if (!restartAccount) {
+      main()
+    }
   }
 }
 
