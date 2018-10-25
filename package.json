@@ -15,7 +15,8 @@
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start",
     "vpn": "apt-get install nordvpn-release_1.0.0_all.deb && apt-get update && apt-get install nordvpn",
     "vm": "apt-get install qemu-kvm && apt-get install libvirt && apt-get install libvirt-client && apt-get install virt-install && apt-get install virt-viewer",
-    "update": "git add sessions.txt && git commit -m saveSession && git push"
+    "update": "git add sessions.txt && git commit -m saveSession && git push",
+    "n": "CHECK=true node napster"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [

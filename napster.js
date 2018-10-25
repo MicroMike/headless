@@ -4,6 +4,8 @@ let over = false
 let albums
 let count = 0
 
+const check = process.env.CHECK
+
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -31,6 +33,15 @@ const main = async (restartAccount, persist) => {
   let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
+
+  accountInfo = account.split(':')
+  const player = accountInfo[0]
+  const login = accountInfo[1]
+  const pass = accountInfo[2]
+  const logged = accountInfo[3] || null
+
+  account += !logged ? ':' + session : ''
+
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
@@ -42,7 +53,7 @@ const main = async (restartAccount, persist) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      partition: session,
+      partition: logged || session,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -50,11 +61,6 @@ const main = async (restartAccount, persist) => {
       experimentalFeatures: true
     }
   })
-
-  accountInfo = account.split(':')
-  const player = accountInfo[0]
-  const login = accountInfo[1]
-  const pass = accountInfo[2]
 
   try {
     let inputs = {
@@ -79,59 +85,71 @@ const main = async (restartAccount, persist) => {
     shuffle = '.repeat-button'
 
     let errorLog = false
+    let connected = false
 
     if (!persist) {
-      await nightmare
-        .goto(url)
-        .wait(2000 + rand(2000))
-        .type(inputs.username, login)
-        .type(inputs.password, pass)
-        .click(loginBtn)
-        .wait(2000 + rand(2000))
-        .then()
-        .catch(async (e) => {
-          console.log('catch login' + e)
-          await nightmare.end()
-          errorLog = true
-          save()
-          setTimeout(() => {
-            main(account)
-          }, 1000);
-        })
+      if (logged) {
+        connected = await nightmare
+          .goto(album())
+          .wait(4000 + rand(2000))
+          .evaluate(() => {
+            return document.querySelector(playBtn)
+              && !document.querySelector('.unradio')
+              && !document.querySelector('.account-issue')
+          })
+          .then()
+          .catch(async (e) => {
+            console.log('catch logged' + e)
+            errorLog = true
+          })
+      }
 
-      if (errorLog) { return }
+      if (errorLog) { throw 'out' }
+
+      if (!connected) {
+        await nightmare
+          .goto(url)
+          .wait(2000 + rand(2000))
+          .type(inputs.username, login)
+          .type(inputs.password, pass)
+          .wait(2000 + rand(2000))
+          .click(loginBtn)
+          .wait(4000 + rand(2000))
+          .then()
+          .catch(async (e) => {
+            console.log('catch login' + e)
+            errorLog = true
+          })
+
+        if (errorLog) { throw 'out' }
+      }
     }
 
-    const unradio = await nightmare
-      .goto(album())
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
-          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML
-      })
-      .then()
-      .catch(async (e) => {
-        console.log('catch account type' + e)
-        errorLog = true
-        save()
-        await nightmare.end(() => {
-          main(account)
+    if (!connected) {
+      const issue = await nightmare
+        .goto(album())
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
+            document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
+            !document.querySelector(playBtn)
         })
-      })
+        .then()
+        .catch(async (e) => {
+          console.log('catch account type' + e)
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
+
+      if (issue) {
+        console.log('out issue')
+        throw 'del'
+      }
+    }
 
     if (!restartAccount) {
       main()
-    }
-
-    if (errorLog) { return }
-
-    if (unradio) {
-      console.log('out no premium')
-      save()
-      await nightmare.end(() => {
-        main()
-      })
-      return
     }
 
     const used = await nightmare
@@ -142,14 +160,7 @@ const main = async (restartAccount, persist) => {
 
     if (used) {
       console.log('out used')
-      accounts.push(account)
-      save()
-      await nightmare.end(() => {
-        setTimeout(() => {
-          main(account)
-        }, 1000 * 60 * 5);
-      })
-      return
+      throw 'out'
     }
 
     await nightmare
@@ -161,35 +172,45 @@ const main = async (restartAccount, persist) => {
       .catch(async (e) => {
         console.log('catch album' + e)
         errorLog = true
-        save()
-        await nightmare.end(() => {
-          // main()
-        })
       })
 
-    if (errorLog) { return }
+    if (errorLog) { throw 'out' }
 
     accounts.push(account)
     save()
 
-    setTimeout(async () => {
-      await nightmare.end(() => {
-        main(account, session)
-      })
-    }, 1000 * 60 * (15 + rand(15)));
+    if (!restartAccount) {
+      main()
+    }
+
+    if (check) {
+      await nightmare.end()
+    }
+    else {
+      setTimeout(async () => {
+        await nightmare.end(() => {
+          main(account)
+        })
+      }, 1000 * 60 * (15 + rand(15)));
+    }
   }
   catch (e) {
-    console.log("error", account, e)
-    main(account)
-    // fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
-    //   if (err) return console.log(err);
-    // });
+    console.log("ERROR ", account, e)
+
+    if (e === 'out') {
+      accounts.push(account)
+    }
+    save()
+
+    if (!restartAccount) {
+      main()
+    }
   }
 }
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
-  shuffle(data)
+  // shuffle(data)
   accounts = data.split(',')
   console.log(accounts.length)
   main()
