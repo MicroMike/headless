@@ -34,6 +34,7 @@ const push = (arr, item) => {
 const main = async (restartAccount, persist) => {
   if (over) { return }
   if (!restartAccount) {
+    console.log(accountsValid.length)
     if (accountsValid.length >= accounts.length || accountsValid.length >= 30) { return }
   }
   let session = persist || 'persist: ' + Date.now()
