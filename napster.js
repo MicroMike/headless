@@ -149,10 +149,6 @@ const main = async (restartAccount, persist) => {
       }
     }
 
-    if (!restartAccount) {
-      main()
-    }
-
     const used = await nightmare
       .wait(2000 + rand(2000))
       .evaluate(() => {
