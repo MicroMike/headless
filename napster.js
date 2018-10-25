@@ -62,15 +62,19 @@ const main = async (restartAccount, persist) => {
     }
   })
 
+  let inputs = {
+    username: '#username',
+    password: '#password'
+  }
+  let url
+  let loginBtn
+  let playBtn
+  let shuffle
+
+  let errorLog = false
+  let connected = false
+
   try {
-    let inputs = {
-      username: '#username',
-      password: '#password'
-    }
-    let url
-    let loginBtn
-    let playBtn
-    let shuffle
 
     url = 'https://app.napster.com/login/'
     loginBtn = '.signin'
@@ -83,9 +87,6 @@ const main = async (restartAccount, persist) => {
     ]
     playBtn = '.track-list-header .shuffle-button'
     shuffle = '.repeat-button'
-
-    let errorLog = false
-    let connected = false
 
     if (!persist) {
       if (logged) {
