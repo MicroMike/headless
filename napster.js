@@ -173,10 +173,10 @@ const main = async (restartAccount, persist) => {
 
     if (errorLog) { throw 'out' }
 
-    accounts.push(account)
-    save()
 
     if (!restartAccount) {
+      accounts.push(account)
+      save()
       main()
     }
 
