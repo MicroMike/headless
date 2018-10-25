@@ -26,11 +26,6 @@ const save = () => {
   });
 }
 
-const push = (arr, item) => {
-  arr = arr.filter(a => a !== item)
-  arr.push(item)
-}
-
 const main = async (restartAccount, persist) => {
   if (over) { return }
   if (!restartAccount) {
@@ -180,7 +175,9 @@ const main = async (restartAccount, persist) => {
 
     if (errorLog) { throw 'out' }
 
-    push(accountsValid, account)
+
+    accountsValid = accountsValid.filter(a => a !== account)
+    accountsValid.push(account)
     save()
 
     if (!restartAccount) {
