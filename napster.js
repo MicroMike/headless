@@ -1,5 +1,6 @@
 const fs = require('fs');
 let accounts = []
+let accountsValid = []
 let over = false
 let albums
 let count = 0
@@ -21,7 +22,7 @@ const rand = (max, min) => {
 const album = () => albums[rand(albums.length)]
 
 const save = () => {
-  fs.writeFile('napsterAccount.txt', accounts.join(','), function (err) {
+  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
     if (err) return console.log(err);
   });
 }
@@ -175,7 +176,7 @@ const main = async (restartAccount, persist) => {
 
 
     if (!restartAccount) {
-      accounts.push(account)
+      accountsValid.push(account)
       save()
       main()
     }
@@ -211,7 +212,9 @@ const main = async (restartAccount, persist) => {
     await nightmare.end(() => {
       if (e === 'out') {
         console.log("ERROR ", login, e)
-        accounts.push(account)
+        if (!restartAccount) {
+          accounts.push(account)
+        }
       }
       save()
 
