@@ -185,23 +185,28 @@ const main = async (restartAccount, persist, reco) => {
       await nightmare.end()
     }
     else {
-      let inter = setInterval(async () => {
-        if (over) { return clearInterval(inter) }
-        await nightmare
-          .goto(album())
-          .wait(2000 + rand(2000))
-          .click(playBtn)
-          .wait(2000 + rand(2000))
-          .click(shuffle)
-          .then()
-          .catch(async (e) => {
-            console.log('catch album' + e)
-            clearInterval(inter)
-            errorLog = true
-          })
+      try {
+        let inter = setInterval(async () => {
+          if (over) { return clearInterval(inter) }
+          await nightmare
+            .goto(album())
+            .wait(2000 + rand(2000))
+            .click(playBtn)
+            .wait(2000 + rand(2000))
+            .click(shuffle)
+            .then()
+            .catch(async (e) => {
+              console.log('catch album' + e)
+              clearInterval(inter)
+              errorLog = true
+            })
 
+          if (errorLog) { throw 'reconnect' }
+        }, 1000 * 60 * (2 + rand(8)));
+      }
+      catch (e) {
         if (errorLog) { throw 'reconnect' }
-      }, 1000 * 60 * (2 + rand(8)));
+      }
       // let time = setTimeout(async () => {
       //   if (over) { return clearInterval(time) }
       //   clearInterval(inter)
