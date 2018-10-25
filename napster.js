@@ -31,7 +31,7 @@ const main = async (restartAccount, night) => {
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 30) { return }
   }
-  let session = persist || 'persist: ' + Date.now()
+  // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
 
@@ -54,7 +54,7 @@ const main = async (restartAccount, night) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      partition: logged || session,
+      // partition: logged || session,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
