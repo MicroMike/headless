@@ -29,7 +29,6 @@ const save = () => {
 const main = async (restartAccount, night) => {
   if (over) { return }
   if (!restartAccount) {
-    console.log(accountsValid.length)
     if (accountsValid.length >= accounts.length || accountsValid.length >= 30) { return }
   }
   let session = persist || 'persist: ' + Date.now()
@@ -179,6 +178,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
+    console.log(accountsValid.length, login)
 
     if (!restartAccount) {
       main()
@@ -199,7 +199,7 @@ const main = async (restartAccount, night) => {
             .click(shuffle)
             .then()
             .catch(async (e) => {
-              console.log('catch album' + e)
+              console.log('catch album')
               clearInterval(inter)
               errorLog = true
             })
