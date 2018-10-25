@@ -28,7 +28,7 @@ const save = () => {
 
 const main = async (restartAccount, persist) => {
   if (over) { return }
-  if (count >= accounts.length) { return }
+  if (count >= accounts.length && count < 30) { return }
   count = !restartAccount ? count + 1 : count
   let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
@@ -198,13 +198,13 @@ const main = async (restartAccount, persist) => {
             errorLog = true
           })
       }, 1000 * 60 * (2 + rand(8)));
-      let time = setTimeout(async () => {
-        if (over) { return clearInterval(time) }
-        clearInterval(inter)
-        await nightmare.end(() => {
-          main(account)
-        })
-      }, 1000 * 60 * (15 + rand(15)));
+      // let time = setTimeout(async () => {
+      //   if (over) { return clearInterval(time) }
+      //   clearInterval(inter)
+      //   await nightmare.end(() => {
+      //     main(account)
+      //   })
+      // }, 1000 * 60 * (15 + rand(15)));
     }
   }
   catch (e) {
