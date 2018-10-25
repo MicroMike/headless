@@ -29,7 +29,7 @@ const save = () => {
 
 const main = async (restartAccount, persist) => {
   if (over) { return }
-  if (count >= accounts.length && count < 30) { return }
+  if (count >= accounts.length || count < 30) { return }
   count = !restartAccount ? count + 1 : count
   let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
