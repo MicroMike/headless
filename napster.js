@@ -184,7 +184,7 @@ const main = async (restartAccount, persist) => {
       await nightmare.end()
     }
     else {
-      let inter = setInterval(() => {
+      let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
         await nightmare
           .goto(album())
