@@ -26,9 +26,14 @@ const save = () => {
   });
 }
 
-const main = async (restartAccount, persist, reco) => {
+const push = (arr, item) => {
+  arr = arr.filter(a => a !== item)
+  arr.push(item)
+}
+
+const main = async (restartAccount, persist) => {
   if (over) { return }
-  if (!restartAccount && !reco) {
+  if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 30) { return }
   }
   let session = persist || 'persist: ' + Date.now()
@@ -174,10 +179,10 @@ const main = async (restartAccount, persist, reco) => {
 
     if (errorLog) { throw 'out' }
 
+    push(accountsValid, account)
+    save()
 
-    if (!restartAccount || reco) {
-      accountsValid.push(account)
-      save()
+    if (!restartAccount) {
       main()
     }
 
@@ -185,8 +190,8 @@ const main = async (restartAccount, persist, reco) => {
       await nightmare.end()
     }
     else {
-      try {
-        let inter = setInterval(async () => {
+      let inter = setInterval(async () => {
+        try {
           if (over) { return clearInterval(inter) }
           await nightmare
             .goto(album())
@@ -202,11 +207,17 @@ const main = async (restartAccount, persist, reco) => {
             })
 
           if (errorLog) { throw 'reconnect' }
-        }, 1000 * 60 * (2 + rand(8)));
-      }
-      catch (e) {
-        if (errorLog) { throw 'reconnect' }
-      }
+        }
+        catch (e) {
+          accountsValid = accountsValid.filter(a => a !== account)
+          save()
+
+          if (e === 'reconnect') {
+            console.log("ERROR reco ", login, e)
+            main(account)
+          }
+        }
+      }, 1000 * 60 * (2 + rand(8)));
       // let time = setTimeout(async () => {
       //   if (over) { return clearInterval(time) }
       //   clearInterval(inter)
@@ -219,17 +230,12 @@ const main = async (restartAccount, persist, reco) => {
   catch (e) {
     await nightmare.end(() => {
       accountsValid = accountsValid.filter(a => a !== account)
+      save()
+
       if (e === 'out') {
         console.log("ERROR ", login, e)
-        if (!restartAccount) {
-          accounts.push(account)
-        }
+        main(account)
       }
-      if (e === 'reconnect') {
-        console.log("ERROR reco ", login, e)
-        main(account, null, true)
-      }
-      save()
 
       if (!restartAccount) {
         main()
