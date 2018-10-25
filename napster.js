@@ -207,9 +207,6 @@ const main = async (restartAccount, night) => {
           if (errorLog) { throw 'reconnect' }
         }
         catch (e) {
-          accountsValid = accountsValid.filter(a => a !== account)
-          save()
-
           if (e === 'reconnect') {
             console.log("ERROR reco ", login, e)
             setTimeout(() => {
