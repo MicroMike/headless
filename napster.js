@@ -27,10 +27,10 @@ const save = () => {
   });
 }
 
-const main = async (restartAccount, persist) => {
+const main = async (restartAccount, persist, reco) => {
   if (over) { return }
-  if (count >= accounts.length || count < 30) { return }
-  count = !restartAccount ? count + 1 : count
+  if (!restartAccount && !reco && (count >= accounts.length || count < 30)) { return }
+  count = !restartAccount && !reco ? count + 1 : count
   let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
@@ -175,7 +175,7 @@ const main = async (restartAccount, persist) => {
     if (errorLog) { throw 'out' }
 
 
-    if (!restartAccount) {
+    if (!restartAccount || reco) {
       accountsValid.push(account)
       save()
       main()
@@ -196,8 +196,11 @@ const main = async (restartAccount, persist) => {
           .then()
           .catch(async (e) => {
             console.log('catch album' + e)
+            clearInterval(inter)
             errorLog = true
           })
+
+        if (errorLog) { throw 'reconnect' }
       }, 1000 * 60 * (2 + rand(8)));
       // let time = setTimeout(async () => {
       //   if (over) { return clearInterval(time) }
@@ -210,11 +213,16 @@ const main = async (restartAccount, persist) => {
   }
   catch (e) {
     await nightmare.end(() => {
+      accountsValid = accountsValid.filter(a => a !== account)
       if (e === 'out') {
         console.log("ERROR ", login, e)
         if (!restartAccount) {
           accounts.push(account)
         }
+      }
+      if (e === 'reconnect') {
+        console.log("ERROR reco ", login, e)
+        main(account, null, true)
       }
       save()
 
