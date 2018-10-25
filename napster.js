@@ -196,15 +196,17 @@ const main = async (restartAccount, persist) => {
     }
   }
   catch (e) {
-    if (e === 'out') {
-      console.log("ERROR ", login, e)
-      accounts.push(account)
-    }
-    save()
+    await nightmare.end(() => {
+      if (e === 'out') {
+        console.log("ERROR ", login, e)
+        accounts.push(account)
+      }
+      save()
 
-    if (!restartAccount) {
-      main()
-    }
+      if (!restartAccount) {
+        main()
+      }
+    })
   }
 }
 
