@@ -196,9 +196,8 @@ const main = async (restartAccount, persist) => {
     }
   }
   catch (e) {
-    console.log("ERROR ", account, e)
-
     if (e === 'out') {
+      console.log("ERROR ", login, e)
       accounts.push(account)
     }
     save()
