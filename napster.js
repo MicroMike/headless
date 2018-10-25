@@ -89,43 +89,43 @@ const main = async (restartAccount, night) => {
     playBtn = '.track-list-header .shuffle-button'
     shuffle = '.repeat-button'
 
-    if (!persist) {
-      if (logged) {
-        connected = await nightmare
-          .goto(album())
-          .wait(4000 + rand(2000))
-          .evaluate(() => {
-            return document.querySelector('.track-list-header .shuffle-button')
-              && !document.querySelector('.unradio')
-              && !document.querySelector('.account-issue')
-          })
-          .then()
-          .catch(async (e) => {
-            console.log('catch logged' + e)
-            errorLog = true
-          })
-      }
+    // if (!persist) {
+    if (logged) {
+      connected = await nightmare
+        .goto(album())
+        .wait(4000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.track-list-header .shuffle-button')
+            && !document.querySelector('.unradio')
+            && !document.querySelector('.account-issue')
+        })
+        .then()
+        .catch(async (e) => {
+          console.log('catch logged' + e)
+          errorLog = true
+        })
+    }
+
+    if (errorLog) { throw 'out' }
+
+    if (!connected) {
+      await nightmare
+        .goto(url)
+        .wait(2000 + rand(2000))
+        .type(inputs.username, login)
+        .type(inputs.password, pass)
+        .wait(2000 + rand(2000))
+        .click(loginBtn)
+        .wait(4000 + rand(2000))
+        .then()
+        .catch(async (e) => {
+          console.log('catch login' + e)
+          errorLog = true
+        })
 
       if (errorLog) { throw 'out' }
-
-      if (!connected) {
-        await nightmare
-          .goto(url)
-          .wait(2000 + rand(2000))
-          .type(inputs.username, login)
-          .type(inputs.password, pass)
-          .wait(2000 + rand(2000))
-          .click(loginBtn)
-          .wait(4000 + rand(2000))
-          .then()
-          .catch(async (e) => {
-            console.log('catch login' + e)
-            errorLog = true
-          })
-
-        if (errorLog) { throw 'out' }
-      }
     }
+    // }
 
     if (!connected) {
       const issue = await nightmare
