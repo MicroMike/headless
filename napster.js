@@ -178,7 +178,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
-    console.log(accountsValid.length, login)
+    console.log('in ', accountsValid.length, login)
 
     if (!restartAccount) {
       main()
