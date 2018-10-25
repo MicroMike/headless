@@ -3,7 +3,6 @@ let accounts = []
 let accountsValid = []
 let over = false
 let albums
-let count = 0
 
 const check = process.env.CHECK
 
@@ -30,9 +29,8 @@ const save = () => {
 const main = async (restartAccount, persist, reco) => {
   if (over) { return }
   if (!restartAccount && !reco) {
-    if (count >= accounts.length || count >= 30) { return }
+    if (accountsValid.length >= accounts.length || accountsValid.length >= 30) { return }
   }
-  count = !restartAccount && !reco ? count + 1 : count
   let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
   let inter
