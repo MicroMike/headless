@@ -29,7 +29,7 @@ const save = () => {
 const main = async (restartAccount, night) => {
   if (over) { return }
   if (!restartAccount) {
-    if (accountsValid.length >= accounts.length || accountsValid.length >= 60) { return }
+    if (accountsValid.length >= accounts.length || accountsValid.length >= 40) { return }
   }
   // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
@@ -262,11 +262,9 @@ const main = async (restartAccount, night) => {
       await nightmare.end()
     }
 
-    if (!restartAccount) {
-      setTimeout(() => {
-        main()
-      }, 2600);
-    }
+    setTimeout(() => {
+      main()
+    }, 2600);
   }
 }
 
