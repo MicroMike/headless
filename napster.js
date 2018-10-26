@@ -221,8 +221,6 @@ const main = async (restartAccount, night) => {
               .goto(album())
               .wait(2000 + rand(2000))
               .click(playBtn)
-              .wait(2000 + rand(2000))
-              .click(shuffle)
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
