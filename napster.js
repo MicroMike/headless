@@ -145,7 +145,9 @@ const main = async (restartAccount, night) => {
       if (errorLog) { throw 'out' }
 
       if (issue) {
-        console.log('out issue', login)
+        if (restartAccount) {
+          console.log('out issue', login)
+        }
         throw 'del'
       }
     }
