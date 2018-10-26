@@ -178,7 +178,9 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
-    console.log('in ', accountsValid.length, login)
+    if (restartAccount) {
+      console.log('reco ', login)
+    }
 
     if (!restartAccount) {
       main()
@@ -188,6 +190,59 @@ const main = async (restartAccount, night) => {
       await nightmare.end()
     }
     else {
+      let t1
+      let t2
+      let freeze = 0
+
+      let inter = setInterval(async () => {
+        if (over) { return clearInterval(inter) }
+
+        t1 = await nightmare
+          .evaluate(() => {
+            const time = '.player-progress-slider-box span.ui-slider-handle'
+            return document.querySelector(time).style.left
+          })
+          .then()
+          .catch(async (e) => {
+            console.log('no time bar')
+          })
+
+        if (t2 && t1 === t2) {
+          freeze++
+        }
+        else {
+          freeze = 0
+        }
+
+        if (freeze >= 4) {
+          freeze = 0
+          try {
+            await nightmare
+              .goto(album())
+              .wait(2000 + rand(2000))
+              .click(playBtn)
+              .wait(2000 + rand(2000))
+              .click(shuffle)
+              .then()
+              .catch(async (e) => {
+                clearInterval(inter)
+                errorLog = true
+              })
+
+            if (errorLog) { throw 'reconnect' }
+          }
+          catch (e) {
+            if (e === 'reconnect') {
+              console.log("ERROR reco ", login, e)
+              setTimeout(() => {
+                main(account, nightmare)
+              }, 1000 * 60 * 5);
+            }
+          }
+        }
+
+        t2 = t1
+      }, 1000 * 15)
       let inter = setInterval(async () => {
         try {
           if (over) { return clearInterval(inter) }
@@ -199,7 +254,7 @@ const main = async (restartAccount, night) => {
             .click(shuffle)
             .then()
             .catch(async (e) => {
-              console.log('catch album')
+              // console.log('catch album')
               clearInterval(inter)
               errorLog = true
             })
@@ -232,9 +287,14 @@ const main = async (restartAccount, night) => {
       console.log("ERROR ", login, e)
       main(account, nightmare)
     }
+    else {
+      await nightmare.end()
+    }
 
     if (!restartAccount) {
-      main()
+      setTimeout(() => {
+        main()
+      }, 2600);
     }
   }
 }
