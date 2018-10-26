@@ -243,33 +243,6 @@ const main = async (restartAccount, night) => {
 
         t2 = t1
       }, 1000 * 15)
-      let inter = setInterval(async () => {
-        try {
-          if (over) { return clearInterval(inter) }
-          await nightmare
-            .goto(album())
-            .wait(2000 + rand(2000))
-            .click(playBtn)
-            .wait(2000 + rand(2000))
-            .click(shuffle)
-            .then()
-            .catch(async (e) => {
-              // console.log('catch album')
-              clearInterval(inter)
-              errorLog = true
-            })
-
-          if (errorLog) { throw 'reconnect' }
-        }
-        catch (e) {
-          if (e === 'reconnect') {
-            console.log("ERROR reco ", login, e)
-            setTimeout(() => {
-              main(account, nightmare)
-            }, 1000 * 60 * 5);
-          }
-        }
-      }, 1000 * 60 * (2 + rand(8)));
       // let time = setTimeout(async () => {
       //   if (over) { return clearInterval(time) }
       //   clearInterval(inter)
