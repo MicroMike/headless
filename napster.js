@@ -183,7 +183,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
-    if (restartAccount) {
+    if (restartAccount && !night) {
       console.log('reco ', login)
     }
 
