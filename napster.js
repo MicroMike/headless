@@ -179,7 +179,6 @@ const main = async (restartAccount, night) => {
 
     if (errorLog) { throw 'out' }
 
-
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
@@ -266,6 +265,10 @@ const main = async (restartAccount, night) => {
     }
     else {
       await nightmare.end()
+      if (restartAccount) {
+        accounts.push(account)
+        save()
+      }
     }
 
     setTimeout(() => {
