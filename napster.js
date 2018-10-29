@@ -184,7 +184,7 @@ const main = async (restartAccount, night) => {
       console.log('reco ', login)
     }
 
-    if (!restartAccount) {
+    if (!restartAccount || accountsValid.length < 30) {
       main()
     }
 
