@@ -20,8 +20,11 @@ const rand = (max, min) => {
 
 const album = () => albums[rand(albums.length)]
 
-const save = () => {
+const save = (temp) => {
   fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
+    if (err) return console.log(err);
+  });
+  fs.writeFile('tna.txt', accountsValid.join(','), function (err) {
     if (err) return console.log(err);
   });
 }
