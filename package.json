@@ -15,7 +15,9 @@
     "s": "git reset --hard && git pull && chmod -R 777 . && npm run start",
     "vpn": "apt-get install nordvpn-release_1.0.0_all.deb && apt-get update && apt-get install nordvpn",
     "vm": "apt-get install qemu-kvm && apt-get install libvirt && apt-get install libvirt-client && apt-get install virt-install && apt-get install virt-viewer",
-    "update": "git add sessions.txt && git commit -m saveSession && git push"
+    "update": "git add sessions.txt && git commit -m saveSession && git push",
+    "n": "CHECK=true node napster",
+    "install":"apt-get install build-essential clang libdbus-1-dev libgtk-3-dev libnotify-dev libgnome-keyring-dev libgconf2-dev libasound2-dev libcap-dev libcups2-dev libxtst-dev libxss1 libnss3-dev gcc-multilib g++-multilib curl gperf bison python-dbusmock"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
