@@ -246,13 +246,13 @@ const main = async (restartAccount, night) => {
         t2 = t1
       }, 1000 * 15)
 
-      let time = setTimeout(async () => {
-        if (over) { return clearInterval(time) }
-        clearInterval(inter)
-        await nightmare.end(() => {
-          main(account)
-        })
-      }, 1000 * 60 * 60);
+      // let time = setTimeout(async () => {
+      //   if (over) { return clearInterval(time) }
+      //   clearInterval(inter)
+      //   await nightmare.end(() => {
+      //     main(account)
+      //   })
+      // }, 1000 * 60 * 60);
     }
   }
   catch (e) {
