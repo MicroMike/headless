@@ -411,7 +411,7 @@ const main = async (session, currentDealer, tempAdd) => {
       const out = await nightmare
         .wait(2000 + rand(2000))
         .evaluate(() => {
-          return !!document.getElementById('signup-spotify') || !document.querySelector('.user-link')
+          return !!document.getElementById('signup-spotify') || !document.querySelector('.UserWidget__user-link')
         })
 
       if (out) {
