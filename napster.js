@@ -245,13 +245,13 @@ const main = async (restartAccount, night) => {
               console.log("ERROR reco ", login, e)
               setTimeout(() => {
                 main(account, nightmare)
-              }, 1000 * 60 * 5);
+              }, 1000 * 60 * 2);
             }
           }
         }
 
         t2 = t1
-      }, 1000 * 15)
+      }, 1000 * 30)
 
       // let time = setTimeout(async () => {
       //   if (over) { return clearInterval(time) }
