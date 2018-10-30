@@ -20,8 +20,11 @@ const rand = (max, min) => {
 
 const album = () => albums[rand(albums.length)]
 
-const save = () => {
+const save = (temp) => {
   fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
+    if (err) return console.log(err);
+  });
+  fs.writeFile('tna.txt', accountsValid.join(','), function (err) {
     if (err) return console.log(err);
   });
 }
@@ -176,15 +179,14 @@ const main = async (restartAccount, night) => {
 
     if (errorLog) { throw 'out' }
 
-
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
-    if (restartAccount) {
+    if (restartAccount && !night) {
       console.log('reco ', login)
     }
 
-    if (!restartAccount) {
+    if (!restartAccount || accountsValid.length < 30) {
       main()
     }
 
@@ -243,13 +245,14 @@ const main = async (restartAccount, night) => {
 
         t2 = t1
       }, 1000 * 15)
-      // let time = setTimeout(async () => {
-      //   if (over) { return clearInterval(time) }
-      //   clearInterval(inter)
-      //   await nightmare.end(() => {
-      //     main(account)
-      //   })
-      // }, 1000 * 60 * (15 + rand(15)));
+
+      let time = setTimeout(async () => {
+        if (over) { return clearInterval(time) }
+        clearInterval(inter)
+        await nightmare.end(() => {
+          main(account)
+        })
+      }, 1000 * 60 * 60);
     }
   }
   catch (e) {
@@ -262,6 +265,10 @@ const main = async (restartAccount, night) => {
     }
     else {
       await nightmare.end()
+      if (restartAccount) {
+        accounts.push(account)
+        save()
+      }
     }
 
     setTimeout(() => {
