@@ -97,7 +97,7 @@ const main = async (restartAccount, night) => {
     shuffle = '.repeat-button'
 
     // if (!persist) {
-    if (logged) {
+    if (restartAccount) {
       connected = await nightmare
         .goto(album())
         .wait(4000 + rand(2000))
@@ -132,30 +132,30 @@ const main = async (restartAccount, night) => {
     }
     // }
 
-    if (!connected) {
-      const issue = await nightmare
-        .goto(album())
-        .wait(2000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
-            document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
-            !document.querySelector('.track-list-header .shuffle-button')
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch account type' + e)
-          errorLog = true
-        })
+    // if (!connected) {
+    const issue = await nightmare
+      .goto(album())
+      .wait(2000 + rand(2000))
+      .evaluate(() => {
+        return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
+          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
+          !document.querySelector('.track-list-header .shuffle-button')
+      })
+      .then()
+      .catch(async (e) => {
+        console.log('catch account type' + e)
+        errorLog = true
+      })
 
-      if (errorLog) { throw 'out' }
+    if (errorLog) { throw 'out' }
 
-      if (issue) {
-        if (restartAccount) {
-          console.log('out issue', login)
-        }
-        throw 'del'
+    if (issue) {
+      if (restartAccount) {
+        console.log('out issue', login)
       }
+      throw 'del'
     }
+    // }
 
     const used = await nightmare
       .wait(2000 + rand(2000))
