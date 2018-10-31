@@ -164,7 +164,7 @@ const main = async (restartAccount, night) => {
       .click(playBtn)
       .wait(2000 + rand(2000))
       .evaluate(() => {
-        document.querySelector(shuffle).click()
+        document.querySelector('.repeat-button.off') && document.querySelector('.repeat-button.off').click()
       })
       .then()
       .catch(async (e) => {
