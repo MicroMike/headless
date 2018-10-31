@@ -154,7 +154,7 @@ const main = async (restartAccount, night) => {
       if (issue) {
         if (restartAccount) {
           console.log('out issue', login)
-          await nightmare.screenshot(login)
+          await nightmare.screenshot(login + '.png')
           setTimeout(() => {
             main(account)
           }, 1000 * 60 * 5);
