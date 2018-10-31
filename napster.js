@@ -61,7 +61,7 @@ const main = async (restartAccount, night) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      // partition: logged || session,
+      partition: 'persist: ' + login,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -97,19 +97,19 @@ const main = async (restartAccount, night) => {
     shuffle = '.repeat-button'
 
     // if (!persist) {
-    if (restartAccount) {
-      connected = await nightmare
-        .goto(album())
-        .wait(4000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.track-list-header .shuffle-button')
-        })
-        .then()
-        .catch(async (e) => {
-          console.log('catch logged' + e)
-          errorLog = true
-        })
-    }
+    // if (restartAccount) {
+    connected = await nightmare
+      .goto(album())
+      .wait(4000 + rand(2000))
+      .evaluate(() => {
+        return document.querySelector('.track-list-header .shuffle-button')
+      })
+      .then()
+      .catch(async (e) => {
+        console.log('catch logged' + e)
+        errorLog = true
+      })
+    // }
 
     if (errorLog) { throw 'out' }
 
@@ -159,17 +159,6 @@ const main = async (restartAccount, night) => {
     }
     // }
 
-    const used = await nightmare
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML
-      })
-
-    if (used) {
-      console.log('out used')
-      throw 'out'
-    }
-
     await nightmare
       .wait(2000 + rand(2000))
       .click(playBtn)
@@ -182,6 +171,17 @@ const main = async (restartAccount, night) => {
       })
 
     if (errorLog) { throw 'out' }
+
+    const used = await nightmare
+      .wait(2000 + rand(2000))
+      .evaluate(() => {
+        return document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML
+      })
+
+    if (used) {
+      console.log('out used')
+      throw 'out'
+    }
 
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
