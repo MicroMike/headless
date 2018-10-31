@@ -94,7 +94,7 @@ const main = async (restartAccount, night) => {
       'https://app.napster.com/artist/yonne/album/loser'
     ]
     playBtn = '.track-list-header .shuffle-button'
-    shuffle = '.repeat-button'
+    shuffle = '.repeat-button.off'
 
     // if (!persist) {
     // if (restartAccount) {
