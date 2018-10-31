@@ -2,8 +2,12 @@
 // 54rvonh1epujcohv8oqefqlr
 // EUX0XJ8RP2MLB84KHYESIMH
 
-// default via 5.189.154.1 dev ens18 proto static 
-// 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39
+// sudo /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39
+// sudo /sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18
+
+
+// 
+// 
 
 const fs = require('fs');
 let accounts = []
