@@ -13,8 +13,8 @@
     "update": "git add sessions.txt && git commit -m saveSession && git push",
     "n": "CHECK=true node napster",
     "install": "apt-get install build-essential clang libdbus-1-dev libgtk-3-dev libnotify-dev libgnome-keyring-dev libgconf2-dev libasound2-dev libcap-dev libcups2-dev libxtst-dev libxss1 libnss3-dev gcc-multilib g++-multilib curl gperf bison python-dbusmock",
-    "initn": "sudo /sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18 && sudo /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39",
-    "inits": "sudo /sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && sudo /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48"
+    "initn": "/sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18 && /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39",
+    "inits": "/sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
