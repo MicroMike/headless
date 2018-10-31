@@ -129,12 +129,14 @@ const main = async (restartAccount, night) => {
         })
 
       if (errorLog) { throw 'out' }
+
+      await nightmare
+        .goto(album())
     }
     // }
 
     // if (!connected) {
     const issue = await nightmare
-      .goto(album())
       .wait(2000 + rand(2000))
       .evaluate(() => {
         return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
