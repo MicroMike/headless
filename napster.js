@@ -152,7 +152,6 @@ const main = async (restartAccount, night) => {
       if (issue) {
         if (restartAccount) {
           console.log('out issue', login)
-          throw 'temp'
         }
         throw 'del'
       }
@@ -262,10 +261,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
 
-    if (e === 'temp') {
-      console.log('CHECK')
-    }
-    else if (e === 'out') {
+    if (e === 'out') {
       console.log("ERROR ", login, e)
       main(account, nightmare)
     }
