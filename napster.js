@@ -103,8 +103,6 @@ const main = async (restartAccount, night) => {
         .wait(4000 + rand(2000))
         .evaluate(() => {
           return document.querySelector('.track-list-header .shuffle-button')
-            && !document.querySelector('.unradio')
-            && !document.querySelector('.account-issue')
         })
         .then()
         .catch(async (e) => {
@@ -154,10 +152,7 @@ const main = async (restartAccount, night) => {
       if (issue) {
         if (restartAccount) {
           console.log('out issue', login)
-          await nightmare.screenshot(login + '.png')
-          setTimeout(() => {
-            main(account)
-          }, 1000 * 60 * 5);
+          throw 'out'
         }
         throw 'del'
       }
@@ -272,11 +267,11 @@ const main = async (restartAccount, night) => {
       main(account, nightmare)
     }
     else {
-      await nightmare.end()
       if (restartAccount) {
         accounts.push(account)
         save()
       }
+      await nightmare.end()
     }
 
     setTimeout(() => {
