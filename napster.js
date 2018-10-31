@@ -163,7 +163,9 @@ const main = async (restartAccount, night) => {
       .wait(2000 + rand(2000))
       .click(playBtn)
       .wait(2000 + rand(2000))
-      .click(shuffle)
+      .evaluate(() => {
+        document.querySelector(shuffle).click()
+      })
       .then()
       .catch(async (e) => {
         console.log('catch album' + e)
