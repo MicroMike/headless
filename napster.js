@@ -224,6 +224,7 @@ const main = async (restartAccount, night) => {
           .then()
           .catch(async (e) => {
             console.log('no time bar')
+            await nightmare.refresh()
           })
 
         if (t2 && t1 === t2) {
@@ -276,7 +277,9 @@ const main = async (restartAccount, night) => {
 
     if (e === 'refresh') {
       console.log("ERROR ", login, e)
-      main(account)
+      await nightmare.end(() => {
+        main(account)
+      })
     }
     else if (e === 'out') {
       console.log("ERROR ", login, e)
