@@ -174,17 +174,6 @@ const main = async (restartAccount, night) => {
 
     if (errorLog) { throw 'out' }
 
-    const used = await nightmare
-      .wait(2000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.single-stream-error') && document.querySelector('.single-stream-error').innerHTML
-      })
-
-    if (used) {
-      console.log('out used')
-      throw 'out'
-    }
-
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
@@ -206,6 +195,26 @@ const main = async (restartAccount, night) => {
 
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
+
+        try {
+          const used = await nightmare
+            .evaluate(() => {
+              return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
+            })
+
+          if (used) {
+            clearInterval(inter)
+            throw 'time'
+          }
+        }
+        catch (e) {
+          if (e === 'time') {
+            console.log("ERROR used ", login, e)
+            setTimeout(() => {
+              main(account, nightmare)
+            }, 1000 * 60 * 30);
+          }
+        }
 
         t1 = await nightmare
           .evaluate(() => {
