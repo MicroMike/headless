@@ -299,8 +299,8 @@ const main = async (restartAccount, night) => {
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   // shuffle(data)
-  data = data.slice(process.env.SLICE || 0)
-  accounts = data.split(',')
+  data = data.split(',')
+  accounts = data.slice(process.env.SLICE || 0)
   console.log(accounts.length)
   main()
 });
