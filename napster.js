@@ -111,7 +111,7 @@ const main = async (restartAccount, night) => {
       })
     // }
 
-    if (errorLog) { throw 'out' }
+    if (errorLog) { throw 'refresh' }
 
     if (!connected) {
       await nightmare
@@ -274,7 +274,11 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
 
-    if (e === 'out') {
+    if (e === 'refresh') {
+      console.log("ERROR ", login, e)
+      main(account)
+    }
+    else if (e === 'out') {
       console.log("ERROR ", login, e)
       main(account, nightmare)
     }

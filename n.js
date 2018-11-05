@@ -1,3 +1,4 @@
+const spawn = require('child_process').spawn
 // setTimeout(() => {
   const ls = spawn('node', ['napster']);
 
