@@ -11,10 +11,13 @@
     "vpn": "apt-get install nordvpn-release_1.0.0_all.deb && apt-get update && apt-get install nordvpn",
     "vm": "apt-get install qemu-kvm && apt-get install libvirt && apt-get install libvirt-client && apt-get install virt-install && apt-get install virt-viewer",
     "update": "git add sessions.txt && git commit -m saveSession && git push",
-    "n": "CHECK=true node napster",
+    "ncheck": "CHECK=true node napster",
     "install": "apt-get install build-essential clang libdbus-1-dev libgtk-3-dev libnotify-dev libgnome-keyring-dev libgconf2-dev libasound2-dev libcap-dev libcups2-dev libxtst-dev libxss1 libnss3-dev gcc-multilib g++-multilib curl gperf bison python-dbusmock",
-    "initn": "/sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18 && /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39",
-    "inits": "/sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48"
+    "n": "/sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18 && /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39",
+    "s": "/sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48",
+    "initn": "npm run n && expressvpn connect nl",
+    "inits": "npm run n && expressvpn connect ch",
+    "n2": "SLICE=50 node napster"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
