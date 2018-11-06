@@ -206,7 +206,9 @@ const main = async (restartAccount, night) => {
           console.log("ERROR used ", login)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          main()
+          await nightmare.end(() => {
+            main()
+          })
           return
         }
 
