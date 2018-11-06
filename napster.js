@@ -204,9 +204,9 @@ const main = async (restartAccount, night) => {
         if (used) {
           clearInterval(inter)
           console.log("ERROR used ", login, e)
-          setTimeout(() => {
-            main(account, nightmare)
-          }, 1000 * 60 * 30);
+          accountsValid = accountsValid.filter(a => a !== account)
+          accounts.push(account)
+          main()
           return
         }
 
