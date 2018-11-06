@@ -203,7 +203,7 @@ const main = async (restartAccount, night) => {
 
         if (used) {
           clearInterval(inter)
-          console.log("ERROR used ", login, e)
+          console.log("ERROR used ", login)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           main()
@@ -278,6 +278,7 @@ const main = async (restartAccount, night) => {
       await nightmare.end(() => {
         main(account)
       })
+      return
     }
     else if (e === 'out') {
       console.log("ERROR ", login, e)
