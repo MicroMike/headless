@@ -36,7 +36,7 @@ const save = (temp) => {
 const main = async (restartAccount, night) => {
   if (over) { return }
   if (!restartAccount) {
-    if (accountsValid.length >= accounts.length || accountsValid.length >= 20) { return }
+    if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
   }
   // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts.shift()
