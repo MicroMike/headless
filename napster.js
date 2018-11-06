@@ -196,24 +196,18 @@ const main = async (restartAccount, night) => {
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
 
-        try {
-          const used = await nightmare
-            .evaluate(() => {
-              return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
-            })
+        const used = await nightmare
+          .evaluate(() => {
+            return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
+          })
 
-          if (used) {
-            clearInterval(inter)
-            throw 'time'
-          }
-        }
-        catch (e) {
-          if (e === 'time') {
-            console.log("ERROR used ", login, e)
-            setTimeout(() => {
-              main(account, nightmare)
-            }, 1000 * 60 * 30);
-          }
+        if (used) {
+          clearInterval(inter)
+          console.log("ERROR used ", login, e)
+          setTimeout(() => {
+            main(account, nightmare)
+          }, 1000 * 60 * 30);
+          return
         }
 
         t1 = await nightmare
@@ -224,8 +218,19 @@ const main = async (restartAccount, night) => {
           .then()
           .catch(async (e) => {
             console.log('no time bar')
-            await nightmare.refresh()
+            clearInterval(inter)
+            setTimeout(async () => {
+              await nightmare.end(() => {
+                main(account)
+              })
+            }, 1000 * 60);
+            return 'out'
           })
+
+        if (t1 === 'out') {
+          console.log('t1: ' + t1)
+          return
+        }
 
         if (t2 && t1 === t2) {
           freeze++
@@ -236,27 +241,20 @@ const main = async (restartAccount, night) => {
 
         if (freeze >= 4) {
           freeze = 0
-          try {
-            await nightmare
-              .goto(album())
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(async (e) => {
-                clearInterval(inter)
-                errorLog = true
-              })
-
-            if (errorLog) { throw 'reconnect' }
-          }
-          catch (e) {
-            if (e === 'reconnect') {
+          await nightmare
+            .goto(album())
+            .wait(2000 + rand(2000))
+            .click(playBtn)
+            .then()
+            .catch(async (e) => {
+              clearInterval(inter)
               console.log("ERROR reco ", login, e)
-              setTimeout(() => {
-                main(account, nightmare)
+              setTimeout(async () => {
+                await nightmare.end(() => {
+                  main(account)
+                })
               }, 1000 * 60 * 2);
-            }
-          }
+            })
         }
 
         t2 = t1
