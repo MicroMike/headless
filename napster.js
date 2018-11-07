@@ -36,7 +36,9 @@ const main = async (restartAccount, night) => {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
   }
   // let session = persist || 'persist: ' + Date.now()
-  let account = restartAccount || accounts.shift()
+  let account = restartAccount || accounts[0]
+  accounts = accounts.filter(a => a !== account)
+
   let inter
 
   accountInfo = account.split(':')
@@ -271,31 +273,17 @@ const main = async (restartAccount, night) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
+    console.log("ERROR ", login, e)
 
-    if (e === 'refresh') {
-      console.log("ERROR ", login, e)
-      await nightmare.end()
+    if (e !== 'del') {
+      accounts.push(account)
+    }
 
+    await nightmare.end(() => {
       setTimeout(() => {
-        main(account)
-      }, 1000 * 60 * 2);
-      return
-    }
-    else if (e === 'out') {
-      console.log("ERROR ", login, e)
-      main(account, nightmare)
-    }
-    else {
-      if (restartAccount) {
-        accounts.push(account)
-        save()
-      }
-      await nightmare.end()
-    }
-
-    setTimeout(() => {
-      main()
-    }, 2600);
+        main()
+      }, 2600);
+    })
   }
 }
 
