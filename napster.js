@@ -280,7 +280,7 @@ const main = async (restartAccount, night) => {
 
       setTimeout(() => {
         main()
-      }, 1000 * 60 * 5);
+      }, 1000 * 60 * 2);
       return
     }
     else if (e === 'out') {
