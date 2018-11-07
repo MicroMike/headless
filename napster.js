@@ -274,12 +274,10 @@ const main = async (restartAccount, night) => {
 
     if (e === 'refresh') {
       console.log("ERROR ", login, e)
-      await nightmare.end(() => {
-        main(account)
-      })
+      await nightmare.end()
 
       setTimeout(() => {
-        main()
+        main(account)
       }, 1000 * 60 * 2);
       return
     }
