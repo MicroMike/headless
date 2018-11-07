@@ -176,6 +176,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
+
     if (restartAccount && !night) {
       console.log('reco ', login)
     }
@@ -273,6 +274,7 @@ const main = async (restartAccount, night) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
+
     console.log("ERROR ", login, e)
 
     if (e !== 'del') {
