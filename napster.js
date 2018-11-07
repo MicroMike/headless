@@ -250,7 +250,7 @@ const main = async (restartAccount, night) => {
             .then()
             .catch(async (e) => {
               clearInterval(inter)
-              console.log("ERROR reco ", login, e)
+              console.log("ERROR reco ", login)
               setTimeout(async () => {
                 await nightmare.end(() => {
                   main(account)
@@ -280,7 +280,9 @@ const main = async (restartAccount, night) => {
       await nightmare.end(() => {
         main(account)
       })
-      return
+      if (accountsValid.length < 23) {
+        return
+      }
     }
     else if (e === 'out') {
       console.log("ERROR ", login, e)
