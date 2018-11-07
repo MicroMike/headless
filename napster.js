@@ -25,9 +25,6 @@ const rand = (max, min) => {
 const album = () => albums[rand(albums.length)]
 
 const save = (temp) => {
-  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
-    if (err) return console.log(err);
-  });
   fs.writeFile('tna.txt', accountsValid.join(','), function (err) {
     if (err) return console.log(err);
   });
@@ -280,9 +277,11 @@ const main = async (restartAccount, night) => {
       await nightmare.end(() => {
         main(account)
       })
-      if (accountsValid.length >= 23) {
-        return
-      }
+
+      setTimeout(() => {
+        main()
+      }, 1000 * 60 * 5);
+      return
     }
     else if (e === 'out') {
       console.log("ERROR ", login, e)
@@ -313,4 +312,7 @@ fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
 
 process.on('SIGINT', function (code) {
   over = true
+  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
+    if (err) return console.log(err);
+  });
 });
