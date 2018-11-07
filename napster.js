@@ -280,7 +280,7 @@ const main = async (restartAccount, night) => {
       await nightmare.end(() => {
         main(account)
       })
-      if (accountsValid.length < 23) {
+      if (accountsValid.length >= 23) {
         return
       }
     }
