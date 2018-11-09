@@ -7,7 +7,7 @@ let accounts = []
 let accountsValid = []
 let over = false
 let albums
-let countFreeze = 0
+let countTimeout = 0
 
 const check = process.env.CHECK
 
@@ -31,9 +31,9 @@ const save = (temp) => {
   });
 }
 
-const main = async (restartAccount, night, freeze) => {
+const main = async (restartAccount, night, timeout) => {
   if (over) { return }
-  if (freeze) { countFreeze-- }
+  if (timeout) { countTimeout-- }
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
   }
@@ -259,7 +259,7 @@ const main = async (restartAccount, night, freeze) => {
                   })
                 }, 1000 * 60 * 2);
               })
-          }, 1000 * 45 * ++countFreeze);
+          }, 1000 * 45 * ++countTimeout);
         }
 
         t2 = t1
@@ -286,8 +286,8 @@ const main = async (restartAccount, night, freeze) => {
 
     await nightmare.end(() => {
       setTimeout(() => {
-        main()
-      }, e !== 'refresh' ? 2600 : rand(1000 * 60 * 3));
+        main(null, null, true)
+      }, e !== 'refresh' ? 2600 : 1000 * 45 * ++countTimeout);
     })
   }
 }
