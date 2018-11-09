@@ -221,19 +221,8 @@ const main = async (restartAccount, night, timeout) => {
           })
           .then()
           .catch(async (e) => {
-            console.log('no time bar ', login)
-            setTimeout(async () => {
-              await nightmare.end(() => {
-                main(account)
-              })
-            }, 1000 * 60);
-            return 'out'
+            return 'no bar'
           })
-
-        if (t1 === 'out') {
-          clearInterval(inter)
-          return
-        }
 
         if (t2 && t1 === t2) {
           freeze++
@@ -243,6 +232,10 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         if (freeze >= 4) {
+          if (t1 === 'no bar') {
+            console.log('no time bar ', login)
+          }
+
           freeze = 0
           setTimeout(async () => {
             await nightmare
@@ -252,7 +245,7 @@ const main = async (restartAccount, night, timeout) => {
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
-                console.log("ERROR reco ", login)
+                console.log("ERROR freez ", login)
                 setTimeout(async () => {
                   await nightmare.end(() => {
                     main(account, null, true)
