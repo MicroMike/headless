@@ -7,7 +7,7 @@ let accounts = []
 let accountsValid = []
 let over = false
 let albums
-const countFreeze = 0
+let countFreeze = 0
 
 const check = process.env.CHECK
 
