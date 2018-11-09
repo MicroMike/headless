@@ -7,6 +7,7 @@ let accounts = []
 let accountsValid = []
 let over = false
 let albums
+const countFreeze = 0
 
 const check = process.env.CHECK
 
@@ -30,8 +31,9 @@ const save = (temp) => {
   });
 }
 
-const main = async (restartAccount, night) => {
+const main = async (restartAccount, night, freeze) => {
   if (over) { return }
+  if (freeze) { countFreeze-- }
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
   }
@@ -242,20 +244,22 @@ const main = async (restartAccount, night) => {
 
         if (freeze >= 4) {
           freeze = 0
-          await nightmare
-            .goto(album())
-            .wait(2000 + rand(2000))
-            .click(playBtn)
-            .then()
-            .catch(async (e) => {
-              clearInterval(inter)
-              console.log("ERROR reco ", login)
-              setTimeout(async () => {
-                await nightmare.end(() => {
-                  main(account)
-                })
-              }, 1000 * 60 * 2);
-            })
+          setTimeout(() => {
+            await nightmare
+              .goto(album())
+              .wait(2000 + rand(2000))
+              .click(playBtn)
+              .then()
+              .catch(async (e) => {
+                clearInterval(inter)
+                console.log("ERROR reco ", login)
+                setTimeout(async () => {
+                  await nightmare.end(() => {
+                    main(account, null, true)
+                  })
+                }, 1000 * 60 * 2);
+              })
+          }, 1000 * 45 * ++countFreeze);
         }
 
         t2 = t1
