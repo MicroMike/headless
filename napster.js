@@ -244,7 +244,7 @@ const main = async (restartAccount, night, freeze) => {
 
         if (freeze >= 4) {
           freeze = 0
-          setTimeout(() => {
+          setTimeout(async () => {
             await nightmare
               .goto(album())
               .wait(2000 + rand(2000))
