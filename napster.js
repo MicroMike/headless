@@ -219,8 +219,7 @@ const main = async (restartAccount, night) => {
           })
           .then()
           .catch(async (e) => {
-            console.log('no time bar')
-            clearInterval(inter)
+            console.log('no time bar ', login)
             setTimeout(async () => {
               await nightmare.end(() => {
                 main(account)
@@ -230,7 +229,7 @@ const main = async (restartAccount, night) => {
           })
 
         if (t1 === 'out') {
-          console.log('t1: ' + t1)
+          clearInterval(inter)
           return
         }
 
@@ -275,7 +274,7 @@ const main = async (restartAccount, night) => {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
 
-    console.log("ERROR ", login, e)
+    // console.log("ERROR ", login, e)
 
     if (e !== 'del') {
       accounts.push(account)
@@ -284,7 +283,7 @@ const main = async (restartAccount, night) => {
     await nightmare.end(() => {
       setTimeout(() => {
         main()
-      }, e !== 'refresh' ? 1000 * 60 * 2 : 2600);
+      }, e !== 'refresh' ? 2600 : rand(1000 * 60 * 3));
     })
   }
 }
@@ -293,7 +292,12 @@ fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   // shuffle(data)
   data = data.split(',')
-  accounts = data.slice(process.env.SLICE || 0)
+  if (process.env.SLICE) {
+    accounts = data.slice(process.env.SLICE)
+  }
+  else {
+    accounts = data.slice(0, 59)
+  }
   console.log(accounts.length)
   main()
 });

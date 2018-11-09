@@ -17,7 +17,7 @@
     "s": "/sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48",
     "initn": "npm run n && expressvpn connect nl",
     "inits": "npm run s && expressvpn connect ch",
-    "n2": "SLICE=50 node napster"
+    "n2": "SLICE=60 node napster"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
