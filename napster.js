@@ -281,6 +281,7 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           if (rand(3) === 1) {
+            clearInterval(inter)
             setTimeout(async () => {
               await nightmare.end(() => {
                 main(null, null, true)
