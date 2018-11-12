@@ -251,6 +251,9 @@ const main = async (restartAccount, night, timeout) => {
                 document.querySelector('.main-image .image').style.backgroundColor = 'orange'
               }
             })
+            .then()
+            .catch((e) => {
+            })
         }
         else {
           freeze = 0
@@ -260,11 +263,24 @@ const main = async (restartAccount, night, timeout) => {
                 document.querySelector('.main-image .image').style.backgroundColor = 'grey'
               }
             })
+            .then()
+            .catch((e) => {
+            })
         }
 
         if (freeze >= 2) {
           isChanging = true
           freeze = 0
+
+          await nightmare
+            .evaluate(() => {
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'blue'
+              }
+            })
+            .then()
+            .catch((e) => {
+            })
 
           if (t1 === 'no bar') {
             console.log('no time bar ', login)
@@ -272,6 +288,17 @@ const main = async (restartAccount, night, timeout) => {
 
           setTimeout(async () => {
             isChanging = false
+
+            await nightmare
+              .evaluate(() => {
+                if (document.querySelector('.main-image .image')) {
+                  document.querySelector('.main-image .image').style.backgroundColor = 'grey'
+                }
+              })
+              .then()
+              .catch((e) => {
+              })
+
             await nightmare
               .goto(album())
               .wait(2000 + rand(2000))
