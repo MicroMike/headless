@@ -293,7 +293,7 @@ const main = async (restartAccount, night, timeout) => {
             main(null, null, true)
           })
         }, 1000 * 45 * ++countTimeout);
-      }, 1000 * 60 * 15);
+      }, 1000 * 60 * 10 + rand(1000 * 60 * 15));
     }
   }
   catch (e) {
