@@ -270,27 +270,32 @@ const main = async (restartAccount, night, timeout) => {
 
           freeze = 0
 
+          const catchFct = async (e) => {
+            clearInterval(inter)
+            console.log("ERROR freez ", login)
+            setTimeout(async () => {
+              await nightmare.end(() => {
+                main(account, null, true)
+              })
+            }, 1000 * 45 * ++countTimeout);
+          }
+
           if (rand(2) === 1) {
             await nightmare
               .goto(album())
+              .wait(2000 + rand(2000))
+              .click(playBtn)
+              .then()
+              .catch(catchFct)
           }
-
-          await nightmare
-            .click('.player-play-button .icon-pause2')
-            .wait(2000 + rand(2000))
-            .click('.player-play-button .icon-play-button')
-            .then()
-            .catch(async (e) => {
-              clearInterval(inter)
-              setTimeout(async () => {
-                console.log("ERROR freez ", login)
-                setTimeout(async () => {
-                  await nightmare.end(() => {
-                    main(account, null, true)
-                  })
-                }, 1000 * 45 * ++countTimeout);
-              }, 1000 * 60 * 2);
-            })
+          else {
+            await nightmare
+              .click('.player-play-button .icon-pause2')
+              .wait(2000 + rand(2000))
+              .click('.player-play-button .icon-play-button')
+              .then()
+              .catch(catchFct)
+          }
         }
 
         t2 = t1
