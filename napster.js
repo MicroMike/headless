@@ -167,7 +167,9 @@ const main = async (restartAccount, night, timeout) => {
       .evaluate(() => {
         if (document.querySelector('.repeat-button')) {
           while (!document.querySelector('.repeat-button.repeat')) {
-            document.querySelector('.repeat-button').click()
+            setTimeout(() => {
+              document.querySelector('.repeat-button').click()
+            }, rand(1000 * 3));
           }
         }
       })
@@ -261,7 +263,7 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         t2 = t1
-      }, 1000 * 30)
+      }, 1000 * 15)
 
       let time = setTimeout(async () => {
         if (over) { return clearInterval(time) }
