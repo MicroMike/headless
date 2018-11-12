@@ -228,8 +228,6 @@ const main = async (restartAccount, night, timeout) => {
             return 'no bar'
           })
 
-        console.log(t1, t2)
-
         if (t2 && t1 === t2) {
           freeze++
         }
@@ -273,7 +271,7 @@ const main = async (restartAccount, night, timeout) => {
         await nightmare.end(() => {
           main()
         })
-      }, 1000 * 60 * 20);
+      }, 1000 * 60 * 15);
     }
   }
   catch (e) {
