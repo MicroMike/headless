@@ -207,6 +207,7 @@ const main = async (restartAccount, night, timeout) => {
       let t1
       let t2
       let freeze = 0
+      let isChanging = false
 
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
@@ -224,6 +225,10 @@ const main = async (restartAccount, night, timeout) => {
           await nightmare.end(() => {
             main()
           })
+          return
+        }
+
+        if (isChanging) {
           return
         }
 
@@ -258,19 +263,15 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         if (freeze >= 2) {
-          await nightmare
-            .evaluate(() => {
-              if (document.querySelector('.main-image .image')) {
-                document.querySelector('.main-image .image').style.backgroundColor = 'red'
-              }
-            })
+          isChanging = true
+          freeze = 0
 
           if (t1 === 'no bar') {
             console.log('no time bar ', login)
           }
 
-          freeze = 0
           setTimeout(async () => {
+            isChanging = false
             await nightmare
               .goto(album())
               .wait(2000 + rand(2000))
