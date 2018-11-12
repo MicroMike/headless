@@ -169,7 +169,7 @@ const main = async (restartAccount, night, timeout) => {
           while (!document.querySelector('.repeat-button.repeat')) {
             setTimeout(() => {
               document.querySelector('.repeat-button').click()
-            }, rand(1000 * 3));
+            }, 2600);
           }
         }
       })
@@ -270,9 +270,11 @@ const main = async (restartAccount, night, timeout) => {
         clearInterval(inter)
         accountsValid = accountsValid.filter(a => a !== account)
         accounts.push(account)
-        await nightmare.end(() => {
-          main()
-        })
+        setTimeout(() => {
+          await nightmare.end(() => {
+            main(null, null, true)
+          })
+        }, 1000 * 45 * ++countTimeout);
       }, 1000 * 60 * 15);
     }
   }
