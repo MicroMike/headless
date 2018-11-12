@@ -278,7 +278,7 @@ const main = async (restartAccount, night, timeout) => {
               console.log("ERROR freez ", login)
               setTimeout(async () => {
                 await nightmare.end(() => {
-                  main(account, null, true)
+                  main(null, null, true)
                 })
               }, 1000 * 60 * ++countTimeout);
             })
