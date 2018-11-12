@@ -237,12 +237,25 @@ const main = async (restartAccount, night, timeout) => {
 
         if (t2 && t1 === t2) {
           freeze++
+          await nightmare
+            .evaluate(() => {
+              document.querySelector('.main-image .image').style.backgroundColor = 'orange'
+            })
         }
         else {
           freeze = 0
+          await nightmare
+            .evaluate(() => {
+              document.querySelector('.main-image .image').style.backgroundColor = 'grey'
+            })
         }
 
         if (freeze >= 4) {
+          await nightmare
+            .evaluate(() => {
+              document.querySelector('.main-image .image').style.backgroundColor = 'red'
+            })
+
           if (t1 === 'no bar') {
             console.log('no time bar ', login)
           }
