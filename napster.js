@@ -241,21 +241,27 @@ const main = async (restartAccount, night, timeout) => {
           freeze++
           await nightmare
             .evaluate(() => {
-              document.querySelector('.main-image .image').style.backgroundColor = 'orange'
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'orange'
+              }
             })
         }
         else {
           freeze = 0
           await nightmare
             .evaluate(() => {
-              document.querySelector('.main-image .image').style.backgroundColor = 'grey'
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'grey'
+              }
             })
         }
 
         if (freeze >= 2) {
           await nightmare
             .evaluate(() => {
-              document.querySelector('.main-image .image').style.backgroundColor = 'red'
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'red'
+              }
             })
 
           if (t1 === 'no bar') {
@@ -263,8 +269,13 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           freeze = 0
+
+          if (rand(2) === 1) {
+            await nightmare
+              .goto(album())
+          }
+
           await nightmare
-            // .goto(album())
             .click('.player-play-button .icon-pause2')
             .wait(2000 + rand(2000))
             .click('.player-play-button .icon-play-button')
