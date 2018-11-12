@@ -250,7 +250,7 @@ const main = async (restartAccount, night, timeout) => {
             })
         }
 
-        if (freeze >= 4) {
+        if (freeze >= 2) {
           await nightmare
             .evaluate(() => {
               document.querySelector('.main-image .image').style.backgroundColor = 'red'
