@@ -284,22 +284,22 @@ const main = async (restartAccount, night, timeout) => {
 
         t2 = t1
 
-        if (!restartOn && accountsValid.length > 20) {
-          restartOn = true
-
-          const time = setTimeout(async () => {
-            if (over) { return clearInterval(time) }
-            clearInterval(inter)
-            accountsValid = accountsValid.filter(a => a !== account)
-            accounts.push(account)
-            setTimeout(async () => {
-              await nightmare.end(() => {
-                main(null, null, true)
-              })
-            }, 1000 * 45 * ++countTimeout);
-          }, rand(1000 * 60 * 15));
-        }
+        // if (!restartOn && accountsValid.length > 20) {
+        //   restartOn = true
+        // }
       }, 1000 * 15)
+
+      const time = setTimeout(async () => {
+        if (over) { return clearInterval(time) }
+        clearInterval(inter)
+        accountsValid = accountsValid.filter(a => a !== account)
+        accounts.push(account)
+        setTimeout(async () => {
+          await nightmare.end(() => {
+            main(null, null, true)
+          })
+        }, 1000 * 45 * ++countTimeout);
+      }, 1000 * 60 * 30 + rand(1000 * 60 * 60));
     }
   }
   catch (e) {
