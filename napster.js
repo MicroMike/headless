@@ -223,9 +223,11 @@ const main = async (restartAccount, night, timeout) => {
           console.log("ERROR used ", login)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          await nightmare.end(() => {
-            main()
-          })
+          setTimeout(async () => {
+            await nightmare.end(() => {
+              main(null, null, true)
+            })
+          }, 1000 * 45 * ++countTimeout);
           return
         }
 
@@ -298,7 +300,9 @@ const main = async (restartAccount, night, timeout) => {
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
-                console.log("ERROR freez ", login)
+                accountsValid = accountsValid.filter(a => a !== account)
+                accounts.push(account)
+                console.log("ERROR freeze ", login)
                 setTimeout(async () => {
                   await nightmare.end(() => {
                     main(null, null, true)
