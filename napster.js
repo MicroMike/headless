@@ -165,12 +165,17 @@ const main = async (restartAccount, night, timeout) => {
       .click(playBtn)
       .wait(2000 + rand(2000))
       .evaluate(() => {
+        const clickLoop = () => {
+          setTimeout(() => {
+            document.querySelector('.repeat-button').click()
+            if (!document.querySelector('.repeat-button.repeat')) {
+              clickLoop()
+            }
+          }, 2600);
+        }
+
         if (document.querySelector('.repeat-button')) {
-          while (!document.querySelector('.repeat-button.repeat')) {
-            setTimeout(() => {
-              document.querySelector('.repeat-button').click()
-            }, 2600);
-          }
+          clickLoop()
         }
       })
       .then()
