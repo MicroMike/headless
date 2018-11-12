@@ -83,6 +83,8 @@ const main = async (restartAccount, night, timeout) => {
   let errorLog = false
   let connected = false
 
+  let restartOn = false
+
   try {
 
     url = 'https://app.napster.com/login/'
@@ -285,6 +287,10 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         t2 = t1
+
+        // if (!restartOn && accountsValid.length > 20) {
+        //   restartOn = true
+        // }
       }, 1000 * 15)
 
       // let time = setTimeout(async () => {
