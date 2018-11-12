@@ -287,6 +287,7 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           setTimeout(async () => {
+            countTimeout--
             isChanging = false
 
             await nightmare
