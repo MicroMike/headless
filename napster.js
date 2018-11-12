@@ -275,14 +275,12 @@ const main = async (restartAccount, night, timeout) => {
             .then()
             .catch(async (e) => {
               clearInterval(inter)
+              console.log("ERROR freez ", login)
               setTimeout(async () => {
-                console.log("ERROR freez ", login)
-                setTimeout(async () => {
-                  await nightmare.end(() => {
-                    main(account, null, true)
-                  })
-                }, 1000 * 45 * ++countTimeout);
-              }, 1000 * 60 * 2);
+                await nightmare.end(() => {
+                  main(account, null, true)
+                })
+              }, 1000 * 60 * ++countTimeout);
             })
         }
 
