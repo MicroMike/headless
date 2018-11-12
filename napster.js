@@ -174,7 +174,7 @@ const main = async (restartAccount, night, timeout) => {
           }, 2600);
         }
 
-        if (document.querySelector('.repeat-button')) {
+        if (document.querySelector('.repeat-button') && !document.querySelector('.repeat-button.repeat')) {
           clickLoop()
         }
       })
