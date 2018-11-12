@@ -270,7 +270,7 @@ const main = async (restartAccount, night, timeout) => {
         clearInterval(inter)
         accountsValid = accountsValid.filter(a => a !== account)
         accounts.push(account)
-        setTimeout(() => {
+        setTimeout(async () => {
           await nightmare.end(() => {
             main(null, null, true)
           })
