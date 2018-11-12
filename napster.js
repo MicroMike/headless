@@ -280,7 +280,7 @@ const main = async (restartAccount, night, timeout) => {
             }, 1000 * 45 * ++countTimeout);
           }
 
-          if (rand(4) === 1) {
+          if (rand(3) === 1) {
             setTimeout(async () => {
               await nightmare.end(() => {
                 main(null, null, true)
