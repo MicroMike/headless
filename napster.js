@@ -281,12 +281,11 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           if (rand(2) === 1) {
-            await nightmare
-              .goto(album())
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(catchFct)
+            setTimeout(async () => {
+              await nightmare.end(() => {
+                main(null, null, true)
+              })
+            }, 1000 * 45 * ++countTimeout);
           }
           else {
             await nightmare
@@ -305,17 +304,12 @@ const main = async (restartAccount, night, timeout) => {
         // }
       }, 1000 * 15)
 
-      const time = setTimeout(async () => {
-        if (over) { return clearInterval(time) }
-        clearInterval(inter)
-        accountsValid = accountsValid.filter(a => a !== account)
-        accounts.push(account)
-        setTimeout(async () => {
-          await nightmare.end(() => {
-            main(null, null, true)
-          })
-        }, 1000 * 45 * ++countTimeout);
-      }, 1000 * 60 * 30 + rand(1000 * 60 * 60));
+      // const time = setTimeout(async () => {
+      //   if (over) { return clearInterval(time) }
+      //   clearInterval(inter)
+      //   accountsValid = accountsValid.filter(a => a !== account)
+      //   accounts.push(account)
+      // }, 1000 * 60 * 30 + rand(1000 * 60 * 60));
     }
   }
   catch (e) {
