@@ -83,6 +83,8 @@ const main = async (restartAccount, night, timeout) => {
   let errorLog = false
   let connected = false
 
+  let restartOn = false
+
   try {
 
     url = 'https://app.napster.com/login/'
@@ -281,19 +283,23 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         t2 = t1
-      }, 1000 * 15)
 
-      let time = setTimeout(async () => {
-        if (over) { return clearInterval(time) }
-        clearInterval(inter)
-        accountsValid = accountsValid.filter(a => a !== account)
-        accounts.push(account)
-        setTimeout(async () => {
-          await nightmare.end(() => {
-            main(null, null, true)
-          })
-        }, 1000 * 45 * ++countTimeout);
-      }, 1000 * 60 * 10 + rand(1000 * 60 * 15));
+        if (!restartOn && accountsValid.length > 20) {
+          restartOn = true
+
+          const time = setTimeout(async () => {
+            if (over) { return clearInterval(time) }
+            clearInterval(inter)
+            accountsValid = accountsValid.filter(a => a !== account)
+            accounts.push(account)
+            setTimeout(async () => {
+              await nightmare.end(() => {
+                main(null, null, true)
+              })
+            }, 1000 * 45 * ++countTimeout);
+          }, rand(1000 * 60 * 15));
+        }
+      }, 1000 * 15)
     }
   }
   catch (e) {
