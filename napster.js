@@ -341,7 +341,7 @@ const main = async (restartAccount, night, timeout) => {
     await nightmare.end(() => {
       setTimeout(() => {
         main(null, null, true)
-      }, 2600 + 1000 * 45 * ++countTimeout);
+      }, countTimeout ? 2600 + 1000 * 45 * ++countTimeout : 2600);
     })
   }
 }
