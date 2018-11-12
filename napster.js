@@ -165,7 +165,11 @@ const main = async (restartAccount, night, timeout) => {
       .click(playBtn)
       .wait(2000 + rand(2000))
       .evaluate(() => {
-        document.querySelector('.repeat-button.off') && document.querySelector('.repeat-button.off').click()
+        if (document.querySelector('.repeat-button')) {
+          while (!document.querySelector('.repeat-button.repeat')) {
+            document.querySelector('.repeat-button').click()
+          }
+        }
       })
       .then()
       .catch(async (e) => {
@@ -224,6 +228,8 @@ const main = async (restartAccount, night, timeout) => {
             return 'no bar'
           })
 
+        console.log(t1, t2)
+
         if (t2 && t1 === t2) {
           freeze++
         }
@@ -237,34 +243,37 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           freeze = 0
-          setTimeout(async () => {
-            await nightmare
-              .goto(album())
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(async (e) => {
-                clearInterval(inter)
+          await nightmare
+            // .goto(album())
+            .click('.player-play-button .icon-pause2')
+            .wait(2000 + rand(2000))
+            .click('.player-play-button .icon-play-button')
+            .then()
+            .catch(async (e) => {
+              clearInterval(inter)
+              setTimeout(async () => {
                 console.log("ERROR freez ", login)
                 setTimeout(async () => {
                   await nightmare.end(() => {
                     main(account, null, true)
                   })
-                }, 1000 * 60 * 2);
-              })
-          }, 1000 * 45 * ++countTimeout);
+                }, 1000 * 45 * ++countTimeout);
+              }, 1000 * 60 * 2);
+            })
         }
 
         t2 = t1
       }, 1000 * 30)
 
-      // let time = setTimeout(async () => {
-      //   if (over) { return clearInterval(time) }
-      //   clearInterval(inter)
-      //   await nightmare.end(() => {
-      //     main(account)
-      //   })
-      // }, 1000 * 60 * 60);
+      let time = setTimeout(async () => {
+        if (over) { return clearInterval(time) }
+        clearInterval(inter)
+        accountsValid = accountsValid.filter(a => a !== account)
+        accounts.push(account)
+        await nightmare.end(() => {
+          main()
+        })
+      }, 1000 * 60 * 20);
     }
   }
   catch (e) {
