@@ -292,16 +292,6 @@ const main = async (restartAccount, night, timeout) => {
             isChanging = false
 
             await nightmare
-              .evaluate(() => {
-                if (document.querySelector('.main-image .image')) {
-                  document.querySelector('.main-image .image').style.backgroundColor = 'grey'
-                }
-              })
-              .then()
-              .catch((e) => {
-              })
-
-            await nightmare
               .goto(album())
               .wait(2000 + rand(2000))
               .click(playBtn)
