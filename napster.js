@@ -235,24 +235,43 @@ const main = async (restartAccount, night, timeout) => {
             return 'no bar'
           })
 
+
         if (t2 && t1 === t2) {
           freeze++
+          await nightmare
+            .evaluate(() => {
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'orange'
+              }
+            })
         }
         else {
           freeze = 0
+          await nightmare
+            .evaluate(() => {
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'grey'
+              }
+            })
         }
 
-        if (freeze >= 4) {
+        if (freeze >= 2) {
+          await nightmare
+            .evaluate(() => {
+              if (document.querySelector('.main-image .image')) {
+                document.querySelector('.main-image .image').style.backgroundColor = 'red'
+              }
+            })
+
           if (t1 === 'no bar') {
             console.log('no time bar ', login)
           }
 
           freeze = 0
           await nightmare
-            // .goto(album())
-            .click('.player-play-button .icon-pause2')
+            .goto(album())
             .wait(2000 + rand(2000))
-            .click('.player-play-button .icon-play-button')
+            .click(playBtn)
             .then()
             .catch(async (e) => {
               clearInterval(inter)
@@ -270,17 +289,17 @@ const main = async (restartAccount, night, timeout) => {
         t2 = t1
       }, 1000 * 15)
 
-      let time = setTimeout(async () => {
-        if (over) { return clearInterval(time) }
-        clearInterval(inter)
-        accountsValid = accountsValid.filter(a => a !== account)
-        accounts.push(account)
-        setTimeout(async () => {
-          await nightmare.end(() => {
-            main(null, null, true)
-          })
-        }, 1000 * 45 * ++countTimeout);
-      }, 1000 * 60 * 15);
+      // let time = setTimeout(async () => {
+      //   if (over) { return clearInterval(time) }
+      //   clearInterval(inter)
+      //   accountsValid = accountsValid.filter(a => a !== account)
+      //   accounts.push(account)
+      //   setTimeout(async () => {
+      //     await nightmare.end(() => {
+      //       main(null, null, true)
+      //     })
+      //   }, 1000 * 45 * ++countTimeout);
+      // }, 1000 * 60 * 15);
     }
   }
   catch (e) {
