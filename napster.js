@@ -8,6 +8,7 @@ let accountsValid = []
 let over = false
 let albums
 let countTimeout = 0
+let countTimeoutFreeze = 0
 
 const check = process.env.CHECK
 
@@ -287,7 +288,7 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           setTimeout(async () => {
-            countTimeout--
+            countTimeoutFreeze--
             isChanging = false
 
             await nightmare
@@ -314,7 +315,7 @@ const main = async (restartAccount, night, timeout) => {
                   })
                 }, 1000 * 45 * ++countTimeout);
               })
-          }, 1000 * 45 * ++countTimeout);
+          }, 1000 * 10 * ++countTimeoutFreeze);
         }
 
         t2 = t1
