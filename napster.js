@@ -319,7 +319,7 @@ const main = async (restartAccount, night, timeout) => {
 
             countTimeoutFreeze--
             isChanging = false
-          }, 1000 * 5 * countTimeoutFreeze++);
+          }, 1000 * 15 * countTimeoutFreeze++);
         }
 
         t2 = t1
