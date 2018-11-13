@@ -306,6 +306,8 @@ const main = async (restartAccount, night, timeout) => {
 
           setTimeout(async () => {
             await nightmare
+              .goto(album())
+              .wait(2000 + rand(2000))
               .click(playBtn)
               .then()
               .catch(async (e) => {
