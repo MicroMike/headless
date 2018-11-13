@@ -298,7 +298,7 @@ const main = async (restartAccount, night, timeout) => {
                 clearInterval(inter)
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
-                console.log("ERROR freeze ", login, e)
+                console.log("ERROR freeze ", login)
                 setTimeout(async () => {
                   await nightmare.end(() => {
                     main(account, null, true)
