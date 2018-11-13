@@ -131,9 +131,9 @@ const main = async (restartAccount, night, timeout) => {
           errorLog = true
         })
 
-      console.log('still')
-
+      console.log(errorLog)
       if (errorLog) { throw 'del' }
+      console.log('still')
 
       await nightmare
         .goto(album())
@@ -323,10 +323,11 @@ const main = async (restartAccount, night, timeout) => {
     save()
     console.log(accountsValid.length)
 
-    // console.log("ERROR ", login, e)
-
     if (e !== 'del') {
       accounts.push(account)
+    }
+    else {
+      console.log("ERROR ", login, e)
     }
 
     await nightmare.end(() => {
