@@ -131,6 +131,8 @@ const main = async (restartAccount, night, timeout) => {
           errorLog = true
         })
 
+      console.log('still')
+
       if (errorLog) { throw 'del' }
 
       await nightmare
