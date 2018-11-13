@@ -109,7 +109,7 @@ const main = async (restartAccount, night, timeout) => {
       .then()
       .catch(async (e) => {
         console.log('catch logged' + e)
-        errorLog = true
+        errorLog = e
       })
     // }
 
@@ -123,6 +123,15 @@ const main = async (restartAccount, night, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
+        .then()
+        .catch(async (e) => {
+          console.log('catch login timeout' + e)
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
+
+      await nightmare
         .wait('#player')
         .wait(2000 + rand(2000))
         .then()
@@ -135,6 +144,13 @@ const main = async (restartAccount, night, timeout) => {
 
       await nightmare
         .goto(album())
+        .then()
+        .catch(async (e) => {
+          console.log('catch login timeout' + e)
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
     }
     // }
 
