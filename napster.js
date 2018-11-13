@@ -306,9 +306,7 @@ const main = async (restartAccount, night, timeout) => {
 
           setTimeout(async () => {
             await nightmare
-              .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
-              .wait(2000 + rand(2000))
-              .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
+              .click(playBtn)
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
