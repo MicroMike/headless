@@ -131,9 +131,7 @@ const main = async (restartAccount, night, timeout) => {
           errorLog = true
         })
 
-      console.log(errorLog)
       if (errorLog) { throw 'del' }
-      console.log('still')
 
       await nightmare
         .goto(album())
@@ -191,7 +189,6 @@ const main = async (restartAccount, night, timeout) => {
 
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
-    console.log(accountsValid.length)
     save()
 
 
@@ -225,11 +222,11 @@ const main = async (restartAccount, night, timeout) => {
           console.log("ERROR used ", login)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          setTimeout(async () => {
-            await nightmare.end(() => {
+          await nightmare.end(() => {
+            setTimeout(async () => {
               main(null, null, true)
-            })
-          }, 1000 * 45 * countTimeout++);
+            }, 1000 * 45 * countTimeout++);
+          })
           return
         }
 
@@ -302,11 +299,11 @@ const main = async (restartAccount, night, timeout) => {
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
                 console.log("ERROR freeze ", login)
-                setTimeout(async () => {
-                  await nightmare.end(() => {
+                await nightmare.end(() => {
+                  setTimeout(async () => {
                     main(account, null, true)
-                  })
-                }, 1000 * 45 * countTimeout++);
+                  }, 1000 * 45 * countTimeout++);
+                })
               })
 
             countTimeoutFreeze--
@@ -321,7 +318,6 @@ const main = async (restartAccount, night, timeout) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
-    console.log(accountsValid.length)
 
     if (e !== 'del') {
       accounts.push(account)
@@ -332,9 +328,7 @@ const main = async (restartAccount, night, timeout) => {
 
     await nightmare.end(() => {
       setTimeout(async () => {
-        await nightmare.end(() => {
-          main(null, null, true)
-        })
+        main(null, null, true)
       }, 1000 * 45 * countTimeout++);
     })
   }
