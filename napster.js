@@ -189,6 +189,7 @@ const main = async (restartAccount, night, timeout) => {
 
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
+    console.log(accountsValid.length)
     save()
 
 
@@ -318,6 +319,7 @@ const main = async (restartAccount, night, timeout) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
     save()
+    console.log(accountsValid.length)
 
     // console.log("ERROR ", login, e)
 
