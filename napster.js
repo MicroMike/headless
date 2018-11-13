@@ -84,8 +84,6 @@ const main = async (restartAccount, night, timeout) => {
   let errorLog = false
   let connected = false
 
-  let restartOn = false
-
   try {
 
     url = 'https://app.napster.com/login/'
@@ -115,7 +113,7 @@ const main = async (restartAccount, night, timeout) => {
       })
     // }
 
-    if (errorLog) { throw 'refresh' }
+    if (errorLog) { throw 'out' }
 
     if (!connected) {
       await nightmare
@@ -125,14 +123,15 @@ const main = async (restartAccount, night, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(4000 + rand(2000))
+        .wait('#player')
+        .wait(2000 + rand(2000))
         .then()
         .catch(async (e) => {
           console.log('catch login' + e)
           errorLog = true
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw 'del' }
 
       await nightmare
         .goto(album())
@@ -141,11 +140,10 @@ const main = async (restartAccount, night, timeout) => {
 
     // if (!connected) {
     const issue = await nightmare
-      .wait(2000 + rand(2000))
+      .wait(4000 + rand(2000))
       .evaluate(() => {
         return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
-          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML ||
-          !document.querySelector('.track-list-header .shuffle-button')
+          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML
       })
       .then()
       .catch(async (e) => {
@@ -193,11 +191,12 @@ const main = async (restartAccount, night, timeout) => {
     accountsValid.push(account)
     save()
 
+
     if (restartAccount && !night) {
       console.log('reco ', login)
     }
 
-    if (!restartAccount || accountsValid.length < 30) {
+    if (!timeout && accountsValid.length < 30) {
       main()
     }
 
@@ -227,7 +226,7 @@ const main = async (restartAccount, night, timeout) => {
             await nightmare.end(() => {
               main(null, null, true)
             })
-          }, 1000 * 45 * ++countTimeout);
+          }, 1000 * 45 * countTimeout++);
           return
         }
 
@@ -302,34 +301,18 @@ const main = async (restartAccount, night, timeout) => {
                 clearInterval(inter)
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
-                console.log("ERROR freeze ", login)
+                console.log("ERROR freeze ", login, e)
                 setTimeout(async () => {
                   await nightmare.end(() => {
-                    main(null, null, true)
+                    main(account, null, true)
                   })
-                }, 1000 * 45 * ++countTimeout);
+                }, 1000 * 45 * countTimeout++);
               })
-          }, 1000 * 10 * ++countTimeoutFreeze);
+          }, 1000 * 5 * countTimeoutFreeze++);
         }
 
         t2 = t1
-
-        // if (!restartOn && accountsValid.length > 20) {
-        //   restartOn = true
-        // }
       }, 1000 * 15)
-
-      // let time = setTimeout(async () => {
-      //   if (over) { return clearInterval(time) }
-      //   clearInterval(inter)
-      //   accountsValid = accountsValid.filter(a => a !== account)
-      //   accounts.push(account)
-      //   setTimeout(async () => {
-      //     await nightmare.end(() => {
-      //       main(null, null, true)
-      //     })
-      //   }, 1000 * 45 * ++countTimeout);
-      // }, 1000 * 60 * 15);
     }
   }
   catch (e) {
@@ -343,9 +326,11 @@ const main = async (restartAccount, night, timeout) => {
     }
 
     await nightmare.end(() => {
-      setTimeout(() => {
-        main(null, null, true)
-      }, 2600 + 1000 * 45 * countTimeout++);
+      setTimeout(async () => {
+        await nightmare.end(() => {
+          main(null, null, true)
+        })
+      }, 1000 * 45 * countTimeout++);
     })
   }
 }
