@@ -290,9 +290,9 @@ const main = async (restartAccount, night, timeout) => {
 
           setTimeout(async () => {
             await nightmare
-              .goto(album())
-              .wait(playBtn)
-              .click(playBtn)
+              .click('.player-play-button .icon-pause2')
+              .wait(2000 + rand(2000))
+              .click('.player-play-button .icon-play-button')
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
@@ -306,9 +306,9 @@ const main = async (restartAccount, night, timeout) => {
                 }, 1000 * 45 * countTimeout++);
               })
 
-            countTimeout--
+            countTimeoutFreeze--
             isChanging = false
-          }, 1000 * 30 * countTimeout++);
+          }, 1000 * 5 * countTimeoutFreeze++);
         }
 
         t2 = t1
