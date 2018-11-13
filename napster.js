@@ -196,7 +196,7 @@ const main = async (restartAccount, night, timeout) => {
       console.log('reco ', login)
     }
 
-    if (!timeout && accountsValid.length < 30) {
+    if (accountsValid.length < 30) {
       main()
     }
 
