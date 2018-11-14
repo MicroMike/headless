@@ -312,6 +312,9 @@ const main = async (restartAccount, night, timeout) => {
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
+                if (accountsValid.length === 23) {
+                  main()
+                }
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
                 await nightmare.end()
