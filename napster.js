@@ -330,9 +330,9 @@ const main = async (restartAccount, night, timeout) => {
 
           setTimeout(async () => {
             await tryChange()
-            countTimeoutFreeze--
+            countTimeout--
             isChanging = false
-          }, 1000 * 30 * countTimeoutFreeze++);
+          }, 1000 * 45 * countTimeout++);
         }
 
         t2 = t1
