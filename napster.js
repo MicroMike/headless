@@ -311,11 +311,13 @@ const main = async (restartAccount, night, timeout) => {
               .then()
               .catch(async (e) => {
                 clearInterval(inter)
-                if (accountsValid.length === 23) {
-                  main()
-                }
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
+                if (accountsValid.length === 22) {
+                  setTimeout(() => {
+                    main()
+                  }, 2600);
+                }
                 await nightmare.end()
                 console.log("ERROR freeze ", login)
               })
