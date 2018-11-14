@@ -305,7 +305,12 @@ const main = async (restartAccount, night, timeout) => {
             })
 
           if (t1 === 'no bar') {
+            clearInterval(inter)
             console.log('no time bar ', login)
+            accountsValid = accountsValid.filter(a => a !== account)
+            accounts.push(account)
+            await nightmare.end()
+            return
           }
 
           const ifCatch = async (e) => {
