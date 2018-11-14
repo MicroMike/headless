@@ -225,6 +225,7 @@ const main = async (restartAccount, night, timeout) => {
       let t1
       let t2
       let freeze = 0
+      let totalFreeze = 0
       let isChanging = false
 
       let inter = setInterval(async () => {
@@ -306,26 +307,39 @@ const main = async (restartAccount, night, timeout) => {
             console.log('no time bar ', login)
           }
 
-          const tryChange = async () => {
-            await nightmare
-              .goto(album())
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(async (e) => {
-                clearInterval(inter)
-                accountsValid = accountsValid.filter(a => a !== account)
-                accounts.push(account)
-                if (finish) {
-                  await nightmare.end(() => {
-                    setTimeout(async () => {
-                      main(null, null, true)
-                    }, 1000 * 45 * countTimeout++);
-                  })
-                }
-                await nightmare.end()
-                console.log("ERROR freeze ", login)
+          const ifCatch = async (e) => {
+            clearInterval(inter)
+            accountsValid = accountsValid.filter(a => a !== account)
+            accounts.push(account)
+            if (finish) {
+              await nightmare.end(() => {
+                setTimeout(async () => {
+                  main(null, null, true)
+                }, 1000 * 45 * countTimeout++);
               })
+            }
+            await nightmare.end()
+            console.log("ERROR freeze ", login)
+          }
+
+          const tryChange = async () => {
+            if (totalFreeze++ < 3) {
+              await nightmare
+                .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
+                .wait(2000 + rand(2000))
+                .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
+                .then()
+                .catch(ifCatch)
+            }
+            else {
+              totalFreeze = 0
+              await nightmare
+                .goto(album())
+                .wait(2000 + rand(2000))
+                .click(playBtn)
+                .then()
+                .catch(ifCatch)
+            }
           }
 
           setTimeout(async () => {
