@@ -9,6 +9,7 @@ let over = false
 let albums
 let countTimeout = 0
 let countTimeoutFreeze = 0
+let finish = false
 
 const check = process.env.CHECK
 
@@ -33,11 +34,13 @@ const save = (temp) => {
 }
 
 const main = async (restartAccount, night, timeout) => {
+  finish = true
   if (over) { return }
   if (timeout) { countTimeout-- }
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
   }
+  finish = false
   // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts[0]
   accounts = accounts.filter(a => a !== account)
@@ -313,10 +316,12 @@ const main = async (restartAccount, night, timeout) => {
                 clearInterval(inter)
                 accountsValid = accountsValid.filter(a => a !== account)
                 accounts.push(account)
-                if (accountsValid.length === 22) {
-                  setTimeout(() => {
-                    main()
-                  }, 2600);
+                if (finish) {
+                  await nightmare.end(() => {
+                    setTimeout(async () => {
+                      main(null, null, true)
+                    }, 1000 * 45 * countTimeout++);
+                  })
                 }
                 await nightmare.end()
                 console.log("ERROR freeze ", login)
