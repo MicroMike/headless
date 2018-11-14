@@ -10,6 +10,7 @@ let albums
 let countTimeout = 0
 let countTimeoutFreeze = 0
 let finish = false
+const max = 20
 
 const check = process.env.CHECK
 
@@ -38,7 +39,7 @@ const main = async (restartAccount, night, timeout) => {
   if (over) { return }
   if (timeout) { countTimeout-- }
   if (!restartAccount) {
-    if (accountsValid.length >= accounts.length || accountsValid.length >= 23) { return }
+    if (accountsValid.length >= accounts.length || accountsValid.length >= max) { return }
   }
   finish = false
   // let session = persist || 'persist: ' + Date.now()
