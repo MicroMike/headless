@@ -339,6 +339,7 @@ const main = async (restartAccount, night, timeout) => {
               .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
               .then()
               .catch(ifCatch)
+            isChanging = false
           }
           else {
             setTimeout(async () => {
