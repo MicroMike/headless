@@ -85,7 +85,6 @@ const main = async (restartAccount, night, timeout) => {
   let connected = false
 
   try {
-
     url = 'https://app.napster.com/login/'
     loginBtn = '.signin'
     albums = [
@@ -323,7 +322,7 @@ const main = async (restartAccount, night, timeout) => {
 
             countTimeoutFreeze--
             isChanging = false
-          }, 1000 * 60 * countTimeoutFreeze++);
+          }, 1000 * 30 * countTimeoutFreeze++);
         }
 
         t2 = t1
