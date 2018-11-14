@@ -64,6 +64,7 @@ const main = async (restartAccount, night, timeout) => {
     // },
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
+    gotoTimeout: 1000 * 60 * 2,
     show: true,
     typeInterval: 300,
     webPreferences: {
