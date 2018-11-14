@@ -376,7 +376,7 @@ fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
     accounts = data.slice(process.env.SLICE)
   }
   else {
-    accounts = data.slice(0, 59)
+    accounts = data.slice(0, 44)
   }
   console.log(accounts.length)
   main()
