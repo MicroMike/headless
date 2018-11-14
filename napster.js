@@ -303,7 +303,7 @@ const main = async (restartAccount, night, timeout) => {
             console.log('no time bar ', login)
           }
 
-          setTimeout(async () => {
+          const tryChange = async () => {
             await nightmare
               .goto(album())
               .wait(2000 + rand(2000))
@@ -319,7 +319,10 @@ const main = async (restartAccount, night, timeout) => {
                 await nightmare.end()
                 console.log("ERROR freeze ", login)
               })
+          }
 
+          setTimeout(async () => {
+            await tryChange()
             countTimeoutFreeze--
             isChanging = false
           }, 1000 * 30 * countTimeoutFreeze++);
@@ -338,6 +341,16 @@ const main = async (restartAccount, night, timeout) => {
     }
     else {
       console.log("ERROR ", login, e)
+
+      fs.readFile('napsterAccountDel.txt', 'utf8', function (err, data) {
+        if (err) return console.log(err);
+        data = data.split(',')
+        data = data.filter(a => a !== account)
+        data.push(account)
+        fs.writeFile('napsterAccountDel.txt', data.join(','), function (err) {
+          if (err) return console.log(err);
+        });
+      });
     }
 
     await nightmare.end(() => {
