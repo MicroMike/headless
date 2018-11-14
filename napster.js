@@ -323,30 +323,30 @@ const main = async (restartAccount, night, timeout) => {
           }
 
           const tryChange = async () => {
-            if (totalFreeze++ < 3) {
-              await nightmare
-                .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
-                .wait(2000 + rand(2000))
-                .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
-                .then()
-                .catch(ifCatch)
-            }
-            else {
-              totalFreeze = 0
-              await nightmare
-                .goto(album())
-                .wait(2000 + rand(2000))
-                .click(playBtn)
-                .then()
-                .catch(ifCatch)
-            }
+            totalFreeze = 0
+            await nightmare
+              .goto(album())
+              .wait(2000 + rand(2000))
+              .click(playBtn)
+              .then()
+              .catch(ifCatch)
           }
 
-          setTimeout(async () => {
-            await tryChange()
-            countTimeout--
-            isChanging = false
-          }, 1000 * 45 * countTimeout++);
+          if (totalFreeze++ < 3) {
+            await nightmare
+              .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
+              .wait(2000 + rand(2000))
+              .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
+              .then()
+              .catch(ifCatch)
+          }
+          else {
+            setTimeout(async () => {
+              await tryChange()
+              countTimeout--
+              isChanging = false
+            }, 1000 * 45 * countTimeout++);
+          }
         }
 
         t2 = t1
