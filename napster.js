@@ -128,6 +128,7 @@ const main = async (restartAccount, night, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
+        .forward()
         .wait('.nav-profile-button')
         .then()
         .catch(async (e) => {
