@@ -243,6 +243,8 @@ const main = async (restartAccount, night, timeout) => {
 
         if (time > 1000 * 60 * 10 + rand(1000 * 60 * 10)) {
           clearInterval(inter)
+          accountsValid = accountsValid.filter(a => a !== account)
+          accounts.push(account)
           await nightmare.end(() => {
             setTimeout(async () => {
               main(null, null, true)
