@@ -88,6 +88,7 @@ const main = async (restartAccount, night, timeout) => {
 
   let errorLog = false
   let connected = false
+  let suppressed = false
 
   try {
     url = 'https://app.napster.com/login/'
@@ -120,31 +121,25 @@ const main = async (restartAccount, night, timeout) => {
     if (errorLog) { throw 'out' }
 
     if (!connected) {
-      await nightmare
+      suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
         .type(inputs.username, login)
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.login-error')
+        })
         .then()
         .catch(async (e) => {
           console.log('catch login timeout' + e)
           errorLog = true
         })
 
+      if (suppressed) { throw 'del' }
       if (errorLog) { throw 'out' }
-
-      await nightmare
-        .wait('#player')
-        .wait(2000 + rand(2000))
-        .then()
-        .catch(async (e) => {
-          console.log('catch login' + e)
-          errorLog = true
-        })
-
-      if (errorLog) { throw 'del' }
 
       await nightmare
         .goto(album())
