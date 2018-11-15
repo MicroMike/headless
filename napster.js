@@ -114,7 +114,7 @@ const main = async (restartAccount, night, timeout) => {
       .then()
       .catch(async (e) => {
         console.log('catch logged' + e)
-        errorLog = e
+        errorLog = true
       })
     // }
 
@@ -134,32 +134,22 @@ const main = async (restartAccount, night, timeout) => {
         })
         .then()
         .catch(async (e) => {
-          // console.log('catch login timeout' + e)
-          await nightmare.end(() => {
-            setTimeout(async () => {
-              main(account, null, true)
-            }, 1000 * 45 * ++countTimeout);
-          })
+          console.log('catch login timeout')
           errorLog = true
         })
 
       if (suppressed) { throw 'del' }
-      if (errorLog) { return }
+      if (errorLog) { throw 'out' }
 
       await nightmare
         .goto(album())
         .then()
         .catch(async (e) => {
-          // console.log('catch login timeout' + e)
-          await nightmare.end(() => {
-            setTimeout(async () => {
-              main(account, null, true)
-            }, 1000 * 45 * ++countTimeout);
-          })
+          console.log('catch login timeout')
           errorLog = true
         })
 
-      if (errorLog) { return }
+      if (errorLog) { throw 'out' }
     }
     // }
 
@@ -177,7 +167,6 @@ const main = async (restartAccount, night, timeout) => {
       })
 
     if (errorLog) { throw 'out' }
-
     if (issue) {
       if (restartAccount) {
         console.log('out issue', login)
@@ -215,7 +204,6 @@ const main = async (restartAccount, night, timeout) => {
     accountsValid = accountsValid.filter(a => a !== account)
     accountsValid.push(account)
     save()
-
 
     if (restartAccount && !night) {
       console.log('reco ', login)
@@ -400,7 +388,7 @@ const main = async (restartAccount, night, timeout) => {
 
     await nightmare.end(() => {
       setTimeout(async () => {
-        main(null, null, true)
+        main(e === 'out' ? account : null, null, true)
       }, 1000 * 45 * countTimeout++);
     })
   }
