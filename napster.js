@@ -229,6 +229,18 @@ const main = async (restartAccount, night, timeout) => {
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
 
+        time += 1000 * 15
+
+        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 10)) {
+          clearInterval(inter)
+          await nightmare.end(() => {
+            setTimeout(async () => {
+              main(null, null, true)
+            }, 1000 * 45 * countTimeout++);
+          })
+          return
+        }
+
         const used = await nightmare
           .evaluate(() => {
             return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
@@ -350,16 +362,6 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         t2 = t1
-
-        time += 1000 * 15
-
-        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 10)) {
-          await nightmare.end(() => {
-            setTimeout(async () => {
-              main(null, null, true)
-            }, 1000 * 45 * countTimeout++);
-          })
-        }
       }, 1000 * 15)
     }
   }
