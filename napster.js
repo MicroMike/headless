@@ -128,18 +128,26 @@ const main = async (restartAccount, night, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(4000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.login-error')
-        })
+        .wait('.player-play-button .icon-next2')
         .then()
         .catch(async (e) => {
           console.log('catch login timeout' + e)
+          return await nightmare
+            .evaluate(() => {
+              return document.querySelector('.login-error')
+            })
           errorLog = true
         })
 
       if (suppressed) { throw 'del' }
-      if (errorLog) { throw 'out' }
+      if (errorLog) {
+        await nightmare.end(() => {
+          setTimeout(async () => {
+            main(account, null, true)
+          }, 1000 * 45 * countTimeout++);
+        })
+        return
+      }
 
       await nightmare
         .goto(album())
