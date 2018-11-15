@@ -138,7 +138,7 @@ const main = async (restartAccount, night, timeout) => {
           await nightmare.end(() => {
             setTimeout(async () => {
               main(account, null, true)
-            }, 1000 * 45 * countTimeout++);
+            }, 1000 * 45 * ++countTimeout);
           })
           errorLog = true
         })
@@ -154,7 +154,7 @@ const main = async (restartAccount, night, timeout) => {
           await nightmare.end(() => {
             setTimeout(async () => {
               main(account, null, true)
-            }, 1000 * 45 * countTimeout++);
+            }, 1000 * 45 * ++countTimeout);
           })
           errorLog = true
         })
@@ -248,7 +248,7 @@ const main = async (restartAccount, night, timeout) => {
           await nightmare.end(() => {
             setTimeout(async () => {
               main(null, null, true)
-            }, 1000 * 45 * countTimeout++);
+            }, 1000 * 45 * ++countTimeout);
           })
           return
         }
@@ -266,7 +266,7 @@ const main = async (restartAccount, night, timeout) => {
           await nightmare.end(() => {
             setTimeout(async () => {
               main(null, null, true)
-            }, 1000 * 45 * countTimeout++);
+            }, 1000 * 45 * ++countTimeout);
           })
           return
         }
