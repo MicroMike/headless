@@ -113,7 +113,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch logged')
+        // console.log('catch logged')
         errorLog = true
       })
     // }
@@ -134,7 +134,7 @@ const main = async (restartAccount, night, timeout) => {
         })
         .then()
         .catch(async (e) => {
-          console.log('catch login timeout')
+          // console.log('catch login timeout')
           errorLog = true
         })
 
@@ -145,7 +145,7 @@ const main = async (restartAccount, night, timeout) => {
         .goto(album())
         .then()
         .catch(async (e) => {
-          console.log('catch login timeout')
+          // console.log('catch login timeout')
           errorLog = true
         })
 
@@ -162,7 +162,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch account type')
+        // console.log('catch account type')
         errorLog = true
       })
 
@@ -195,7 +195,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch album')
+        // console.log('catch album')
         errorLog = true
       })
 
@@ -371,6 +371,7 @@ const main = async (restartAccount, night, timeout) => {
 
     if (e !== 'del') {
       accounts.push(account)
+      console.log("ERROR ", login)
     }
     else {
       console.log("ERROR ", login, e)
