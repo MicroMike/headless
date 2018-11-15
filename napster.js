@@ -113,7 +113,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch logged' + e)
+        console.log('catch logged')
         errorLog = true
       })
     // }
@@ -162,7 +162,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch account type' + e)
+        console.log('catch account type')
         errorLog = true
       })
 
@@ -195,7 +195,7 @@ const main = async (restartAccount, night, timeout) => {
       })
       .then()
       .catch(async (e) => {
-        console.log('catch album' + e)
+        console.log('catch album')
         errorLog = true
       })
 
