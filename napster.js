@@ -134,29 +134,32 @@ const main = async (restartAccount, night, timeout) => {
         })
         .then()
         .catch(async (e) => {
-          console.log('catch login timeout' + e)
+          // console.log('catch login timeout' + e)
+          await nightmare.end(() => {
+            setTimeout(async () => {
+              main(account, null, true)
+            }, 1000 * 45 * countTimeout++);
+          })
           errorLog = true
         })
 
       if (suppressed) { throw 'del' }
-      if (errorLog) {
-        await nightmare.end(() => {
-          setTimeout(async () => {
-            main(account, null, true)
-          }, 1000 * 45 * countTimeout++);
-        })
-        return
-      }
+      if (errorLog) { return }
 
       await nightmare
         .goto(album())
         .then()
         .catch(async (e) => {
-          console.log('catch login timeout' + e)
+          // console.log('catch login timeout' + e)
+          await nightmare.end(() => {
+            setTimeout(async () => {
+              main(account, null, true)
+            }, 1000 * 45 * countTimeout++);
+          })
           errorLog = true
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { return }
     }
     // }
 
