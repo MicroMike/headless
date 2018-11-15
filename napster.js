@@ -129,13 +129,12 @@ const main = async (restartAccount, night, timeout) => {
         .wait(2000 + rand(2000))
         .click(loginBtn)
         .wait(6000 + rand(2000))
+        .evaluate(() => {
+          return document.querySelector('.login-error')
+        })
         .then()
         .catch(async (e) => {
           console.log('catch login timeout' + e)
-          return await nightmare
-            .evaluate(() => {
-              return document.querySelector('.login-error')
-            })
           errorLog = true
         })
 
