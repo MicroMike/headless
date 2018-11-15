@@ -128,7 +128,7 @@ const main = async (restartAccount, night, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait('.player-play-button .icon-next2')
+        .wait('.nav-profile-button')
         .then()
         .catch(async (e) => {
           console.log('catch login timeout' + e)
