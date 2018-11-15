@@ -224,6 +224,7 @@ const main = async (restartAccount, night, timeout) => {
       let freeze = 0
       let totalFreeze = 0
       let isChanging = false
+      let time = 0
 
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
@@ -349,6 +350,16 @@ const main = async (restartAccount, night, timeout) => {
         }
 
         t2 = t1
+
+        time += 1000 * 15
+
+        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 10)) {
+          await nightmare.end(() => {
+            setTimeout(async () => {
+              main(null, null, true)
+            }, 1000 * 45 * countTimeout++);
+          })
+        }
       }, 1000 * 15)
     }
   }
