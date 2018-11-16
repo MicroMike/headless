@@ -398,9 +398,9 @@ fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   main()
 });
 
-// process.on('SIGINT', function (code) {
-//   over = true
-//   fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
-//     if (err) return console.log(err);
-//   });
-// });
+process.on('SIGINT', function (code) {
+  over = true
+  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
+    if (err) return console.log(err);
+  });
+});
