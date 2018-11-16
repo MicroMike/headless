@@ -15,16 +15,17 @@ const pause = 30
 
 const check = process.env.CHECK
 
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
+}
+
+function shuffle(arr) {
+  arr.sort(() => { return rand(2) })
+  arr.sort(() => { return rand(2) })
+  arr.sort(() => { return rand(2) })
+  arr.sort(() => { return rand(2) })
+  arr.sort(() => { return rand(2) })
+  return arr
 }
 
 const album = () => albums[rand(albums.length)]
@@ -230,7 +231,7 @@ const main = async (restartAccount, timeout) => {
 
         time += 1000 * 15
 
-        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 20)) {
+        if (time > 1000 * 60 * 30 + rand(1000 * 60 * 30)) {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
@@ -393,21 +394,15 @@ const mainInter = setInterval(() => {
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
-  // shuffle(data)
   data = data.split(',')
-  if (process.env.SLICE) {
-    accounts = data.slice(process.env.SLICE)
-  }
-  else {
-    accounts = data.slice(0, 40)
-  }
+  accounts = shuffle(data)
   console.log(accounts.length)
   main()
 });
 
-process.on('SIGINT', function (code) {
-  over = true
-  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
-    if (err) return console.log(err);
-  });
-});
+// process.on('SIGINT', function (code) {
+//   over = true
+//   fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
+//     if (err) return console.log(err);
+//   });
+// });
