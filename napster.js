@@ -11,6 +11,7 @@ let countTimeout = 0
 let countTimeoutFreeze = 0
 let finish = false
 const max = 20
+const pause = 30
 
 const check = process.env.CHECK
 
@@ -346,7 +347,7 @@ const main = async (restartAccount, timeout) => {
               await tryChange()
               countTimeout--
               isChanging = false
-            }, 1000 * 45 * countTimeout++);
+            }, 1000 * pause * countTimeout++);
           }
         }
 
@@ -379,7 +380,7 @@ const main = async (restartAccount, timeout) => {
     await nightmare.end(() => {
       setTimeout(async () => {
         main(null, true)
-      }, 1000 * 45 * countTimeout++);
+      }, 1000 * pause * countTimeout++);
     })
   }
 }
@@ -390,7 +391,7 @@ const mainInter = setInterval(() => {
   if (finish) {
     main()
   }
-}, 1000 * 60);
+}, 1000 * pause);
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
