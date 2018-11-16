@@ -387,7 +387,7 @@ const main = async (restartAccount, timeout) => {
 const mainInter = setInterval(() => {
   if (over) { return clearInterval(mainInter) }
   main()
-}, 1000 * pause * 2);
+}, 1000 * pause);
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
