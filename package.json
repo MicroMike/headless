@@ -18,7 +18,7 @@
     "s": "npm run inits && expressvpn connect ch && npm run starts",
     "startn": "git reset --hard && git pull && node napster",
     "starts": "git reset --hard && git pull && npm run n2",
-    "n2": "SLICE=40 node napster"
+    "n2": "SLICE=35 node napster"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
