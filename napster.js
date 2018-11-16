@@ -347,7 +347,7 @@ const main = async (restartAccount, timeout) => {
               await tryChange()
               countTimeout--
               isChanging = false
-            }, 1000 * pause * countTimeout++);
+            }, 1000 * pause * ++countTimeout);
           }
         }
 
@@ -377,11 +377,7 @@ const main = async (restartAccount, timeout) => {
       });
     }
 
-    await nightmare.end(() => {
-      setTimeout(async () => {
-        main(null, true)
-      }, 1000 * pause * countTimeout++);
-    })
+    main()
   }
 }
 
