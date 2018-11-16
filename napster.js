@@ -377,7 +377,9 @@ const main = async (restartAccount, timeout) => {
       });
     }
 
-    main()
+    await nightmare.end(() => {
+      main()
+    })
   }
 }
 
