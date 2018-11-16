@@ -15,7 +15,7 @@
     "initn": "/sbin/ip route del 5.189.154.0/24 via 5.189.154.1 dev ens18 && /sbin/ip route add 5.189.154.0/24 dev ens18 proto kernel scope link src 5.189.154.39",
     "inits": "/sbin/ip route del 5.189.185.0/24 via 5.189.185.1 dev ens18 && /sbin/ip route add 5.189.185.0/24 dev ens18 proto kernel scope link src 5.189.185.48",
     "n": "npm run initn && expressvpn connect nl && npm run startn",
-    "s": "npm run inits && expressvpn connect ch && npm run starts",
+    "s": "npm run inits && expressvpn connect br && npm run starts",
     "startn": "git reset --hard && git pull && node napster",
     "starts": "git reset --hard && git pull && npm run n2",
     "n2": "SLICE=40 node napster"
