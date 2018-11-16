@@ -333,7 +333,7 @@ const main = async (restartAccount, timeout) => {
               .catch(ifCatch)
           }
 
-          if (++totalFreeze < 5) {
+          if (++totalFreeze < 10) {
             await nightmare
               .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
               .wait(2000 + rand(2000))
