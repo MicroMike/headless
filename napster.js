@@ -229,7 +229,7 @@ const main = async (restartAccount, timeout) => {
 
         time += 1000 * 15
 
-        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 10)) {
+        if (time > 1000 * 60 * 10 + rand(1000 * 60 * 20)) {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
