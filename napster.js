@@ -48,6 +48,9 @@ const main = async (restartAccount, timeout) => {
   let account = restartAccount || accounts[0]
   accounts = accounts.filter(a => a !== account)
 
+  accountsValid = accountsValid.filter(a => a !== account)
+  accountsValid.push(account)
+
   let inter
 
   accountInfo = account.split(':')
@@ -203,8 +206,6 @@ const main = async (restartAccount, timeout) => {
 
     if (errorLog) { throw 'out' }
 
-    accountsValid = accountsValid.filter(a => a !== account)
-    accountsValid.push(account)
     save()
 
     if (restartAccount && !night) {
