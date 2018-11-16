@@ -212,7 +212,7 @@ const main = async (restartAccount, timeout) => {
     }
 
     if (accountsValid.length < max) {
-      main()
+      // main()
     }
 
     if (check) {
@@ -379,18 +379,15 @@ const main = async (restartAccount, timeout) => {
     }
 
     await nightmare.end(() => {
-      main()
+      // main()
     })
   }
 }
 
 const mainInter = setInterval(() => {
   if (over) { return clearInterval(mainInter) }
-
-  if (finish) {
-    main()
-  }
-}, 1000 * pause);
+  main()
+}, 1000 * pause * 2);
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
