@@ -34,7 +34,7 @@ const save = (temp) => {
   });
 }
 
-const main = async (restartAccount, night, timeout) => {
+const main = async (restartAccount, timeout) => {
   finish = true
   if (over) { return }
   if (timeout) { countTimeout-- }
@@ -57,7 +57,7 @@ const main = async (restartAccount, night, timeout) => {
   // account += !logged ? ':' + session : ''
 
   const Nightmare = require('nightmare')
-  const nightmare = night || Nightmare({
+  const nightmare = Nightmare({
     electronPath: require('electron'),
     // openDevTools: {
     //   mode: 'detach'
@@ -68,7 +68,7 @@ const main = async (restartAccount, night, timeout) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      partition: 'persist: ' + login,
+      // partition: 'persist: ' + login,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -209,7 +209,7 @@ const main = async (restartAccount, night, timeout) => {
       console.log('reco ', login)
     }
 
-    if (accountsValid.length < 30) {
+    if (accountsValid.length < max) {
       main()
     }
 
@@ -233,11 +233,7 @@ const main = async (restartAccount, night, timeout) => {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          await nightmare.end(() => {
-            setTimeout(async () => {
-              main(null, null, true)
-            }, 1000 * 45 * ++countTimeout);
-          })
+          await nightmare.end()
           return
         }
 
@@ -251,11 +247,7 @@ const main = async (restartAccount, night, timeout) => {
           console.log("ERROR used ", login)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          await nightmare.end(() => {
-            setTimeout(async () => {
-              main(null, null, true)
-            }, 1000 * 45 * ++countTimeout);
-          })
+          await nightmare.end()
           return
         }
 
@@ -326,9 +318,6 @@ const main = async (restartAccount, night, timeout) => {
             clearInterval(inter)
             accountsValid = accountsValid.filter(a => a !== account)
             accounts.push(account)
-            if (finish) {
-              main(null, null, true)
-            }
             await nightmare.end()
             console.log("ERROR freeze ", login)
           }
@@ -343,7 +332,7 @@ const main = async (restartAccount, night, timeout) => {
               .catch(ifCatch)
           }
 
-          if (totalFreeze++ < 3) {
+          if (++totalFreeze < 5) {
             await nightmare
               .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
               .wait(2000 + rand(2000))
@@ -389,11 +378,19 @@ const main = async (restartAccount, night, timeout) => {
 
     await nightmare.end(() => {
       setTimeout(async () => {
-        main(e === 'out' ? account : null, null, true)
+        main(null, true)
       }, 1000 * 45 * countTimeout++);
     })
   }
 }
+
+const mainInter = setInterval(() => {
+  if (over) { return clearInterval(mainInter) }
+
+  if (finish) {
+    main()
+  }
+}, 1000 * 60);
 
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
