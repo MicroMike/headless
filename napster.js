@@ -105,17 +105,17 @@ const main = async (restartAccount, timeout) => {
 
     // if (!persist) {
     // if (restartAccount) {
-    connected = await nightmare
-      .goto(album())
-      .wait(4000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.track-list-header .shuffle-button')
-      })
-      .then()
-      .catch(async (e) => {
-        // console.log('catch logged')
-        errorLog = true
-      })
+    // connected = await nightmare
+    //   .goto(album())
+    //   .wait(4000 + rand(2000))
+    //   .evaluate(() => {
+    //     return document.querySelector('.track-list-header .shuffle-button')
+    //   })
+    //   .then()
+    //   .catch(async (e) => {
+    //     // console.log('catch logged')
+    //     errorLog = true
+    //   })
     // }
 
     if (errorLog) { throw 'out' }
