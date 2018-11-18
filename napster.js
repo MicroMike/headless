@@ -127,13 +127,13 @@ const main = async (restartAccount, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(1000 * 60 * 30)
+        .wait(1000 * 30)
         .evaluate(() => {
           return document.querySelector('.login-error')
         })
         .then()
         .catch(async (e) => {
-          console.log(e)
+          // console.log('catch login timeout')
           errorLog = true
         })
 
