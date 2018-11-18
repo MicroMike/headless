@@ -30,12 +30,6 @@ function shuffle(arr) {
 
 const album = () => albums[rand(albums.length)]
 
-const save = (temp) => {
-  fs.writeFile('tna.txt', accountsValid.join(','), function (err) {
-    if (err) return console.log(err);
-  });
-}
-
 const main = async (restartAccount, timeout) => {
   finish = true
   if (over) { return }
@@ -133,7 +127,7 @@ const main = async (restartAccount, timeout) => {
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(6000 + rand(2000))
+        .wait('.player-wrapper')
         .evaluate(() => {
           return document.querySelector('.login-error')
         })
@@ -205,8 +199,6 @@ const main = async (restartAccount, timeout) => {
       })
 
     if (errorLog) { throw 'out' }
-
-    save()
 
     if (restartAccount && !night) {
       console.log('reco ', login)
@@ -359,7 +351,6 @@ const main = async (restartAccount, timeout) => {
   }
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
-    save()
 
     if (e !== 'del') {
       accounts.push(account)
