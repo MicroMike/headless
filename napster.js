@@ -133,7 +133,7 @@ const main = async (restartAccount, timeout) => {
         })
         .then()
         .catch(async (e) => {
-          // console.log('catch login timeout')
+          console.log(e)
           errorLog = true
         })
 
