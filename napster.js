@@ -120,23 +120,14 @@ const main = async (restartAccount, timeout) => {
     if (errorLog) { throw 'out' }
 
     if (!connected) {
-      await nightmare
+      suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
         .type(inputs.username, login)
         .type(inputs.password, pass)
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .then()
-        .catch(async (e) => {
-          // console.log('catch login timeout')
-          errorLog = true
-        })
-
-      if (errorLog) { throw 'out' }
-
-      suppressed = await nightmare
-        .wait('.player-wrapper')
+        .wait(1000 * 60 * 30)
         .evaluate(() => {
           return document.querySelector('.login-error')
         })
