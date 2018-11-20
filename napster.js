@@ -205,11 +205,11 @@ const main = async (restartAccount, timeout) => {
     // }
 
     await nightmare
-      .wait(2000 + rand(2000))
+      .wait(4000 + rand(2000))
       .click(playBtn)
-      .wait(2000 + rand(2000))
+      .wait(4000 + rand(2000))
       .click(repeatBtn || 'body')
-      .wait(2000 + rand(2000))
+      .wait(4000 + rand(2000))
       .click(shuffleBtn || 'body')
       .then()
       .catch(async (e) => {
