@@ -198,7 +198,7 @@ const main = async (restartAccount, timeout) => {
     if (errorLog) { throw 'out' }
     if (issue) {
       if (restartAccount) {
-        console.log('out issue', login)
+        console.log('out issue', account)
       }
       throw 'del'
     }
@@ -276,7 +276,7 @@ const main = async (restartAccount, timeout) => {
 
         if (used) {
           clearInterval(inter)
-          console.log("ERROR used ", login)
+          console.log("ERROR used ", account)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
@@ -339,7 +339,7 @@ const main = async (restartAccount, timeout) => {
 
           if (t1 === 'no bar') {
             clearInterval(inter)
-            console.log('no time bar ', login)
+            console.log('no time bar ', account)
             accountsValid = accountsValid.filter(a => a !== account)
             accounts.push(account)
             await nightmare.end()
@@ -351,7 +351,7 @@ const main = async (restartAccount, timeout) => {
             accountsValid = accountsValid.filter(a => a !== account)
             accounts.push(account)
             await nightmare.end()
-            console.log("ERROR freeze ", login)
+            console.log("ERROR freeze ", account)
           }
 
           const tryChange = async () => {
@@ -391,7 +391,7 @@ const main = async (restartAccount, timeout) => {
 
     if (e !== 'del') {
       accounts.push(account)
-      console.log("ERROR ", login)
+      console.log("ERROR ", account)
     }
     else {
       console.log("ERROR ", login, e)
@@ -419,7 +419,7 @@ const mainInter = setInterval(() => {
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
-  // accounts = shuffle(accounts)
+  accounts = shuffle(accounts)
   console.log(accounts.length)
   main()
 });
