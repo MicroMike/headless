@@ -251,7 +251,7 @@ const main = async (restartAccount, timeout) => {
     else {
       let t1
       let t2
-      let freeze = 0
+      let freeze = 1
       let totalFreeze = 0
       let isChanging = false
       let time = 0
@@ -288,7 +288,8 @@ const main = async (restartAccount, timeout) => {
         }
 
         if (player === 'amazon') {
-          if (time > 1000 * 60 * 1 + rand(1000 * 60 * 1)) {
+          if (time/freeze > 1000 * 60 * 1 + rand(1000 * 60 * 1)) {
+            freeze++
             tryChange()
           }
           return
