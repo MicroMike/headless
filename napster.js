@@ -288,7 +288,7 @@ const main = async (restartAccount, timeout) => {
         }
 
         if (player === 'amazon') {
-          if (time > 1000 * 60 * 15 + rand(1000 * 60 * 15)) {
+          if (time > 1000 * 60 * 1 + rand(1000 * 60 * 1)) {
             tryChange()
           }
           return
