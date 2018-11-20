@@ -269,6 +269,8 @@ const main = async (restartAccount, timeout) => {
           return
         }
 
+        if (player === 'amazon') { return }
+
         const used = await nightmare
           .evaluate(() => {
             return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
