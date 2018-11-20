@@ -62,7 +62,7 @@ const main = async (restartAccount, timeout) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60,
+    waitTimeout: 1000 * 60 * 10,
     gotoTimeout: 1000 * 59,
     show: true,
     typeInterval: 300,
