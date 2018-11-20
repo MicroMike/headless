@@ -62,12 +62,12 @@ const main = async (restartAccount, timeout) => {
     //   mode: 'detach'
     // },
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 10,
+    waitTimeout: 1000 * 60,
     gotoTimeout: 1000 * 59,
     show: true,
     typeInterval: 300,
     webPreferences: {
-      partition: 'persist: ' + login,
+      partition: 'persist: ' + player + ':' + login,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -157,7 +157,7 @@ const main = async (restartAccount, timeout) => {
         .click(remember || 'body')
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(1000 * 30)
+        .wait(1000 * 30 * 1000)
         .evaluate(() => {
           return document.querySelector('.login-error')
         })
