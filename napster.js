@@ -417,7 +417,7 @@ const mainInter = setInterval(() => {
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
-  // accounts = shuffle(accounts)
+  accounts = shuffle(accounts)
   console.log(accounts.length)
   main()
 });
