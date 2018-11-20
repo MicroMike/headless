@@ -111,7 +111,7 @@ const main = async (restartAccount, timeout) => {
     }
     if (player === 'amazon') {
       url = 'https://music.amazon.fr/gp/dmusic/cloudplayer/forceSignIn'
-      loggedDom = '.signIn'
+      loggedDom = '.nowPlayingView:not(.hidden)'
 
       username = '#ap_email'
       password = '#ap_password'
