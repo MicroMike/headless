@@ -120,7 +120,7 @@ const main = async (restartAccount, timeout) => {
 
       playBtn = '.playerIconPlayRing'
       shuffleBtn = '.shuffleButton'
-      repeatBtn = 'repeatButton'
+      repeatBtn = '.repeatButton'
 
       albums = [
         'https://music.amazon.fr/albums/B07G9RM2MG',
@@ -205,11 +205,11 @@ const main = async (restartAccount, timeout) => {
     // }
 
     await nightmare
-      .wait(4000 + rand(2000))
+      .wait(2000 + rand(2000))
       .click(playBtn)
-      .wait(4000 + rand(2000))
+      .wait(2000 + rand(2000))
       .click(repeatBtn || 'body')
-      .wait(4000 + rand(2000))
+      .wait(2000 + rand(2000))
       .click(shuffleBtn || 'body')
       .then()
       .catch(async (e) => {
