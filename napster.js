@@ -259,6 +259,24 @@ const main = async (restartAccount, timeout) => {
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
 
+        const ifCatch = async (e) => {
+          clearInterval(inter)
+          accountsValid = accountsValid.filter(a => a !== account)
+          accounts.push(account)
+          await nightmare.end()
+          console.log("ERROR freeze ", account)
+        }
+
+        const tryChange = async () => {
+          totalFreeze = 0
+          await nightmare
+            .goto(album())
+            .wait(2000 + rand(2000))
+            .click(playBtn)
+            .then()
+            .catch(ifCatch)
+        }
+
         time += 1000 * 15
 
         if (time > 1000 * 60 * 30 + rand(1000 * 60 * 30)) {
@@ -269,7 +287,12 @@ const main = async (restartAccount, timeout) => {
           return
         }
 
-        if (player === 'amazon') { return }
+        if (player === 'amazon') {
+          if (time > 1000 * 60 * 15 + rand(1000 * 60 * 15)) {
+            tryChange()
+          }
+          return
+        }
 
         const used = await nightmare
           .evaluate(() => {
@@ -346,24 +369,6 @@ const main = async (restartAccount, timeout) => {
             accounts.push(account)
             await nightmare.end()
             return
-          }
-
-          const ifCatch = async (e) => {
-            clearInterval(inter)
-            accountsValid = accountsValid.filter(a => a !== account)
-            accounts.push(account)
-            await nightmare.end()
-            console.log("ERROR freeze ", account)
-          }
-
-          const tryChange = async () => {
-            totalFreeze = 0
-            await nightmare
-              .goto(album())
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(ifCatch)
           }
 
           if (++totalFreeze < 10) {
