@@ -405,9 +405,9 @@ const main = async (restartAccount, timeout) => {
           if (err) return console.log(err);
         });
       });
-
-      await nightmare.end()
     }
+
+    await nightmare.end()
   }
 }
 
