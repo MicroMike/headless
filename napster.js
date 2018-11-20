@@ -6,7 +6,7 @@ const fs = require('fs');
 let accounts = []
 let accountsValid = []
 let over = false
-let albums
+let albums = []
 let countTimeout = 0
 let countTimeoutFreeze = 0
 let finish = false
@@ -67,7 +67,7 @@ const main = async (restartAccount, timeout) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      // partition: 'persist: ' + login,
+      partition: 'persist: ' + login,
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
@@ -76,45 +76,72 @@ const main = async (restartAccount, timeout) => {
     }
   })
 
-  let inputs = {
-    username: '#username',
-    password: '#password'
-  }
+  let username
+  let password
   let url
+  let remember
   let loginBtn
   let playBtn
-  let shuffle
+  let shuffleBtn
+  let repeatBtn
 
   let errorLog = false
   let connected = false
   let suppressed = false
 
   try {
-    url = 'https://app.napster.com/login/'
-    loginBtn = '.signin'
-    albums = [
-      'https://app.napster.com/artist/honey/album/just-another-emotion',
-      'https://app.napster.com/artist/yokem/album/boombeats',
-      'https://app.napster.com/artist/hanke/album/new-york-story',
-      'https://app.napster.com/artist/hanke/album/100-revenge',
-      'https://app.napster.com/artist/yonne/album/loser'
-    ]
-    playBtn = '.track-list-header .shuffle-button'
-    shuffle = '.repeat-button.off'
+    if (player === 'napster') {
+      url = 'https://app.napster.com/login/'
+
+      username = '#username'
+      password = '#password'
+      loginBtn = '.signin'
+
+      playBtn = '.track-list-header .shuffle-button'
+      shuffle = '.repeat-button.off'
+
+      albums = [
+        'https://app.napster.com/artist/honey/album/just-another-emotion',
+        'https://app.napster.com/artist/yokem/album/boombeats',
+        'https://app.napster.com/artist/hanke/album/new-york-story',
+        'https://app.napster.com/artist/hanke/album/100-revenge',
+        'https://app.napster.com/artist/yonne/album/loser'
+      ]
+    }
+    if (player === 'amazon') {
+      url = 'https://music.amazon.fr/gp/dmusic/cloudplayer/forceSignIn'
+
+      username = '#ap_email'
+      password = '#ap_password'
+      remember = '[name="rememberMe"]'
+      loginBtn = '#signInSubmit'
+
+      playBtn = '.playerIconPlayRing'
+      shuffleBtn = '.shuffleButton'
+      repeatBtn = 'repeatButton'
+
+      albums = [
+        'https://music.amazon.fr/albums/B07G9RM2MG',
+        'https://music.amazon.fr/albums/B07CZDXC9B',
+        'https://music.amazon.fr/albums/B07D3NQ235',
+        'https://music.amazon.fr/albums/B07G5PPYSY',
+        'https://music.amazon.fr/albums/B07D3PGSR4',
+      ]
+    }
 
     // if (!persist) {
     // if (restartAccount) {
-    // connected = await nightmare
-    //   .goto(album())
-    //   .wait(4000 + rand(2000))
-    //   .evaluate(() => {
-    //     return document.querySelector('.track-list-header .shuffle-button')
-    //   })
-    //   .then()
-    //   .catch(async (e) => {
-    //     // console.log('catch logged')
-    //     errorLog = true
-    //   })
+    connected = await nightmare
+      .goto(album())
+      .wait(4000 + rand(2000))
+      .evaluate((playBtn) => {
+        return document.querySelector(playBtn)
+      }, playBtn)
+      .then()
+      .catch(async (e) => {
+        // console.log('catch logged')
+        errorLog = true
+      })
     // }
 
     if (errorLog) { throw 'out' }
@@ -123,8 +150,9 @@ const main = async (restartAccount, timeout) => {
       suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
-        .type(inputs.username, login)
-        .type(inputs.password, pass)
+        .type(username, login)
+        .type(password, pass)
+        .click(remember || 'body')
         .wait(2000 + rand(2000))
         .click(loginBtn)
         .wait(1000 * 30)
@@ -178,20 +206,9 @@ const main = async (restartAccount, timeout) => {
       .wait(2000 + rand(2000))
       .click(playBtn)
       .wait(2000 + rand(2000))
-      .evaluate(() => {
-        const clickLoop = () => {
-          setTimeout(() => {
-            document.querySelector('.repeat-button').click()
-            if (!document.querySelector('.repeat-button.repeat')) {
-              clickLoop()
-            }
-          }, 2600);
-        }
-
-        if (document.querySelector('.repeat-button') && !document.querySelector('.repeat-button.repeat')) {
-          clickLoop()
-        }
-      })
+      .click(repeatBtn || 'body')
+      .wait(2000 + rand(2000))
+      .click(shuffleBtn || 'body')
       .then()
       .catch(async (e) => {
         // console.log('catch album')
@@ -200,12 +217,30 @@ const main = async (restartAccount, timeout) => {
 
     if (errorLog) { throw 'out' }
 
-    if (restartAccount && !night) {
-      console.log('reco ', login)
-    }
+    if (player === 'napster') {
+      await nightmare
+        .wait(2000 + rand(2000))
+        .evaluate(() => {
+          const clickLoop = () => {
+            setTimeout(() => {
+              document.querySelector('.repeat-button').click()
+              if (!document.querySelector('.repeat-button.repeat')) {
+                clickLoop()
+              }
+            }, 2600);
+          }
 
-    if (accountsValid.length < max) {
-      // main()
+          if (document.querySelector('.repeat-button') && !document.querySelector('.repeat-button.repeat')) {
+            clickLoop()
+          }
+        })
+        .then()
+        .catch(async (e) => {
+          // console.log('catch album')
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
     }
 
     if (check) {
@@ -369,10 +404,6 @@ const main = async (restartAccount, timeout) => {
         });
       });
     }
-
-    await nightmare.end(() => {
-      // main()
-    })
   }
 }
 
