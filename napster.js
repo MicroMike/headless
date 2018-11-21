@@ -52,6 +52,19 @@ const main = async (restartAccount, timeout) => {
 
   // account += !logged ? ':' + session : ''
 
+  const webPreferences = {
+    partition: 'persist: ' + player + ':' + login,
+    webSecurity: false,
+    allowRunningInsecureContent: true,
+    plugins: true,
+    images: false,
+    experimentalFeatures: true
+  }
+
+  if (player === 'napster') {
+    delete webPreferences.partition
+  }
+
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
@@ -61,14 +74,7 @@ const main = async (restartAccount, timeout) => {
     gotoTimeout: 1000 * 59,
     show: true,
     typeInterval: 300,
-    webPreferences: {
-      partition: player === 'amazon' ? 'persist: ' + player + ':' + login : '',
-      webSecurity: false,
-      allowRunningInsecureContent: true,
-      plugins: true,
-      images: false,
-      experimentalFeatures: true
-    }
+    webPreferences
   })
 
   let username
