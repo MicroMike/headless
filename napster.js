@@ -163,6 +163,7 @@ const main = async (restartAccount, timeout) => {
     if (player === 'tidal') {
       await nightmare
         .goto(url)
+        .wait(4000 + rand(2000))
         .click(goToLogin)
         .wait(4000 + rand(2000))
         .insert(username, login)
