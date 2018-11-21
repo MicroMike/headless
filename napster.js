@@ -79,6 +79,7 @@ const main = async (restartAccount, timeout) => {
   let remember
   let loginBtn
   let playBtn
+  let pauseBtn
   let shuffleBtn
   let repeatBtn
   let loggedDom
@@ -110,7 +111,7 @@ const main = async (restartAccount, timeout) => {
     }
     if (player === 'amazon') {
       url = 'https://music.amazon.fr/gp/dmusic/cloudplayer/forceSignIn'
-      loggedDom = '.nowPlayingView:not(.hidden)'
+      loggedDom = '.playbackActive'
 
       username = '#ap_email'
       password = '#ap_password'
@@ -119,6 +120,7 @@ const main = async (restartAccount, timeout) => {
       usernameInput = false
 
       playBtn = '.playerIconPlayRing'
+      pauseBtn = '.playerIconPauseRing'
       shuffleBtn = '.shuffleButton'
       repeatBtn = '.repeatButton'
 
@@ -136,7 +138,8 @@ const main = async (restartAccount, timeout) => {
         .goto(album())
         .wait(4000 + rand(2000))
         .click(playBtn)
-        .wait(4000 + rand(2000))
+        .wait(2000 + rand(2000))
+        .click(pauseBtn)
         .evaluate((loggedDom) => {
           console.log(document.querySelector(loggedDom))
           return document.querySelector(loggedDom)
