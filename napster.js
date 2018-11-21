@@ -88,6 +88,7 @@ const main = async (restartAccount, timeout) => {
   let repeatBtn
   let loggedDom
   let usernameInput
+  let goToLogin
 
   let errorLog = false
   let connected = false
@@ -143,7 +144,7 @@ const main = async (restartAccount, timeout) => {
       password = '[name="password"]'
       loginBtn = '.login-cta'
       usernameInput = true
-      let goToLogin = '[data-test-id="no-user--login"]'
+      goToLogin = '[data-test-id="no-user--login"]'
 
       playBtn = '.playerIconPlayRing'
       pauseBtn = '.playerIconPauseRing'
