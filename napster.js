@@ -157,7 +157,7 @@ const main = async (restartAccount, timeout) => {
       suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
-        .type(usernameInput ? username : 'body', login)
+        .type(usernameInput ? username : '', login)
         .type(password, pass)
         .click(remember || 'body')
         .wait(2000 + rand(2000))
