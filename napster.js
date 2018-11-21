@@ -19,7 +19,7 @@ const rand = (max, min) => {
 }
 
 function shuffle(arr) {
-  for (let i = 0; i < 5; i++) {
+  for (i = 0; i < 5; i++) {
     arr.sort(() => { return rand(2) })
   }
   return arr
