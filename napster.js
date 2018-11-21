@@ -482,7 +482,9 @@ const main = async (restartAccount, timeout) => {
       });
     }
 
-    await nightmare.end()
+    if (player !== 'tidal') {
+      await nightmare.end()
+    }
   }
 }
 
