@@ -307,7 +307,7 @@ const main = async (restartAccount, timeout) => {
         }
 
         if (player === 'amazon') {
-          if (time / freeze > rand(1000 * 60 * 5)) {
+          if (time / freeze > 1000 * 60 * 5) {
             freeze++
             tryChange()
           }
