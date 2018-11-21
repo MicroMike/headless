@@ -161,22 +161,36 @@ const main = async (restartAccount, timeout) => {
     }
 
     if (player === 'tidal') {
-      await nightmare
+      let notConnected = await nightmare
         .goto(url)
-        .wait(goToLogin)
         .wait(2000 + rand(2000))
-        .click(goToLogin)
-        .wait(2000 + rand(2000))
-        .insert(username, login)
-        .wait(1000 * 60 * 3 + rand(2000))
-        .click(username + ' + button')
-        .wait(1000 * 60 * 3 + rand(2000))
-        .insert(password, pass)
-        .wait(2000 + rand(2000))
-        .click(password + ' + button')
+        .exists(goToLogin)
+
+      if (notConnected) {
+        await nightmare
+          .click(goToLogin)
+          .wait(2000 + rand(2000))
+          .insert(username, login)
+          .wait(1000 * 60 * 3 + rand(2000))
+          .click(username + ' + button')
+          .wait(1000 * 60 * 3 + rand(2000))
+          .insert(password, pass)
+          .wait(2000 + rand(2000))
+          .click(password + ' + button')
+          .then()
+          .catch(async (e) => {
+            console.log(e)
+            errorLog = true
+          })
+
+        if (errorLog) { throw 'out' }
+      }
+
+      await nightmare
+        .goto(album())
         .then()
         .catch(async (e) => {
-          console.log(e)
+          // console.log('catch login timeout')
           errorLog = true
         })
 
