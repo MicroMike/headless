@@ -57,7 +57,7 @@ const main = async (restartAccount, timeout) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    openDevTools: true,
+    // openDevTools: true,
     alwaysOnTop: false,
     waitTimeout: 1000 * 60,
     gotoTimeout: 1000 * 59,
@@ -141,7 +141,6 @@ const main = async (restartAccount, timeout) => {
         .wait(2000 + rand(2000))
         .click(pauseBtn)
         .evaluate((loggedDom) => {
-          console.log(document.querySelector(loggedDom))
           return document.querySelector(loggedDom)
         }, loggedDom)
         .then()
