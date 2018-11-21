@@ -287,7 +287,7 @@ const main = async (restartAccount, timeout) => {
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
-          console.log("ERROR freeze ", account)
+          console.log("ERROR freeze ", account, e)
         }
 
         const tryChange = async () => {
@@ -450,7 +450,7 @@ const mainInter = setInterval(() => {
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
-  accounts = shuffle(accounts)
+  // accounts = shuffle(accounts)
   console.log(accounts.length)
   main()
 });
