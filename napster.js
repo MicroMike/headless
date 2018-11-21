@@ -251,10 +251,10 @@ const main = async (restartAccount, timeout) => {
     if (player === 'amazon') {
       await nightmare
         .wait(2000 + rand(2000))
-        .evaluate(({ shuffleBtn, repeatBtn }) => {
-          document.querySelector(btn.shuffleBtn).click()
-          document.querySelector(btn.repeatBtn).click()
-        }, btn)
+        .evaluate((btn) => {
+          document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
+          document.querySelector(btn.repeatBtn) && document.querySelector(btn.repeatBtn).click()
+        }, { shuffleBtn, repeatBtn })
         .then()
         .catch(async (e) => {
           // console.log('catch album')
