@@ -19,11 +19,9 @@ const rand = (max, min) => {
 }
 
 function shuffle(arr) {
-  arr.sort(() => { return rand(2) })
-  arr.sort(() => { return rand(2) })
-  arr.sort(() => { return rand(2) })
-  arr.sort(() => { return rand(2) })
-  arr.sort(() => { return rand(2) })
+  for (let i = 0; i < arr.length; i++) {
+    arr.sort(() => { return rand(2) })
+  }
   return arr
 }
 
