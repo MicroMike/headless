@@ -57,7 +57,7 @@ const main = async (restartAccount, timeout) => {
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
-    images: false,
+    images: player === 'tidal',
     experimentalFeatures: true
   }
 
@@ -168,10 +168,11 @@ const main = async (restartAccount, timeout) => {
         .click(goToLogin)
         .wait(2000 + rand(2000))
         .insert(username, login)
-        .wait(2000 + rand(2000))
+        .wait(1000 * 60 * 3 + rand(2000))
         .click(username + ' + button')
         .wait(1000 * 60 * 3 + rand(2000))
         .insert(password, pass)
+        .wait(2000 + rand(2000))
         .click(password + ' + button')
         .then()
         .catch(async (e) => {
