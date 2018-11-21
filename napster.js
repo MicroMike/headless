@@ -321,7 +321,7 @@ const main = async (restartAccount, timeout) => {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          await nightmare.screenshot('screen/' + player + ':' + login + '.png')
+          await nightmare.screenshot(player + ':' + login + '.png')
           await nightmare.end()
           console.log("ERROR freeze ", account, e)
         }
