@@ -325,7 +325,7 @@ const main = async (restartAccount, timeout) => {
 
         if (used) {
           clearInterval(inter)
-          console.log("ERROR used ", account)
+          // console.log("ERROR used ", account)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
