@@ -121,8 +121,8 @@ const main = async (restartAccount, timeout) => {
 
       playBtn = '.playerIconPlayRing'
       pauseBtn = '.playerIconPauseRing'
-      shuffleBtn = '.shuffleButton'
-      repeatBtn = '.repeatButton'
+      shuffleBtn = '.shuffleButton:not(.on)'
+      repeatBtn = '.repeatButton:not(.on)'
 
       albums = [
         'https://music.amazon.fr/albums/B07G9RM2MG',
