@@ -171,6 +171,13 @@ const main = async (restartAccount, timeout) => {
         .wait(4000 + rand(2000))
         .insert(password, pass)
         .click(password + ' + button')
+        .then()
+        .catch(async (e) => {
+          console.log(e)
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
     }
 
     if (player === 'amazon') {
