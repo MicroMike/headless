@@ -212,6 +212,7 @@ const main = async (restartAccount, timeout) => {
         .wait(2000 + rand(2000))
         .click(loginBtn)
         .wait(1000 * 30)
+        .wait(2000 + rand(2000))
         .evaluate(() => {
           return document.querySelector('.login-error')
         })
@@ -338,6 +339,7 @@ const main = async (restartAccount, timeout) => {
           totalFreeze = 0
           await nightmare
             .goto(album())
+            .wait(1000 * 30)
             .wait(2000 + rand(2000))
             .click(playBtn)
             .then()
