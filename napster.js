@@ -6,7 +6,6 @@ const fs = require('fs');
 let accounts = []
 let accountsValid = []
 let over = false
-let albums = []
 let countTimeout = 0
 let countTimeoutFreeze = 0
 let finish = false
@@ -28,9 +27,9 @@ function shuffle(arr) {
   return arr
 }
 
-const album = () => albums[rand(albums.length)]
-
 const main = async (restartAccount, timeout) => {
+  let albums = []
+  const album = () => albums[rand(albums.length)]
   finish = true
   if (over) { return }
   if (timeout) { countTimeout-- }
