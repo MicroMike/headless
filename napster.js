@@ -19,7 +19,7 @@ const rand = (max, min) => {
 }
 
 function shuffle(arr) {
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < arr.length; i++) {
     arr.sort(() => { return rand(2) })
   }
   return arr
@@ -444,7 +444,7 @@ const mainInter = setInterval(() => {
 fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
   if (err) return console.log(err);
   accounts = data.split(',')
-  // accounts = shuffle(accounts)
+  accounts = shuffle(accounts)
   console.log(accounts.length)
   main()
 });
