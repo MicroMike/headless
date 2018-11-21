@@ -138,6 +138,7 @@ const main = async (restartAccount, timeout) => {
         .goto(album())
         .wait(4000 + rand(2000))
         .evaluate((loggedDom) => {
+          console.log(document.querySelector(loggedDom))
           return document.querySelector(loggedDom)
         }, loggedDom)
         .then()
