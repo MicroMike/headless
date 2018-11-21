@@ -133,22 +133,21 @@ const main = async (restartAccount, timeout) => {
       ]
     }
 
-    // if (!persist) {
-    // if (restartAccount) {
-    // connected = await nightmare
-    //   .goto(album())
-    //   .wait(4000 + rand(2000))
-    //   .evaluate((loggedDom) => {
-    //     return document.querySelector(loggedDom)
-    //   }, loggedDom)
-    //   .then()
-    //   .catch(async (e) => {
-    //     // console.log('catch logged')
-    //     errorLog = true
-    //   })
-    // }
+    if (player === 'amazon') {
+      connected = await nightmare
+        .goto(album())
+        .wait(4000 + rand(2000))
+        .evaluate((loggedDom) => {
+          return document.querySelector(loggedDom)
+        }, loggedDom)
+        .then()
+        .catch(async (e) => {
+          // console.log('catch logged')
+          errorLog = true
+        })
 
-    if (errorLog) { throw 'out' }
+      if (errorLog) { throw 'out' }
+    }
 
     if (!connected) {
       suppressed = await nightmare
