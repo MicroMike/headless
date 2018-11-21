@@ -135,6 +135,8 @@ const main = async (restartAccount, timeout) => {
       connected = await nightmare
         .goto(album())
         .wait(4000 + rand(2000))
+        .click(playBtn)
+        .wait(4000 + rand(2000))
         .evaluate((loggedDom) => {
           console.log(document.querySelector(loggedDom))
           return document.querySelector(loggedDom)
