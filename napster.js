@@ -67,7 +67,7 @@ const main = async (restartAccount, timeout) => {
     show: true,
     typeInterval: 300,
     webPreferences: {
-      // partition: 'persist: ' + player + ':' + login,
+      partition: player === 'amazon' ? 'persist: ' + player + ':' + login : '',
       webSecurity: false,
       allowRunningInsecureContent: true,
       plugins: true,
