@@ -214,10 +214,6 @@ const main = async (restartAccount, timeout) => {
     await nightmare
       .wait(2000 + rand(2000))
       .click(playBtn)
-      .wait(2000 + rand(2000))
-      .click(repeatBtn || 'body')
-      .wait(2000 + rand(2000))
-      .click(shuffleBtn || 'body')
       .then()
       .catch(async (e) => {
         // console.log('catch album')
@@ -243,6 +239,22 @@ const main = async (restartAccount, timeout) => {
             clickLoop()
           }
         })
+        .then()
+        .catch(async (e) => {
+          // console.log('catch album')
+          errorLog = true
+        })
+
+      if (errorLog) { throw 'out' }
+    }
+
+    if (player === 'amazon') {
+      await nightmare
+        .wait(2000 + rand(2000))
+        .evaluate((btn) => {
+          document.querySelector(btn.shuffleBtn).click()
+          document.querySelector(btn.repeatBtn).click()
+        }, { shuffleBtn, repeatBtn })
         .then()
         .catch(async (e) => {
           // console.log('catch album')
