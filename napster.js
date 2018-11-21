@@ -85,6 +85,7 @@ const main = async (restartAccount, timeout) => {
   let shuffleBtn
   let repeatBtn
   let loggedDom
+  let usernameInput
 
   let errorLog = false
   let connected = false
@@ -94,6 +95,7 @@ const main = async (restartAccount, timeout) => {
     if (player === 'napster') {
       url = 'https://app.napster.com/login/'
 
+      usernameInput = true
       username = '#username'
       password = '#password'
       loginBtn = '.signin'
@@ -117,6 +119,7 @@ const main = async (restartAccount, timeout) => {
       password = '#ap_password'
       remember = '[name="rememberMe"]'
       loginBtn = '#signInSubmit'
+      usernameInput = false
 
       playBtn = '.playerIconPlayRing'
       shuffleBtn = '.shuffleButton'
@@ -148,11 +151,13 @@ const main = async (restartAccount, timeout) => {
 
     if (errorLog) { throw 'out' }
 
+
+
     if (!connected) {
       suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
-        // .type(username, login)
+        .type(usernameInput ? username : 'body', login)
         .type(password, pass)
         .click(remember || 'body')
         .wait(2000 + rand(2000))
