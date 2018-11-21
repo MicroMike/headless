@@ -136,6 +136,41 @@ const main = async (restartAccount, timeout) => {
         'https://music.amazon.fr/albums/B07D3PGSR4',
       ]
     }
+    if (player === 'tidal') {
+      url = 'https://listen.tidal.com/'
+
+      username = '#email'
+      password = '[name="password"]'
+      loginBtn = '.login-cta'
+      usernameInput = true
+      let goToLogin = '[data-test-id="no-user--login"]'
+
+      playBtn = '.playerIconPlayRing'
+      pauseBtn = '.playerIconPauseRing'
+      shuffleBtn = '.shuffleButton:not(.on)'
+      repeatBtn = '.repeatButton:not(.on)'
+
+      albums = [
+        'https://listen.tidal.com/album/93312939',
+        // 'https://listen.tidal.com/album/93312939',
+        // 'https://listen.tidal.com/album/93312939',
+        // 'https://listen.tidal.com/album/93312939',
+        // 'https://listen.tidal.com/album/93312939',
+      ]
+    }
+
+    if (player === 'tidal') {
+      await nightmare
+        .goto(url)
+        .click(goToLogin)
+        .wait(4000 + rand(2000))
+        .insert(username, login)
+        .wait(4000 + rand(2000))
+        .click(username + ' + button')
+        .wait(4000 + rand(2000))
+        .insert(password, pass)
+        .click(password + ' + button')
+    }
 
     if (player === 'amazon') {
       connected = await nightmare
@@ -156,7 +191,7 @@ const main = async (restartAccount, timeout) => {
       if (errorLog) { throw 'out' }
     }
 
-    if (!connected) {
+    if (!connected && player !== 'tidal') {
       suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
