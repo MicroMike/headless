@@ -144,7 +144,7 @@ const main = async (restartAccount, timeout) => {
       password = '[name="password"]'
       loginBtn = '.login-cta'
       usernameInput = true
-      goToLogin = '[class*="button--"]'
+      goToLogin = '#sidebar section button + button'
 
       playBtn = '.playerIconPlayRing'
       pauseBtn = '.playerIconPauseRing'
