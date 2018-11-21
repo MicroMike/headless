@@ -151,14 +151,15 @@ const main = async (restartAccount, timeout) => {
 
     if (errorLog) { throw 'out' }
 
-
-
     if (!connected) {
       suppressed = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
-        .type(usernameInput ? username : password, login)
+        .insert(usernameInput ? username : password, login)
+        .wait(2000 + rand(2000))
+        .insert(password, '')
         .insert(password, pass)
+        .wait(2000 + rand(2000))
         .click(remember || 'body')
         .wait(2000 + rand(2000))
         .click(loginBtn)
