@@ -238,7 +238,7 @@ const main = async (restartAccount, timeout) => {
         .click(remember || 'body')
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(1000 * 60)
+        .wait(1000 * 30)
         .wait(2000 + rand(2000))
         .evaluate(() => {
           return document.querySelector('.login-error')
