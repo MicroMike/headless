@@ -496,13 +496,12 @@ const main = async (restartAccount, timeout) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
 
+    console.log("ERROR ", account, e)
+
     if (e !== 'del') {
       accounts.push(account)
-      console.log("ERROR ", account, e)
     }
     else {
-      console.log("ERROR ", account, e)
-
       fs.readFile('napsterAccountDel.txt', 'utf8', function (err, data) {
         if (err) return console.log(err);
         data = data.split(',')
