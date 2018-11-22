@@ -361,7 +361,7 @@ const main = async (restartAccount, timeout) => {
           accounts.push(account)
           await nightmare.screenshot(player + '.' + login + '.png')
           await nightmare.end()
-          console.log("ERROR freeze ", account, e)
+          console.log("ERROR freeze ", account, e.split('at')[0])
         }
 
         const tryChange = async () => {
