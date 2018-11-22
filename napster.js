@@ -94,7 +94,7 @@ const main = async (restartAccount, timeout) => {
   let pauseBtn
   let shuffleBtn
   let repeatBtn
-  let repeatBtnOK
+  let repeatBtnOk
   let loggedDom
   let usernameInput
   let goToLogin
@@ -114,7 +114,7 @@ const main = async (restartAccount, timeout) => {
 
       loggedDom = playBtn = '.track-list-header .shuffle-button'
       repeatBtn = '.repeat-button'
-      repeatBtnOK = '.repeat-button.repeat'
+      repeatBtnOk = '.repeat-button.repeat'
 
       albums = [
         'https://app.napster.com/artist/honey/album/just-another-emotion',
@@ -160,7 +160,7 @@ const main = async (restartAccount, timeout) => {
       pauseBtn = '.playerIconPauseRing'
       // shuffleBtn = '[class*="shuffleButton"]'
       repeatBtn = '[class*="repeatButton"]'
-      repeatBtnOK = '[class*="repeatStateIcon"][class*="all"]'
+      repeatBtnOk = '[class*="repeatStateIcon"][class*="all"]'
 
       albums = [
         'https://listen.tidal.com/album/93312939',
@@ -329,17 +329,17 @@ const main = async (restartAccount, timeout) => {
         .wait(repeatBtn)
         .wait(2000 + rand(2000))
         .evaluate((btn) => {
-          const clickLoop = (rBtn, rBtnOk) => {
+          const clickLoop = () => {
             setTimeout(() => {
-              document.querySelector(rBtn).click()
-              if (!document.querySelector(rBtnOk)) {
+              document.querySelector(btn.repeatBtn).click()
+              if (!document.querySelector(btn.repeatBtnOk)) {
                 clickLoop()
               }
             }, 2600);
           }
 
           if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
-            clickLoop(btn.repeatBtn, btn.repeatBtnOk)
+            clickLoop()
           }
         }, { repeatBtn, repeatBtnOk })
         .then()
