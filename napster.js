@@ -196,6 +196,7 @@ const main = async (restartAccount, timeout) => {
           .insert(username, login)
           .wait(2000 + rand(2000))
           .click(username + ' + button')
+          .wait(1000 * 60)
           .wait(2000 + rand(2000))
           .insert(password, pass)
           .wait(2000 + rand(2000))
