@@ -248,7 +248,7 @@ const main = async (restartAccount, timeout) => {
           // console.log('catch logged')
           errorLog = e
         })
-
+      console.log(usernameInput)
       if (errorLog) { throw errorLog }
 
       suppressed = await nightmare
