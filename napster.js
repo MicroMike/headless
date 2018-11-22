@@ -188,10 +188,10 @@ const main = async (restartAccount, timeout) => {
           .then()
           .catch(async (e) => {
             console.log(e)
-            errorLog = true
+            errorLog = e
           })
 
-        if (errorLog) { throw 'out' }
+        if (errorLog) { throw errorLog }
       }
 
       await nightmare
@@ -199,10 +199,10 @@ const main = async (restartAccount, timeout) => {
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = true
+          errorLog = e
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
     }
 
     if (player === 'amazon') {
@@ -219,10 +219,10 @@ const main = async (restartAccount, timeout) => {
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          errorLog = true
+          errorLog = e
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
     }
 
     if (!connected && player !== 'tidal') {
@@ -246,21 +246,21 @@ const main = async (restartAccount, timeout) => {
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = true
+          errorLog = e
         })
 
       if (suppressed) { throw 'del' }
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
 
       await nightmare
         .goto(album())
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = true
+          errorLog = e
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
     }
     // }
 
@@ -274,10 +274,10 @@ const main = async (restartAccount, timeout) => {
       .then()
       .catch(async (e) => {
         // console.log('catch account type')
-        errorLog = true
+        errorLog = e
       })
 
-    if (errorLog) { throw 'out' }
+    if (errorLog) { throw errorLog }
     if (issue) {
       if (restartAccount) {
         console.log('out issue', account)
@@ -293,10 +293,10 @@ const main = async (restartAccount, timeout) => {
       .then()
       .catch(async (e) => {
         // console.log('catch album')
-        errorLog = true
+        errorLog = e
       })
 
-    if (errorLog) { throw 'out' }
+    if (errorLog) { throw errorLog }
 
     if (player === 'napster') {
       await nightmare
@@ -318,10 +318,10 @@ const main = async (restartAccount, timeout) => {
         .then()
         .catch(async (e) => {
           // console.log('catch album')
-          errorLog = true
+          errorLog = e
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
     }
 
     if (player === 'amazon') {
@@ -334,10 +334,10 @@ const main = async (restartAccount, timeout) => {
         .then()
         .catch(async (e) => {
           // console.log('catch album')
-          errorLog = true
+          errorLog = e
         })
 
-      if (errorLog) { throw 'out' }
+      if (errorLog) { throw errorLog }
     }
 
     if (check) {
@@ -498,7 +498,7 @@ const main = async (restartAccount, timeout) => {
 
     if (e !== 'del') {
       accounts.push(account)
-      console.log("ERROR ", account)
+      console.log("ERROR ", account, e)
     }
     else {
       console.log("ERROR ", login)
@@ -515,7 +515,7 @@ const main = async (restartAccount, timeout) => {
     }
 
     // if (player !== 'tidal') {
-      await nightmare.end()
+    await nightmare.end()
     // }
   }
 }
