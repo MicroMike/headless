@@ -342,6 +342,7 @@ const main = async (restartAccount, timeout) => {
       let totalFreeze = 0
       let isChanging = false
       let time = 0
+      let time2 = 0
 
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
@@ -367,6 +368,7 @@ const main = async (restartAccount, timeout) => {
         }
 
         time += 1000 * 15
+        time2 += 1000 * 15
 
         if (time > 1000 * 60 * 30 + rand(1000 * 60 * 30)) {
           clearInterval(inter)
@@ -377,8 +379,8 @@ const main = async (restartAccount, timeout) => {
         }
 
         if (player === 'amazon') {
-          if (time / freeze > 1000 * 60 * 10) {
-            freeze++
+          if (time2 > 1000 * 60 * 2) {
+            time2 = 0
             tryChange()
           }
           return
