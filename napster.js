@@ -329,7 +329,7 @@ const main = async (restartAccount, timeout) => {
         .wait(repeatBtn)
         .wait(2000 + rand(2000))
         .evaluate((btn) => {
-          const clickLoop = () => {
+          const clickLoop = (btn) => {
             setTimeout(() => {
               document.querySelector(btn.repeatBtn).click()
               if (!document.querySelector(btn.repeatBtnOk)) {
@@ -339,7 +339,7 @@ const main = async (restartAccount, timeout) => {
           }
 
           if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
-            clickLoop()
+            clickLoop(btn)
           }
         }, { repeatBtn, repeatBtnOk })
         .then()
