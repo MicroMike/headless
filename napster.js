@@ -187,7 +187,6 @@ const main = async (restartAccount, timeout) => {
           .click(password + ' + button')
           .then()
           .catch(async (e) => {
-            console.log(e)
             errorLog = e
           })
 
@@ -238,9 +237,21 @@ const main = async (restartAccount, timeout) => {
     }
 
     if (!connected && player !== 'tidal') {
-      suppressed = await nightmare
+      usernameInput = await nightmare
         .goto(url)
         .wait(password)
+        .evaluate((username) => {
+          return document.querySelector(username)
+        }, username)
+        .then()
+        .catch(async (e) => {
+          // console.log('catch logged')
+          errorLog = e
+        })
+
+      if (errorLog) { throw errorLog }
+
+      suppressed = await nightmare
         .wait(2000 + rand(2000))
         .insert(usernameInput ? username : password, login)
         .wait(2000 + rand(2000))
