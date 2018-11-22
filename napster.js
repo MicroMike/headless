@@ -473,9 +473,9 @@ const main = async (restartAccount, timeout) => {
 
           if (++totalFreeze < 10) {
             await nightmare
-              .click(t1 === '0%' ? '.player-play-button .icon-pause2' : '.player-play-button .icon-next2')
+              .click('.player-play-button .icon-pause2')
               .wait(2000 + rand(2000))
-              .click(t1 === '0%' ? '.player-play-button .icon-play-button' : 'body')
+              .click('.player-play-button .icon-play-button')
               .then()
               .catch(ifCatch)
             isChanging = false
