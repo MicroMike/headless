@@ -519,7 +519,7 @@ const main = async (restartAccount, timeout) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log("ERROR ", account, e.TypeError.split('at')[0])
+    console.log("ERROR ", account, e.split('at')[0])
 
     if (e !== 'del') {
       accounts.push(account)
