@@ -519,7 +519,7 @@ const main = async (restartAccount, timeout) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log("ERROR ", account, e)
+    console.log("ERROR ", account, e.TypeError)
 
     if (e !== 'del') {
       accounts.push(account)
