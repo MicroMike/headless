@@ -331,14 +331,14 @@ const main = async (restartAccount, timeout) => {
         .evaluate((btn) => {
           const clickLoop = () => {
             setTimeout(() => {
-              document.querySelector(repeatBtn).click()
-              if (!document.querySelector(repeatBtnOk)) {
+              document.querySelector(btn.repeatBtn).click()
+              if (!document.querySelector(btn.repeatBtnOk)) {
                 clickLoop()
               }
             }, 2600);
           }
 
-          if (document.querySelector(repeatBtn) && !document.querySelector(repeatBtnOk)) {
+          if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
             clickLoop()
           }
         }, { repeatBtn, repeatBtnOk })
