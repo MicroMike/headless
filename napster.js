@@ -78,7 +78,7 @@ const main = async (restartAccount, timeout) => {
     electronPath: require('electron'),
     // openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 10,
+    waitTimeout: 1000 * 60 * 2,
     gotoTimeout: 1000 * 59 * 2,
     show: true,
     typeInterval: 300,
