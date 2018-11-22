@@ -501,7 +501,7 @@ const main = async (restartAccount, timeout) => {
       console.log("ERROR ", account, e)
     }
     else {
-      console.log("ERROR ", login)
+      console.log("ERROR ", account, e)
 
       fs.readFile('napsterAccountDel.txt', 'utf8', function (err, data) {
         if (err) return console.log(err);
