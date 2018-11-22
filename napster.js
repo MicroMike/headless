@@ -212,7 +212,6 @@ const main = async (restartAccount, timeout) => {
         .wait(2000 + rand(2000))
         .click(playBtn)
         .wait(2000 + rand(2000))
-        .click(pauseBtn)
         .evaluate((loggedDom) => {
           return document.querySelector(loggedDom)
         }, loggedDom)
@@ -223,6 +222,19 @@ const main = async (restartAccount, timeout) => {
         })
 
       if (errorLog) { throw errorLog }
+
+      if (connected) {
+        await nightmare
+          .wait(2000 + rand(2000))
+          .click(pauseBtn)
+          .then()
+          .catch(async (e) => {
+            // console.log('catch logged')
+            errorLog = e
+          })
+
+        if (errorLog) { throw errorLog }
+      }
     }
 
     if (!connected && player !== 'tidal') {
