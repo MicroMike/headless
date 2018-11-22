@@ -430,7 +430,7 @@ const main = async (restartAccount, timeout) => {
           return
         }
 
-        if (player === 'amazon') {
+        if (player !== 'napster') {
           if (time2 > 1000 * 60 * 2) {
             time2 = 0
             tryChange()
