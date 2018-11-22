@@ -27,7 +27,15 @@ function shuffle(arr) {
 
 const main = async (restartAccount, timeout) => {
   let albums = []
-  const album = () => albums[rand(albums.length)]
+  let currentAlbum
+  const album = () => {
+    let albumUrl = albums[rand(albums.length)]
+    while (currentAlbum === albumUrl) {
+      albumUrl = albums[rand(albums.length)]
+    }
+    currentAlbum = albumUrl
+    return albumUrl
+  }
   finish = true
   if (over) { return }
   if (timeout) { countTimeout-- }
