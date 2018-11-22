@@ -94,6 +94,7 @@ const main = async (restartAccount, timeout) => {
   let pauseBtn
   let shuffleBtn
   let repeatBtn
+  let repeatBtnOK
   let loggedDom
   let usernameInput
   let goToLogin
@@ -112,7 +113,8 @@ const main = async (restartAccount, timeout) => {
       loginBtn = '.signin'
 
       loggedDom = playBtn = '.track-list-header .shuffle-button'
-      shuffle = '.repeat-button.off'
+      repeatBtn = '.repeat-button'
+      repeatBtnOK = '.repeat-button.repeat'
 
       albums = [
         'https://app.napster.com/artist/honey/album/just-another-emotion',
@@ -154,19 +156,32 @@ const main = async (restartAccount, timeout) => {
       usernameInput = true
       goToLogin = '#sidebar section button + button'
 
-      playBtn = '.playerIconPlayRing'
+      playBtn = '[class*="controls"] button + button'
       pauseBtn = '.playerIconPauseRing'
-      shuffleBtn = '.shuffleButton:not(.on)'
-      repeatBtn = '.repeatButton:not(.on)'
+      // shuffleBtn = '[class*="shuffleButton"]'
+      repeatBtn = '[class*="repeatButton"]'
+      repeatBtnOK = '[class*="repeatStateIcon"][class*="all"]'
 
       albums = [
         'https://listen.tidal.com/album/93312939',
-        // 'https://listen.tidal.com/album/93312939',
-        // 'https://listen.tidal.com/album/93312939',
-        // 'https://listen.tidal.com/album/93312939',
-        // 'https://listen.tidal.com/album/93312939',
+        'https://listen.tidal.com/album/93087422',
+        'https://listen.tidal.com/album/88716570',
+        'https://listen.tidal.com/album/88041212'
       ]
     }
+    if (player === 'spotify') {
+      url = 'https://accounts.spotify.com/dk/login'
+
+      username = 'form input[name="username"]'
+      password = 'form input[name="password"]'
+      loginBtn = '#login-button'
+
+      playBtn = '.tracklist-play-pause.tracklist-middle-align'
+    }
+
+    // ***************************************************************************************************************************************************************
+    // *************************************************************************** CONNECT ***************************************************************************
+    // ***************************************************************************************************************************************************************
 
     if (player === 'tidal') {
       let notConnected = await nightmare
@@ -287,57 +302,45 @@ const main = async (restartAccount, timeout) => {
     }
     // }
 
-    // if (!connected) {
-    const issue = await nightmare
-      .wait(4000 + rand(2000))
-      .evaluate(() => {
-        return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
-          document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML
-      })
-      .then()
-      .catch(async (e) => {
-        // console.log('catch account type')
-        errorLog = e
-      })
-
-    if (errorLog) { throw errorLog }
-    if (issue) {
-      if (restartAccount) {
-        console.log('out issue', account)
-      }
-      throw 'del'
-    }
-    // }
-
-    await nightmare
-      .wait(playBtn)
-      .wait(2000 + rand(2000))
-      .click(playBtn)
-      .then()
-      .catch(async (e) => {
-        // console.log('catch album')
-        errorLog = e
-      })
-
-    if (errorLog) { throw errorLog }
-
     if (player === 'napster') {
-      await nightmare
-        .wait(2000 + rand(2000))
+      const issue = await nightmare
+        .wait(4000 + rand(2000))
         .evaluate(() => {
+          return document.querySelector('.unradio') && document.querySelector('.unradio').innerHTML ||
+            document.querySelector('.account-issue') && document.querySelector('.account-issue').innerHTML
+        })
+        .then()
+        .catch(async (e) => {
+          // console.log('catch account type')
+          errorLog = e
+        })
+
+      if (errorLog) { throw errorLog }
+      if (issue) { throw 'del' }
+    }
+
+    // ***************************************************************************************************************************************************************
+    // *************************************************************************** PLAY ******************************************************************************
+    // ***************************************************************************************************************************************************************
+
+    if (player === 'napster' || player === 'tidal') {
+      await nightmare
+        .wait(repeatBtn)
+        .wait(2000 + rand(2000))
+        .evaluate((btn) => {
           const clickLoop = () => {
             setTimeout(() => {
-              document.querySelector('.repeat-button').click()
-              if (!document.querySelector('.repeat-button.repeat')) {
+              document.querySelector(repeatBtn).click()
+              if (!document.querySelector(repeatBtnOk)) {
                 clickLoop()
               }
             }, 2600);
           }
 
-          if (document.querySelector('.repeat-button') && !document.querySelector('.repeat-button.repeat')) {
+          if (document.querySelector(repeatBtn) && !document.querySelector(repeatBtnOk)) {
             clickLoop()
           }
-        })
+        }, { repeatBtn, repeatBtnOk })
         .then()
         .catch(async (e) => {
           // console.log('catch album')
@@ -363,10 +366,27 @@ const main = async (restartAccount, timeout) => {
       if (errorLog) { throw errorLog }
     }
 
+    await nightmare
+      .wait(playBtn)
+      .wait(2000 + rand(2000))
+      .click(playBtn)
+      .then()
+      .catch(async (e) => {
+        // console.log('catch album')
+        errorLog = e
+      })
+
+    if (errorLog) { throw errorLog }
+
     if (check) {
       await nightmare.end()
     }
     else {
+
+      // ***************************************************************************************************************************************************************
+      // *************************************************************************** LOOP ******************************************************************************
+      // ***************************************************************************************************************************************************************
+
       let t1
       let t2
       let freeze = 1
