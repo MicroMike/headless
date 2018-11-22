@@ -329,17 +329,17 @@ const main = async (restartAccount, timeout) => {
         .wait(repeatBtn)
         .wait(2000 + rand(2000))
         .evaluate((btn) => {
-          const clickLoop = (btn) => {
+          const clickLoop = (rBtn, rBtnOk) => {
             setTimeout(() => {
-              document.querySelector(btn.repeatBtn).click()
-              if (!document.querySelector(btn.repeatBtnOk)) {
+              document.querySelector(rBtn).click()
+              if (!document.querySelector(rBtnOk)) {
                 clickLoop()
               }
             }, 2600);
           }
 
           if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
-            clickLoop(btn)
+            clickLoop(btn.repeatBtn, btn.repeatBtnOk)
           }
         }, { repeatBtn, repeatBtnOk })
         .then()
