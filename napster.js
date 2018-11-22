@@ -70,8 +70,8 @@ const main = async (restartAccount, timeout) => {
     electronPath: require('electron'),
     // openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60,
-    gotoTimeout: 1000 * 59,
+    waitTimeout: 1000 * 60 * 2,
+    gotoTimeout: 1000 * 59 * 2,
     show: true,
     typeInterval: 300,
     webPreferences
@@ -200,7 +200,8 @@ const main = async (restartAccount, timeout) => {
     if (player === 'amazon') {
       connected = await nightmare
         .goto(album())
-        .wait(4000 + rand(2000))
+        .wait(playBtn)
+        .wait(2000 + rand(2000))
         .click(playBtn)
         .wait(2000 + rand(2000))
         .click(pauseBtn)
@@ -219,6 +220,7 @@ const main = async (restartAccount, timeout) => {
     if (!connected && player !== 'tidal') {
       suppressed = await nightmare
         .goto(url)
+        .wait(password)
         .wait(2000 + rand(2000))
         .insert(usernameInput ? username : password, login)
         .wait(2000 + rand(2000))
@@ -228,7 +230,7 @@ const main = async (restartAccount, timeout) => {
         .click(remember || 'body')
         .wait(2000 + rand(2000))
         .click(loginBtn)
-        .wait(1000 * 30)
+        .wait(1000 * 60)
         .wait(2000 + rand(2000))
         .evaluate(() => {
           return document.querySelector('.login-error')
@@ -277,6 +279,7 @@ const main = async (restartAccount, timeout) => {
     // }
 
     await nightmare
+      .wait(playBtn)
       .wait(2000 + rand(2000))
       .click(playBtn)
       .then()
@@ -356,7 +359,7 @@ const main = async (restartAccount, timeout) => {
           totalFreeze = 0
           await nightmare
             .goto(album())
-            .wait(1000 * 30)
+            .wait(playBtn)
             .wait(2000 + rand(2000))
             .click(playBtn)
             .then()
@@ -488,7 +491,7 @@ const main = async (restartAccount, timeout) => {
       console.log("ERROR ", account)
     }
     else {
-      console.log("ERROR ", login, e)
+      console.log("ERROR ", login)
 
       fs.readFile('napsterAccountDel.txt', 'utf8', function (err, data) {
         if (err) return console.log(err);
