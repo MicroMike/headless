@@ -514,9 +514,9 @@ const main = async (restartAccount, timeout) => {
       });
     }
 
-    if (player !== 'tidal') {
+    // if (player !== 'tidal') {
       await nightmare.end()
-    }
+    // }
   }
 }
 
