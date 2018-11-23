@@ -565,7 +565,7 @@ const main = async (restartAccount, timeout) => {
 
 const mainInter = setInterval(() => {
   if (over) { return clearInterval(mainInter) }
-  // main()
+  main()
 }, 1000 * pause);
 
 fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
@@ -573,7 +573,7 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   accounts = data.split(',')
   accounts = process.env.RAND ? shuffle(accounts) : accounts
   console.log(accounts.length)
-  mail()
+  main()
 });
 
 const mail = async () => {
