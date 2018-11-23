@@ -601,6 +601,7 @@ const mail = async () => {
     .insert('#loginName', 'yokem92')
     .insert('#loginPassword', 'Yokem123')
     .click('#loginButton')
+    .wait(1000 * 10)
     .evaluate(() => {
       const tip = '#loggedOutTip'
       document.querySelector(tip) && document.querySelector(tip).remove()
