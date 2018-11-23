@@ -594,6 +594,9 @@ const mail = async () => {
       experimentalFeatures: true
     }
   })
+
+  await nightmare
+  .goto('https://mail.fr')
 }
 
 process.on('SIGINT', function (code) {
