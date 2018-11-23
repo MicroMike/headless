@@ -568,13 +568,33 @@ const mainInter = setInterval(() => {
   main()
 }, 1000 * pause);
 
-fs.readFile('napsterAccount.txt', 'utf8', function (err, data) {
+fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   if (err) return console.log(err);
   accounts = data.split(',')
   accounts = process.env.RAND ? shuffle(accounts) : accounts
   console.log(accounts.length)
-  main()
+  mail()
 });
+
+const mail = async () => {
+  const Nightmare = require('nightmare')
+  const nightmare = Nightmare({
+    electronPath: require('electron'),
+    openDevTools: true,
+    alwaysOnTop: false,
+    waitTimeout: 1000 * 60 * 2,
+    gotoTimeout: 1000 * 59 * 2,
+    show: true,
+    typeInterval: 300,
+    webPreferences: {
+      partition: 'persist: mail',
+      webSecurity: false,
+      allowRunningInsecureContent: true,
+      plugins: true,
+      experimentalFeatures: true
+    }
+  })
+}
 
 process.on('SIGINT', function (code) {
   over = true
