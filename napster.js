@@ -598,14 +598,24 @@ const mail = async () => {
   await nightmare
     .goto('https://my.mail.fr')
     .wait('#loginName')
+    .wait(2000 + rand(2000))
     .insert('#loginName', 'yokem92')
+    .wait(2000 + rand(2000))
     .insert('#loginPassword', 'Yokem123')
+    .wait(2000 + rand(2000))
     .click('#loginButton')
-    .wait(1000 * 10)
+    .wait('#loggedOutTip')
     .evaluate(() => {
       const tip = '#loggedOutTip'
       document.querySelector(tip) && document.querySelector(tip).remove()
     })
+    .then()
+    .catch(() => { })
+
+  await nightmare
+    .wait(2000 + rand(2000))
+    .click('#dashboardContent tr')
+
 }
 
 process.on('SIGINT', function (code) {
