@@ -612,10 +612,15 @@ const mail = async () => {
     .then()
     .catch(() => { })
 
-  await nightmare
+  const code = await nightmare
     .wait(2000 + rand(2000))
-    .click('#dashboardContent tr')
+    .click('#dashboardContent .tbody .tr')
+    .wait(2000 + rand(2000))
+    .evaluate(() => {
+      return document.querySelector('.mailViewFrame').contentDocument.body.innerHTML.split(':')[1].split('<br>')[2].trim()
+    })
 
+  console.log(code)
 }
 
 process.on('SIGINT', function (code) {
