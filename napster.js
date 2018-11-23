@@ -565,7 +565,7 @@ const main = async (restartAccount, timeout) => {
 
 const mainInter = setInterval(() => {
   if (over) { return clearInterval(mainInter) }
-  main()
+  // main()
 }, 1000 * pause);
 
 fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
@@ -596,7 +596,7 @@ const mail = async () => {
   })
 
   await nightmare
-  .goto('https://mail.fr')
+    .goto('https://mail.fr')
 }
 
 process.on('SIGINT', function (code) {
