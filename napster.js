@@ -596,7 +596,15 @@ const mail = async () => {
   })
 
   await nightmare
-    .goto('https://mail.fr')
+    .goto('https://my.mail.fr')
+    .wait('#loginName')
+    .insert('#loginName', 'yokem92')
+    .insert('#loginPassword', 'Yokem123')
+    .click('#loginButton')
+    .evaluate(() => {
+      const tip = '#loggedOutTip'
+      document.querySelector(tip) && document.querySelector(tip).remove()
+    })
 }
 
 process.on('SIGINT', function (code) {
