@@ -3,6 +3,7 @@
 // EUX0XJ8RP2MLB84KHYESIMH
 
 const fs = require('fs');
+const request = require('ajax-request');
 let accounts = []
 let accountsValid = []
 let over = false
@@ -23,6 +24,59 @@ function shuffle(arr) {
     arr.sort(() => { return rand(2) })
   }
   return arr
+}
+
+const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
+  request({
+    url: 'https://api.anti-captcha.com/createTask',
+    method: 'POST',
+    json: true,
+    data: {
+      clientKey: '21648811563096fd1970c47f55b3d548',
+      task: {
+        type: 'NoCaptchaTaskProxyless',
+        websiteURL,
+        websiteKey,
+        invisible
+      }
+    }
+  }, function (err, res, response) {
+    // console.log(response)
+    if (!response || !response.taskId) {
+      console.log(response || 'no response')
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (over) { return clearInterval(interval) }
+      request({
+        url: 'https://api.anti-captcha.com/getTaskResult',
+        method: 'POST',
+        json: true,
+        data: {
+          clientKey: '21648811563096fd1970c47f55b3d548',
+          taskId: response.taskId
+        }
+      }, function (err, res, response) {
+        try {
+          if (response && response.status !== 'processing') {
+            clearInterval(interval)
+            onecaptcha = false;
+            captcha = response.solution.gRecaptchaResponse
+            main()
+          }
+          else if (!response) {
+            throw 'error'
+          }
+        }
+        catch (e) {
+          clearInterval(interval)
+          onecaptcha = false;
+          processing = false;
+        }
+      });
+    }, 1000 * 30)
+  });
 }
 
 const main = async (restartAccount, timeout) => {
@@ -98,6 +152,7 @@ const main = async (restartAccount, timeout) => {
   let loggedDom
   let usernameInput
   let goToLogin
+  let keyCaptcha
 
   let errorLog = false
   let connected = false
@@ -162,6 +217,8 @@ const main = async (restartAccount, timeout) => {
       repeatBtn = '[class*="repeatButton"]'
       repeatBtnOk = '[class*="repeatStateIcon"][class*="all"]'
 
+      keyCaptcha = '6Lf-ty8UAAAAAE5YTgJXsS3B-frcWP41G15z-Va2'
+
       albums = [
         'https://listen.tidal.com/album/93312939',
         'https://listen.tidal.com/album/93087422',
@@ -170,13 +227,20 @@ const main = async (restartAccount, timeout) => {
       ]
     }
     if (player === 'spotify') {
-      url = 'https://accounts.spotify.com/dk/login'
+      url = 'https://accounts.spotify.com/login'
 
       username = 'form input[name="username"]'
       password = 'form input[name="password"]'
       loginBtn = '#login-button'
 
       playBtn = '.tracklist-play-pause.tracklist-middle-align'
+
+      keyCaptcha = '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo'
+      let albums = [
+        'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
+        'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
+        'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
+      ]
     }
 
     // ***************************************************************************************************************************************************************
@@ -403,7 +467,7 @@ const main = async (restartAccount, timeout) => {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
-          await nightmare.screenshot(player + '.' + login + '.png')
+          await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
           await nightmare.end()
           console.log("ERROR freeze ", account, e)
         }
@@ -541,6 +605,7 @@ const main = async (restartAccount, timeout) => {
     accountsValid = accountsValid.filter(a => a !== account)
 
     console.log("ERROR ", account, (e + ' ').split(' at')[0])
+    await nightmare.screenshot('throw.' + player + '.' + login + '.png')
 
     if (e !== 'del') {
       accounts.push(account)
