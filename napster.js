@@ -290,20 +290,21 @@ const main = async (restartAccount, timeout) => {
         .wait(playBtn)
         .wait(2000 + rand(2000))
         .click(playBtn)
-        .wait(2000 + rand(2000))
+        .wait(4000 + rand(2000))
         .evaluate((loggedDom) => {
           return document.querySelector(loggedDom)
         }, loggedDom)
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          errorLog = e
+          errorLog = 'A ' + e
         })
 
       if (errorLog) { throw errorLog }
 
       if (connected) {
         await nightmare
+          .wait(pauseBtn)
           .wait(2000 + rand(2000))
           .click(pauseBtn)
           .then()
@@ -438,7 +439,7 @@ const main = async (restartAccount, timeout) => {
       .then()
       .catch(async (e) => {
         // console.log('catch album')
-        errorLog = e
+          errorLog = 'B ' + e
       })
 
     if (errorLog) { throw errorLog }
