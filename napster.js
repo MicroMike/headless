@@ -260,13 +260,36 @@ const main = async (restartAccount, timeout) => {
           .evaluate(() => {
             return document.URL
           })
+          .then()
+          .catch(async (e) => {
+            errorLog = e
+          })
+
+        if (errorLog) { throw errorLog }
 
         const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
         if (captcha === 'out') { throw captcha }
 
         await nightmare
+          .evaluate((captcha) => {
+            let clients = window.___grecaptcha_cfg.clients[0]
+            Object.keys(clients).map(key => {
+              let client = clients[key]
+              Object.keys(client).map(k => {
+                let l = client[k]
+                l && l.callback && l.callback(captcha)
+              })
+            })
+          }, captcha)
+          .then()
+          .catch(async (e) => {
+            errorLog = e
+          })
+
+        if (errorLog) { throw errorLog }
+
+        await nightmare
           .wait(2000 + rand(2000))
-          .click(username + ' + button')
           .wait(password)
           .wait(2000 + rand(2000))
           .insert(password, pass)
