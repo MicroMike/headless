@@ -155,6 +155,7 @@ const main = async (restartAccount, timeout) => {
   let usernameInput
   let goToLogin
   let keyCaptcha
+  let usedDom
 
   let errorLog = false
   let connected = false
@@ -179,6 +180,8 @@ const main = async (restartAccount, timeout) => {
         'https://app.napster.com/artist/hanke/album/100-revenge',
         'https://app.napster.com/artist/yonne/album/loser'
       ]
+
+      usedDom = '.player-error-box'
     }
     if (player === 'amazon') {
       url = 'https://music.amazon.fr/gp/dmusic/cloudplayer/forceSignIn'
@@ -201,6 +204,8 @@ const main = async (restartAccount, timeout) => {
         'https://music.amazon.fr/albums/B07G5PPYSY',
         'https://music.amazon.fr/albums/B07D3PGSR4',
       ]
+
+      usedDom = '.concurrentStreamsPopover'
     }
     if (player === 'tidal') {
       url = 'https://listen.tidal.com/'
@@ -519,12 +524,12 @@ const main = async (restartAccount, timeout) => {
 
         const used = await nightmare
           .evaluate(() => {
-            return document.querySelector('.player-error-box') && document.querySelector('.player-error-box').innerHTML
+            return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
           })
 
         if (used) {
           clearInterval(inter)
-          // console.log("ERROR used ", account)
+          console.log("ERROR used ", account)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
