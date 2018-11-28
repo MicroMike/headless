@@ -658,10 +658,10 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
 
   const split = parseInt(accounts.length / 2)
   if (process.env.RAND === 1) {
-    account = account.slice(0, split)
+    accounts = accounts.slice(0, split)
   }
   else {
-    account = account.slice(split)
+    accounts = accounts.slice(split)
   }
 
   accounts = process.env.RAND ? shuffle(accounts) : accounts
