@@ -653,7 +653,12 @@ const main = async (restartAccount, timeout) => {
 
 const mainInter = setInterval(() => {
   if (over) { return clearInterval(mainInter) }
-  main()
+  try {
+    main()
+  }
+  catch (e) {
+    console.log(e)
+  }
 }, 1000 * pause);
 
 fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
