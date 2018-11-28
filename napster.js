@@ -27,56 +27,58 @@ function shuffle(arr) {
 }
 
 const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
-  request({
-    url: 'https://api.anti-captcha.com/createTask',
-    method: 'POST',
-    json: true,
-    data: {
-      clientKey: '21648811563096fd1970c47f55b3d548',
-      task: {
-        type: 'NoCaptchaTaskProxyless',
-        websiteURL,
-        websiteKey,
-        invisible
+  return new Promise((resolve, reject) => {
+    request({
+      url: 'https://api.anti-captcha.com/createTask',
+      method: 'POST',
+      json: true,
+      data: {
+        clientKey: '21648811563096fd1970c47f55b3d548',
+        task: {
+          type: 'NoCaptchaTaskProxyless',
+          websiteURL,
+          websiteKey,
+          invisible
+        }
       }
-    }
-  }, function (err, res, response) {
-    // console.log(response)
-    if (!response || !response.taskId) {
-      console.log(response || 'no response')
-      return;
-    }
+    }, function (err, res, response) {
+      // console.log(response)
+      if (!response || !response.taskId) {
+        console.log(response || 'no response')
+        resolve('error captcha')
+        return;
+      }
 
-    const interval = setInterval(() => {
-      if (over) { return clearInterval(interval) }
-      request({
-        url: 'https://api.anti-captcha.com/getTaskResult',
-        method: 'POST',
-        json: true,
-        data: {
-          clientKey: '21648811563096fd1970c47f55b3d548',
-          taskId: response.taskId
-        }
-      }, function (err, res, response) {
-        try {
-          if (response && response.status !== 'processing') {
+      const interval = setInterval(() => {
+        if (over) { return clearInterval(interval) }
+        request({
+          url: 'https://api.anti-captcha.com/getTaskResult',
+          method: 'POST',
+          json: true,
+          data: {
+            clientKey: '21648811563096fd1970c47f55b3d548',
+            taskId: response.taskId
+          }
+        }, function (err, res, response) {
+          try {
+            if (response && response.status !== 'processing') {
+              clearInterval(interval)
+              resolve(response.solution.gRecaptchaResponse)
+            }
+            else if (!response) {
+              throw 'error captcha'
+            }
+          }
+          catch (e) {
+            console.log(response || 'no response B')
             clearInterval(interval)
-            onecaptcha = false;
-            captcha = response.solution.gRecaptchaResponse
-            main()
+            resolve('error captcha')
+            return;
           }
-          else if (!response) {
-            throw 'error'
-          }
-        }
-        catch (e) {
-          clearInterval(interval)
-          onecaptcha = false;
-          processing = false;
-        }
-      });
-    }, 1000 * 30)
-  });
+        });
+      }, 1000 * 30)
+    });
+  })
 }
 
 const main = async (restartAccount, timeout) => {
@@ -251,10 +253,18 @@ const main = async (restartAccount, timeout) => {
         .exists(goToLogin)
 
       if (notConnected) {
-        await nightmare
+        const tidalUrl = await nightmare
           .click(goToLogin)
           .wait(2000 + rand(2000))
           .insert(username, login)
+          .evaluate(() => {
+            return document.URL
+          })
+
+        const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
+        if (captcha === 'out') { throw captcha }
+
+        await nightmare
           .wait(2000 + rand(2000))
           .click(username + ' + button')
           .wait(password)
