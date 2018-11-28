@@ -228,6 +228,8 @@ const main = async (restartAccount, timeout) => {
         'https://listen.tidal.com/album/88716570',
         'https://listen.tidal.com/album/88041212'
       ]
+
+      usedDom = '.WARN'
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
@@ -525,10 +527,12 @@ const main = async (restartAccount, timeout) => {
           .evaluate((usedDom) => {
             return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
           }, usedDom)
+          .then()
+          .catch(ifCatch)
 
         if (used) {
           clearInterval(inter)
-          console.log("ERROR used ", account)
+          // console.log("ERROR used ", account)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
