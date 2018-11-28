@@ -304,6 +304,7 @@ const main = async (restartAccount, timeout) => {
       }
 
       await nightmare
+        .wait(6000 + rand(2000))
         .goto(album())
         .then()
         .catch(async (e) => {
