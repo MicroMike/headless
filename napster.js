@@ -523,9 +523,9 @@ const main = async (restartAccount, timeout) => {
         }
 
         const used = await nightmare
-          .evaluate(() => {
+          .evaluate((usedDom) => {
             return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
-          })
+          }, usedDom)
 
         if (used) {
           clearInterval(inter)
