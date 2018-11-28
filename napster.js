@@ -33,7 +33,7 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
       method: 'POST',
       json: true,
       data: {
-        clientKey: '21648811563096fd1970c47f55b3d548',
+        clientKey: '0cab7e41bab98900c321592426ec2183',
         task: {
           type: 'NoCaptchaTaskProxyless',
           websiteURL,
@@ -56,7 +56,7 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
           method: 'POST',
           json: true,
           data: {
-            clientKey: '21648811563096fd1970c47f55b3d548',
+            clientKey: '0cab7e41bab98900c321592426ec2183',
             taskId: response.taskId
           }
         }, function (err, res, response) {
