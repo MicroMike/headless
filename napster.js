@@ -181,7 +181,7 @@ const main = async (restartAccount, timeout) => {
     }
     if (player === 'amazon') {
       url = 'https://music.amazon.fr/gp/dmusic/cloudplayer/forceSignIn'
-      loggedDom = '.playbackActive'
+      loggedDom = '.actionSection.settings'
 
       username = '#ap_email'
       password = '#ap_password'
@@ -287,10 +287,7 @@ const main = async (restartAccount, timeout) => {
     if (player === 'amazon') {
       connected = await nightmare
         .goto(album())
-        .wait(playBtn)
         .wait(2000 + rand(2000))
-        .click(playBtn)
-        .wait(4000 + rand(2000))
         .evaluate((loggedDom) => {
           return document.querySelector(loggedDom)
         }, loggedDom)
@@ -301,20 +298,6 @@ const main = async (restartAccount, timeout) => {
         })
 
       if (errorLog) { throw errorLog }
-
-      if (connected) {
-        await nightmare
-          .wait(pauseBtn)
-          .wait(2000 + rand(2000))
-          .click(pauseBtn)
-          .then()
-          .catch(async (e) => {
-            // console.log('catch logged')
-            errorLog = e
-          })
-
-        if (errorLog) { throw errorLog }
-      }
     }
 
     if (!connected && player !== 'tidal') {
@@ -439,7 +422,7 @@ const main = async (restartAccount, timeout) => {
       .then()
       .catch(async (e) => {
         // console.log('catch album')
-          errorLog = 'B ' + e
+        errorLog = 'B ' + e
       })
 
     if (errorLog) { throw errorLog }
