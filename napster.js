@@ -162,12 +162,11 @@ const main = async (restartAccount, timeout) => {
     if (player === 'napster') {
       url = 'https://app.napster.com/login/'
 
-      usernameInput = true
       username = '#username'
       password = '#password'
       loginBtn = '.signin'
 
-      loggedDom = playBtn = '.track-list-header .shuffle-button'
+      playBtn = '.track-list-header .shuffle-button'
       repeatBtn = '.repeat-button'
       repeatBtnOk = '.repeat-button.repeat'
 
@@ -187,7 +186,6 @@ const main = async (restartAccount, timeout) => {
       password = '#ap_password'
       remember = '[name="rememberMe"]'
       loginBtn = '#signInSubmit'
-      usernameInput = false
 
       playBtn = '.playerIconPlayRing'
       pauseBtn = '.playerIconPauseRing'
@@ -208,7 +206,6 @@ const main = async (restartAccount, timeout) => {
       username = '#email'
       password = '[name="password"]'
       loginBtn = '.login-cta'
-      usernameInput = true
       goToLogin = '#sidebar section button + button'
 
       playBtn = '[class*="controls"] button + button'
