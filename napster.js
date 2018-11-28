@@ -121,7 +121,7 @@ const main = async (restartAccount, timeout) => {
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
-    images: player === 'tidal',
+    images: false,
     experimentalFeatures: true
   }
 
