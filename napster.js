@@ -45,7 +45,7 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
       // console.log(response)
       if (!response || !response.taskId) {
         console.log(response || 'no response')
-        resolve('error captcha')
+        resolve('error')
         return;
       }
 
@@ -66,13 +66,13 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
               resolve(response.solution.gRecaptchaResponse)
             }
             else if (!response) {
-              throw 'error captcha'
+              throw 'error'
             }
           }
           catch (e) {
             console.log(response || 'no response B')
             clearInterval(interval)
-            resolve('error captcha')
+            resolve('error')
             return;
           }
         });
@@ -268,7 +268,7 @@ const main = async (restartAccount, timeout) => {
         if (errorLog) { throw errorLog }
 
         const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
-        if (captcha === 'out') { throw captcha }
+        if (captcha === 'error') { throw captcha }
 
         await nightmare
           .evaluate((captcha) => {
