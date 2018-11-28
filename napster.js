@@ -403,6 +403,18 @@ const main = async (restartAccount, timeout) => {
     // *************************************************************************** PLAY ******************************************************************************
     // ***************************************************************************************************************************************************************
 
+    await nightmare
+      .wait(playBtn)
+      .wait(2000 + rand(2000))
+      .click(playBtn)
+      .then()
+      .catch(async (e) => {
+        // console.log('catch album')
+        errorLog = 'B ' + e
+      })
+
+    if (errorLog) { throw errorLog }
+
     if (player === 'napster' || player === 'tidal') {
       await nightmare
         .wait(repeatBtn)
@@ -445,18 +457,6 @@ const main = async (restartAccount, timeout) => {
 
       if (errorLog) { throw errorLog }
     }
-
-    await nightmare
-      .wait(playBtn)
-      .wait(2000 + rand(2000))
-      .click(playBtn)
-      .then()
-      .catch(async (e) => {
-        // console.log('catch album')
-        errorLog = 'B ' + e
-      })
-
-    if (errorLog) { throw errorLog }
 
     if (check) {
       await nightmare.end()
