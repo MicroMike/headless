@@ -217,7 +217,6 @@ const main = async (restartAccount, timeout) => {
 
       playBtn = '[class*="controls"] button + button'
       pauseBtn = '.playerIconPauseRing'
-      // shuffleBtn = '[class*="shuffleButton"]'
       repeatBtn = '[class*="repeatButton"]'
       repeatBtnOk = '[class*="repeatStateIcon"][class*="all"]'
 
