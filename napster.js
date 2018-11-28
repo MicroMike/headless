@@ -403,6 +403,22 @@ const main = async (restartAccount, timeout) => {
     // *************************************************************************** PLAY ******************************************************************************
     // ***************************************************************************************************************************************************************
 
+    if (player === 'amazon') {
+      await nightmare
+        .wait(2000 + rand(2000))
+        .evaluate((btn) => {
+          document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
+          document.querySelector(btn.repeatBtn) && document.querySelector(btn.repeatBtn).click()
+        }, { shuffleBtn, repeatBtn })
+        .then()
+        .catch(async (e) => {
+          // console.log('catch album')
+          errorLog = e
+        })
+
+      if (errorLog) { throw errorLog }
+    }
+
     await nightmare
       .wait(playBtn)
       .wait(2000 + rand(2000))
@@ -433,22 +449,6 @@ const main = async (restartAccount, timeout) => {
             clickLoop()
           }
         }, { repeatBtn, repeatBtnOk })
-        .then()
-        .catch(async (e) => {
-          // console.log('catch album')
-          errorLog = e
-        })
-
-      if (errorLog) { throw errorLog }
-    }
-
-    if (player === 'amazon') {
-      await nightmare
-        .wait(2000 + rand(2000))
-        .evaluate((btn) => {
-          document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
-          document.querySelector(btn.repeatBtn) && document.querySelector(btn.repeatBtn).click()
-        }, { shuffleBtn, repeatBtn })
         .then()
         .catch(async (e) => {
           // console.log('catch album')
