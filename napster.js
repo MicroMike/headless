@@ -601,11 +601,11 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   accounts = data.split(',')
 
   const split = parseInt(accounts.length / 2)
-  if (process.env.START === 1) {
-    accounts = accounts.slice(0, split)
+  if (process.env.START === 2) {
+    accounts = accounts.slice(split)
   }
   else {
-    accounts = accounts.slice(split)
+    accounts = accounts.slice(0, split)
   }
 
   accounts = process.env.RAND ? shuffle(accounts) : accounts
