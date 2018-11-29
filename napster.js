@@ -547,6 +547,11 @@ const main = async (restartAccount, timeout) => {
         }
 
         if (player === 'napster' && rand(2)) {
+          const playerPlay = await nightmare
+            .exists('.player-play-button .icon-pause2')
+
+          if (!playerPlay) { return }
+
           await nightmare
             .click('.player-play-button .icon-pause2')
             .wait(2000 + rand(2000))
