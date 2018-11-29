@@ -533,7 +533,8 @@ const main = async (restartAccount, timeout) => {
           .catch(ifCatch)
 
         if (used && player === 'tidal') {
-          used = used.match(/lecture.*interrompue/)
+          console.log()
+          used = used.match(/currently/)
         }
 
         const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
