@@ -604,7 +604,7 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   data = data.split(',')
 
   const split = parseInt(data.length / 2)
-  if (process.env.BEGIN === 2) {
+  if (process.env.BEGIN === '2') {
     accounts = data.slice(split)
   }
   else {
