@@ -532,7 +532,7 @@ const main = async (restartAccount, timeout) => {
           .catch(ifCatch)
 
         if (used && player === 'tidal') {
-          console.log()
+          console.log(used)
           used = used.match(/currently/)
         }
 
