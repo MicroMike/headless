@@ -231,7 +231,7 @@ const main = async (restartAccount, timeout) => {
       ]
 
       usedDom = '.WARN'
-      reLog = 'body > div > div.flex-grow > div > div > div > div > button.position-relative.btn-primary-outline.fullwidth > div'
+      reLog = 'body > div > div > div > div > div > div > button > div'
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
@@ -273,6 +273,7 @@ const main = async (restartAccount, timeout) => {
         }
         else {
           const tidalUrl = await nightmare
+            .wait(4000 + rand(2000))
             .insert(username, login)
             .evaluate(() => {
               return document.URL
@@ -532,7 +533,6 @@ const main = async (restartAccount, timeout) => {
           .catch(ifCatch)
 
         if (used && player === 'tidal') {
-          console.log(used)
           used = used.match(/currently/)
         }
 
