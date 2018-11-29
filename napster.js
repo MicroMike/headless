@@ -534,6 +534,9 @@ const main = async (restartAccount, timeout) => {
 
         if (used && player === 'tidal') {
           used = used.match(/currently/)
+          if (!used) {
+            await nightmare.click('#wimp > div > div > div > div > div > button')
+          }
         }
 
         const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
