@@ -596,14 +596,14 @@ const mainInter = setInterval(() => {
 
 fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   if (err) return console.log(err);
-  accounts = data.split(',')
+  data = data.split(',')
 
-  const split = parseInt(accounts.length / 2)
+  const split = parseInt(data.length / 2)
   if (process.env.BEGIN === 2) {
-    accounts = accounts.slice(split)
+    accounts = data.slice(split)
   }
   else {
-    accounts = accounts.slice(0, split)
+    accounts = data.slice(0, split)
   }
 
   accounts = process.env.RAND ? shuffle(accounts) : accounts
