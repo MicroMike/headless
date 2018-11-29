@@ -532,7 +532,7 @@ const main = async (restartAccount, timeout) => {
           .then()
           .catch(ifCatch)
 
-        if (player === 'tidal') {
+        if (used && player === 'tidal') {
           used = used.match(/lecture.*interrompue/)
         }
 
