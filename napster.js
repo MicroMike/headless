@@ -231,7 +231,7 @@ const main = async (restartAccount, timeout) => {
       ]
 
       usedDom = '.WARN'
-      reLog = 'body > div > div > div > div > div > div > button > div'
+      reLog = 'body > div > div > div > div > div > div > div > button'
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
