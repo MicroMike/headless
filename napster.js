@@ -665,7 +665,4 @@ const mail = async () => {
 
 process.on('SIGINT', function (code) {
   over = true
-  fs.writeFile('napsterAccount.txt', accountsValid.concat(accounts).join(','), function (err) {
-    if (err) return console.log(err);
-  });
 });
