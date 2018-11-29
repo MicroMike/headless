@@ -156,6 +156,7 @@ const main = async (restartAccount, timeout) => {
   let goToLogin
   let keyCaptcha
   let usedDom
+  let reLog
 
   let errorLog = false
   let connected = false
@@ -230,6 +231,7 @@ const main = async (restartAccount, timeout) => {
       ]
 
       usedDom = '.WARN'
+      reLog = 'body > div > div.flex-grow > div > div > div > div > button.position-relative.btn-primary-outline.fullwidth > div'
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
@@ -259,54 +261,65 @@ const main = async (restartAccount, timeout) => {
         .exists(goToLogin)
 
       if (notConnected) {
-        const tidalUrl = await nightmare
+        await nightmare
           .click(goToLogin)
           .wait(2000 + rand(2000))
-          .insert(username, login)
-          .evaluate(() => {
-            return document.URL
-          })
-          .then()
-          .catch(async (e) => {
-            errorLog = e
-          })
 
-        if (errorLog) { throw errorLog }
+        const done = await nightmare
+          .exists(reLog)
 
-        const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
-        if (captcha === 'error') { throw captcha }
-
-        await nightmare
-          .evaluate((captcha) => {
-            let clients = window.___grecaptcha_cfg.clients[0]
-            Object.keys(clients).map(key => {
-              let client = clients[key]
-              Object.keys(client).map(k => {
-                let l = client[k]
-                l && l.callback && l.callback(captcha)
-              })
+        if (done) {
+          await nightmare
+            .click(reLog)
+        }
+        else {
+          const tidalUrl = await nightmare
+            .insert(username, login)
+            .evaluate(() => {
+              return document.URL
             })
-          }, captcha)
-          .then()
-          .catch(async (e) => {
-            errorLog = e
-          })
+            .then()
+            .catch(async (e) => {
+              errorLog = e
+            })
 
-        if (errorLog) { throw errorLog }
+          if (errorLog) { throw errorLog }
 
-        await nightmare
-          .wait(2000 + rand(2000))
-          .wait(password)
-          .wait(2000 + rand(2000))
-          .insert(password, pass)
-          .wait(2000 + rand(2000))
-          .click(password + ' + button')
-          .then()
-          .catch(async (e) => {
-            errorLog = e
-          })
+          const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
+          if (captcha === 'error') { throw captcha }
 
-        if (errorLog) { throw errorLog }
+          await nightmare
+            .evaluate((captcha) => {
+              let clients = window.___grecaptcha_cfg.clients[0]
+              Object.keys(clients).map(key => {
+                let client = clients[key]
+                Object.keys(client).map(k => {
+                  let l = client[k]
+                  l && l.callback && l.callback(captcha)
+                })
+              })
+            }, captcha)
+            .then()
+            .catch(async (e) => {
+              errorLog = e
+            })
+
+          if (errorLog) { throw errorLog }
+
+          await nightmare
+            .wait(2000 + rand(2000))
+            .wait(password)
+            .wait(2000 + rand(2000))
+            .insert(password, pass)
+            .wait(2000 + rand(2000))
+            .click(password + ' + button')
+            .then()
+            .catch(async (e) => {
+              errorLog = e
+            })
+
+          if (errorLog) { throw errorLog }
+        }
       }
 
       await nightmare
