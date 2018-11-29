@@ -520,120 +520,42 @@ const main = async (restartAccount, timeout) => {
         time += 1000 * 15
         time2 += 1000 * 15
 
-        if (time > 1000 * 60 * 30 + rand(1000 * 60 * 30)) {
-          clearInterval(inter)
-          accountsValid = accountsValid.filter(a => a !== account)
-          accounts.push(account)
-          await nightmare.end()
-          return
+        if (time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)) {
+          time2 = 0
+          tryChange()
         }
 
-        if (player !== 'napster') {
-          if (time2 > 1000 * 60 * 2) {
-            time2 = 0
-            tryChange()
-          }
-          return
-        }
-
-        const used = await nightmare
+        let used = await nightmare
           .evaluate((usedDom) => {
             return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
           }, usedDom)
           .then()
           .catch(ifCatch)
 
-        if (used) {
+        if (player === 'tidal') {
+          used = used.match(/lecture.*interrompue/)
+        }
+
+        const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
+
+        if (reboot || used) {
           clearInterval(inter)
-          // console.log("ERROR used ", account)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
           return
         }
 
-        if (isChanging) {
-          return
-        }
-
-        t1 = await nightmare
-          .evaluate(() => {
-            const time = '.player-progress-slider-box span.ui-slider-handle'
-            return document.querySelector(time).style.left
-          })
-          .then()
-          .catch(async (e) => {
-            return 'no bar'
-          })
-
-
-        if (t2 && t1 === t2) {
-          freeze++
-          await nightmare
-            .evaluate(() => {
-              if (document.querySelector('.main-image .image')) {
-                document.querySelector('.main-image .image').style.backgroundColor = 'orange'
-              }
-            })
-            .then()
-            .catch((e) => {
-            })
-        }
-        else {
-          freeze = 0
-          await nightmare
-            .evaluate(() => {
-              if (document.querySelector('.main-image .image')) {
-                document.querySelector('.main-image .image').style.backgroundColor = 'grey'
-              }
-            })
-            .then()
-            .catch((e) => {
-            })
-        }
-
-        if (freeze >= 2) {
-          isChanging = true
-          freeze = 0
-
-          await nightmare
-            .evaluate(() => {
-              if (document.querySelector('.main-image .image')) {
-                document.querySelector('.main-image .image').style.backgroundColor = 'blue'
-              }
-            })
-            .then()
-            .catch((e) => {
-            })
-
-          if (t1 === 'no bar') {
-            clearInterval(inter)
-            console.log('no time bar ', account)
-            accountsValid = accountsValid.filter(a => a !== account)
-            accounts.push(account)
-            await nightmare.end()
-            return
-          }
-
-          if (++totalFreeze < 10) {
+        if (player === 'napster') {
+          setTimeout(() => {
             await nightmare
               .click('.player-play-button .icon-pause2')
               .wait(2000 + rand(2000))
               .click('.player-play-button .icon-play-button')
               .then()
               .catch(ifCatch)
-            isChanging = false
-          }
-          else {
-            setTimeout(async () => {
-              await tryChange()
-              countTimeout--
-              isChanging = false
-            }, 1000 * pause * ++countTimeout);
-          }
+          }, rand(1000 * 60 * 3));
         }
-
-        t2 = t1
       }, 1000 * 15)
     }
   }
