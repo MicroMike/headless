@@ -599,7 +599,7 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   accounts = data.split(',')
 
   const split = parseInt(accounts.length / 2)
-  if (process.env.START === 2) {
+  if (process.env.BEGIN === 2) {
     accounts = accounts.slice(split)
   }
   else {
