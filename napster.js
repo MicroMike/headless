@@ -540,27 +540,52 @@ const main = async (restartAccount, timeout) => {
         }
 
         const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
+        let fix = false
 
-        if (reboot || used) {
+        if (player === 'napster') {
+          t1 = await nightmare
+            .evaluate(() => {
+              const time = '.player-progress-slider-box span.ui-slider-handle'
+              return document.querySelector(time).style.left
+            })
+            .then()
+            .catch(async (e) => {
+              return 'no bar'
+            })
+
+
+          if (t2 && t1 === t2) {
+            freeze++
+          }
+          else {
+            freeze = 0
+          }
+
+          if (freeze >= 2) {
+            freeze = 0
+
+            if (t1 === 'no bar') {
+              fix = true
+            }
+            else {
+              await nightmare
+                .click('.player-play-button .icon-pause2')
+                .wait(2000 + rand(2000))
+                .click('.player-play-button .icon-play-button')
+                .then()
+                .catch(ifCatch)
+            }
+          }
+
+          t2 = t1
+        }
+
+        if (reboot || used || fix) {
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
           return
-        }
-
-        if (player === 'napster' && rand(2)) {
-          const playerPlay = await nightmare
-            .exists('.player-play-button .icon-pause2')
-
-          if (!playerPlay) { return }
-
-          await nightmare
-            .click('.player-play-button .icon-pause2')
-            .wait(2000 + rand(2000))
-            .click('.player-play-button .icon-play-button')
-            .then()
-            .catch(ifCatch)
         }
       }, 1000 * 60)
     }
