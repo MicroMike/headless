@@ -11,7 +11,7 @@ let countTimeout = 0
 let countTimeoutFreeze = 0
 let finish = false
 const max = 20
-const pause = 45
+const pause = 30
 
 const check = process.env.CHECK
 
@@ -537,6 +537,12 @@ const main = async (restartAccount, timeout) => {
           if (!used) {
             await nightmare.click('#wimp > div > div > div > div > div > button')
           }
+          else {
+            console.log('used', account)
+          }
+        }
+        else if (used && player === 'amazon') {
+          console.log('used', account)
         }
 
         const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
