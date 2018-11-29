@@ -546,17 +546,15 @@ const main = async (restartAccount, timeout) => {
           return
         }
 
-        if (player === 'napster') {
-          setTimeout(async () => {
-            await nightmare
-              .click('.player-play-button .icon-pause2')
-              .wait(2000 + rand(2000))
-              .click('.player-play-button .icon-play-button')
-              .then()
-              .catch(ifCatch)
-          }, rand(1000 * 60 * 3));
+        if (player === 'napster' && rand(2)) {
+          await nightmare
+            .click('.player-play-button .icon-pause2')
+            .wait(2000 + rand(2000))
+            .click('.player-play-button .icon-play-button')
+            .then()
+            .catch(ifCatch)
         }
-      }, 1000 * 15)
+      }, 1000 * 60)
     }
   }
   catch (e) {
