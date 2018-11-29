@@ -261,16 +261,15 @@ const main = async (restartAccount, timeout) => {
         .exists(goToLogin)
 
       if (notConnected) {
-        await nightmare
-          .click(goToLogin)
-          .wait(2000 + rand(2000))
-
         const done = await nightmare
+          .click(goToLogin)
+          .wait(6000 + rand(2000))
           .exists(reLog)
 
         if (done) {
           await nightmare
             .click(reLog)
+            .wait(2000 + rand(2000))
         }
         else {
           const tidalUrl = await nightmare
