@@ -312,7 +312,7 @@ const main = async (restartAccount, timeout) => {
             .wait(2000 + rand(2000))
             .insert(password, pass)
             .wait(2000 + rand(2000))
-            .click(password + ' + button')
+            .click('body > div > div > div > div > div > div > div > form > button')
             .then()
             .catch(async (e) => {
               errorLog = e
