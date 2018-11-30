@@ -125,7 +125,7 @@ const main = async (restartAccount) => {
   }
 
   if (player === 'napster') {
-    delete webPreferences.partition
+    // delete webPreferences.partition
   }
 
   const Nightmare = require('nightmare')
@@ -133,8 +133,8 @@ const main = async (restartAccount) => {
     electronPath: require('electron'),
     // openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 2,
-    gotoTimeout: 1000 * 59 * 2,
+    waitTimeout: 1000 * 60 * 3,
+    gotoTimeout: 1000 * 59 * 3,
     show: true,
     typeInterval: 300,
     webPreferences
