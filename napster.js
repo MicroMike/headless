@@ -507,7 +507,7 @@ const main = async (restartAccount) => {
 
         const tryChange = async () => {
           totalFreeze = 0
-          setTimeout(() => {
+          setTimeout(async () => {
             await nightmare
               .goto(album())
               .wait(playBtn)
