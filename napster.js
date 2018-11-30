@@ -81,7 +81,7 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
   })
 }
 
-const main = async (restartAccount, timeout) => {
+const main = async (restartAccount) => {
   let albums = []
   let currentAlbum
   const album = () => {
@@ -94,7 +94,6 @@ const main = async (restartAccount, timeout) => {
   }
   finish = true
   if (over) { return }
-  if (timeout) { countTimeout-- }
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= max) { return }
   }
@@ -508,13 +507,16 @@ const main = async (restartAccount, timeout) => {
 
         const tryChange = async () => {
           totalFreeze = 0
-          await nightmare
-            .goto(album())
-            .wait(playBtn)
-            .wait(2000 + rand(2000))
-            .click(playBtn)
-            .then()
-            .catch(ifCatch)
+          setTimeout(() => {
+            await nightmare
+              .goto(album())
+              .wait(playBtn)
+              .wait(2000 + rand(2000))
+              .click(playBtn)
+              .then()
+              .catch(ifCatch)
+            countTimeout--
+          }, 1000 * 30 * countTimeout++);
         }
 
         time += 1000 * 15
