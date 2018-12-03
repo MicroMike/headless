@@ -400,12 +400,13 @@ const main = async (restartAccount) => {
               let client = clients[key]
               Object.keys(client).map(k => {
                 let l = client[k]
-                l && l.callback && l.callback(captcha)
+                console.log(captcha) || (l && l.callback && l.callback(captcha))
               })
             })
           }, captcha)
           .then()
           .catch(async (e) => {
+            console.log('captcha')
             errorLog = e
           })
 
