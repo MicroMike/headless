@@ -528,7 +528,6 @@ const main = async (restartAccount) => {
         const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
         if (changeTime) {
           time2 = 0
-          console.log('change')
           tryChange()
           return
         }
