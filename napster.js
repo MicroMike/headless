@@ -656,7 +656,7 @@ const main = async (restartAccount) => {
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log("ERROR ", account, (e + ' ').split(' at')[0])
+    console.log("ERROR ", account, process.env.CHECK ? e : (e + ' ').split(' at')[0])
     await nightmare.screenshot('throw.' + player + '.' + login + '.png')
 
     if (e !== 'del') {
