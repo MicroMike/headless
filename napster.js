@@ -390,7 +390,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        const captcha = await anticaptcha(URL, keyCaptcha, true)
+        const captcha = 'test'//await anticaptcha(URL, keyCaptcha, true)
         if (captcha === 'error') { throw captcha }
 
         await nightmare
