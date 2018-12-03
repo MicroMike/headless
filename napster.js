@@ -125,7 +125,7 @@ const main = async (restartAccount) => {
   }
 
   if (player === 'napster') {
-    // delete webPreferences.partition
+    delete webPreferences.partition
   }
 
   const Nightmare = require('nightmare')
@@ -488,8 +488,6 @@ const main = async (restartAccount) => {
       let t1
       let t2
       let freeze = 1
-      let totalFreeze = 0
-      let isChanging = false
       let time = 0
       let time2 = 0
 
@@ -506,10 +504,10 @@ const main = async (restartAccount) => {
         }
 
         const tryChange = async () => {
-          totalFreeze = 0
           setTimeout(async () => {
             await nightmare
               .goto(album())
+              .wait(1000 * 60)
               .wait(playBtn)
               .wait(2000 + rand(2000))
               .click(playBtn)
@@ -583,7 +581,10 @@ const main = async (restartAccount) => {
         }
 
         if (reboot || used || fix) {
-          if (used) { console.log('used', account) }
+          if (used) {
+            await nightmare.screenshot('used.' + player + '.' + login + '.png')
+            console.log('used', account)
+          }
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
