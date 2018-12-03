@@ -494,7 +494,6 @@ const main = async (restartAccount) => {
 
       let inter = setInterval(async () => {
         if (over) { return clearInterval(inter) }
-        console.log('----------')
 
         const ifCatch = async (e) => {
           clearInterval(inter)
