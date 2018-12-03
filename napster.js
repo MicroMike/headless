@@ -506,6 +506,7 @@ const main = async (restartAccount) => {
         }
 
         const tryChange = async () => {
+          freeze = 0
           isChanging = true
           setTimeout(async () => {
             await nightmare
@@ -525,7 +526,7 @@ const main = async (restartAccount) => {
 
         if (isChanging) { return }
 
-        const changeTime = process.env.TEST ? time2 > 1000 * 60 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
+        const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
         if (changeTime) {
           time2 = 0
           console.log('change')
@@ -569,7 +570,7 @@ const main = async (restartAccount) => {
             freeze = 0
           }
 
-          if (freeze >= 2) {
+          if (freeze >= 3) {
             freeze = 0
 
             if (t1 === 'no bar') {
