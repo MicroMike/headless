@@ -131,7 +131,7 @@ const main = async (restartAccount) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    // openDevTools: true,
+    openDevTools: process.env.CHECK || process.env.TEST,
     alwaysOnTop: false,
     waitTimeout: 1000 * 60 * 3,
     gotoTimeout: 1000 * 59 * 3,
@@ -397,13 +397,14 @@ const main = async (restartAccount) => {
           .evaluate((captcha) => {
             console.log(window)
             let clients = window.___grecaptcha_cfg.clients[0]
-            Object.keys(clients).map(key => {
-              let client = clients[key]
-              Object.keys(client).map(k => {
-                let l = client[k]
-                console.log(captcha) || (l && l.callback && l.callback(captcha))
-              })
-            })
+            console.log(clients)
+            // Object.keys(clients).map(key => {
+            //   let client = clients[key]
+            //   Object.keys(client).map(k => {
+            //     let l = client[k]
+            //     console.log(captcha) || (l && l.callback && l.callback(captcha))
+            //   })
+            // })
           }, captcha)
           .then()
           .catch(async (e) => {
