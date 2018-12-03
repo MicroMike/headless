@@ -530,6 +530,7 @@ const main = async (restartAccount) => {
 
     if (check) {
       await nightmare.end()
+      main()
       return
     }
 
@@ -680,7 +681,7 @@ const main = async (restartAccount) => {
 }
 
 const mainInter = setInterval(() => {
-  if (over || process.env.TEST) { return clearInterval(mainInter) }
+  if (over || process.env.TEST || process.env.CHECK) { return clearInterval(mainInter) }
   try {
     main()
   }
