@@ -488,6 +488,7 @@ const main = async (restartAccount) => {
       let t1
       let t2
       let freeze = 1
+      let isChanging = false
       let time = 0
       let time2 = 0
 
@@ -504,21 +505,24 @@ const main = async (restartAccount) => {
         }
 
         const tryChange = async () => {
+          isChanging = true
           setTimeout(async () => {
             await nightmare
               .goto(album())
-              .wait(1000 * 60)
               .wait(playBtn)
               .wait(2000 + rand(2000))
               .click(playBtn)
               .then()
               .catch(ifCatch)
+            isChanging = false
             countTimeout--
           }, 1000 * pause * countTimeout++);
         }
 
         time += 1000 * 15
         time2 += 1000 * 15
+
+        if (isChanging) { return }
 
         if (time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)) {
           time2 = 0
@@ -622,7 +626,7 @@ const main = async (restartAccount) => {
 }
 
 const mainInter = setInterval(() => {
-  if (over) { return clearInterval(mainInter) }
+  if (over || process.env.TEST) { return clearInterval(mainInter) }
   try {
     main()
   }
