@@ -131,7 +131,7 @@ const main = async (restartAccount) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    openDevTools: process.env.CHECK || process.env.TEST,
+    // openDevTools: true,
     alwaysOnTop: false,
     waitTimeout: 1000 * 60 * 3,
     gotoTimeout: 1000 * 59 * 3,
@@ -235,7 +235,7 @@ const main = async (restartAccount) => {
       reLog = 'body > div > div > div > div > div > div > div > button'
     }
     if (player === 'spotify') {
-      url = 'https://accounts.spotify.com/us/login'
+      url = 'https://accounts.spotify.com/login'
 
       username = 'form input[name="username"]'
       password = 'form input[name="password"]'
@@ -358,12 +358,6 @@ const main = async (restartAccount) => {
     if (!connected && player !== 'tidal') {
       usernameInput = await nightmare
         .goto(url)
-        .evaluate(() => {
-          console.log(window.___grecaptcha_cfg)
-          let clients = window.___grecaptcha_cfg.clients[0]
-          console.log(clients)
-        })
-      usernameInput = await nightmare
         .wait(password)
         .evaluate((username) => {
           return document.querySelector(username)
@@ -396,25 +390,22 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        const captcha = 'test'//await anticaptcha(URL, keyCaptcha, true)
+        const captcha = await anticaptcha(URL, keyCaptcha, true)
         if (captcha === 'error') { throw captcha }
 
         await nightmare
           .evaluate((captcha) => {
-            console.log(window.___grecaptcha_cfg)
             let clients = window.___grecaptcha_cfg.clients[0]
-            console.log(clients)
-            // Object.keys(clients).map(key => {
-            //   let client = clients[key]
-            //   Object.keys(client).map(k => {
-            //     let l = client[k]
-            //     console.log(captcha) || (l && l.callback && l.callback(captcha))
-            //   })
-            // })
+            Object.keys(clients).map(key => {
+              let client = clients[key]
+              Object.keys(client).map(k => {
+                let l = client[k]
+                l && l.callback && l.callback(captcha)
+              })
+            })
           }, captcha)
           .then()
           .catch(async (e) => {
-            console.log('captcha')
             errorLog = e
           })
 
