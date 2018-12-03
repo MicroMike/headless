@@ -243,13 +243,15 @@ const main = async (restartAccount) => {
       loginError = '.alert.alert-warning'
 
       playBtn = '.tracklist-play-pause.tracklist-middle-align'
+      repeatBtn = '[class*="spoticon-repeat"]'
+      repeatBtnOk = '.spoticon-repeat-16.control-button--active'
+      shuffleBtn = '.spoticon-shuffle-16:not(.control-button--active)'
 
       keyCaptcha = '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo'
 
       let albums = [
-        'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
         'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
-        'https://open.spotify.com/album/6vvfbzMU2dkFQRJiP99RS4',
+        'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk'
       ]
     }
 
@@ -496,7 +498,7 @@ const main = async (restartAccount) => {
 
     if (errorLog) { throw errorLog }
 
-    if (player === 'napster' || player === 'tidal') {
+    if (player === 'napster' || player === 'tidal' || player === 'spotify') {
       await nightmare
         .wait(repeatBtn)
         .wait(2000 + rand(2000))
@@ -513,6 +515,9 @@ const main = async (restartAccount) => {
           if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
             clickLoop()
           }
+
+          document.querySelector(shuffleBtn) && document.querySelector(shuffleBtn).click()
+
         }, { repeatBtn, repeatBtnOk })
         .then()
         .catch(async (e) => {
@@ -525,128 +530,127 @@ const main = async (restartAccount) => {
 
     if (check) {
       await nightmare.end()
+      return
     }
-    else {
 
-      // ***************************************************************************************************************************************************************
-      // *************************************************************************** LOOP ******************************************************************************
-      // ***************************************************************************************************************************************************************
+    // ***************************************************************************************************************************************************************
+    // *************************************************************************** LOOP ******************************************************************************
+    // ***************************************************************************************************************************************************************
 
-      let t1
-      let t2
-      let freeze = 1
-      let isChanging = false
-      let time = 0
-      let time2 = 0
+    let t1
+    let t2
+    let freeze = 1
+    let isChanging = false
+    let time = 0
+    let time2 = 0
 
-      let inter = setInterval(async () => {
-        if (over) { return clearInterval(inter) }
+    let inter = setInterval(async () => {
+      if (over) { return clearInterval(inter) }
 
-        const ifCatch = async (e) => {
-          clearInterval(inter)
-          accountsValid = accountsValid.filter(a => a !== account)
-          accounts.push(account)
-          await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
-          await nightmare.end()
-          console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
-        }
+      const ifCatch = async (e) => {
+        clearInterval(inter)
+        accountsValid = accountsValid.filter(a => a !== account)
+        accounts.push(account)
+        await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
+        await nightmare.end()
+        console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
+      }
 
-        const tryChange = async () => {
-          freeze = 0
-          isChanging = true
-          setTimeout(async () => {
-            await nightmare
-              .goto(album())
-              .wait(playBtn)
-              .wait(2000 + rand(2000))
-              .click(playBtn)
-              .then()
-              .catch(ifCatch)
-            isChanging = false
-            countTimeout--
-          }, 1000 * pause * countTimeout++);
-        }
-
-        time += 1000 * 15
-        time2 += 1000 * 15
-
-        if (isChanging) { return }
-
-        const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
-        if (changeTime) {
-          time2 = 0
-          tryChange()
-          return
-        }
-
-        let used = await nightmare
-          .evaluate((usedDom) => {
-            return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
-          }, usedDom)
-          .then()
-          .catch(ifCatch)
-
-        if (typeof used === 'string' && player === 'tidal') {
-          used = used.match(/currently/)
-          if (!used) {
-            await nightmare.click('#wimp > div > div > div > div > div > button')
-          }
-        }
-
-        const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
-        let fix = false
-
-        if (player === 'napster') {
-          t1 = await nightmare
-            .evaluate(() => {
-              const time = '.player-progress-slider-box span.ui-slider-handle'
-              return document.querySelector(time).style.left
-            })
+      const tryChange = async () => {
+        freeze = 0
+        isChanging = true
+        setTimeout(async () => {
+          await nightmare
+            .goto(album())
+            .wait(playBtn)
+            .wait(2000 + rand(2000))
+            .click(playBtn)
             .then()
-            .catch(async (e) => {
-              return 'no bar'
-            })
+            .catch(ifCatch)
+          isChanging = false
+          countTimeout--
+        }, 1000 * pause * countTimeout++);
+      }
+
+      time += 1000 * 15
+      time2 += 1000 * 15
+
+      if (isChanging) { return }
+
+      const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
+      if (changeTime) {
+        time2 = 0
+        tryChange()
+        return
+      }
+
+      let used = await nightmare
+        .evaluate((usedDom) => {
+          return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
+        }, usedDom)
+        .then()
+        .catch(ifCatch)
+
+      if (typeof used === 'string' && player === 'tidal') {
+        used = used.match(/currently/)
+        if (!used) {
+          await nightmare.click('#wimp > div > div > div > div > div > button')
+        }
+      }
+
+      const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
+      let fix = false
+
+      if (player === 'napster') {
+        t1 = await nightmare
+          .evaluate(() => {
+            const time = '.player-progress-slider-box span.ui-slider-handle'
+            return document.querySelector(time).style.left
+          })
+          .then()
+          .catch(async (e) => {
+            return 'no bar'
+          })
 
 
-          if (t2 && t1 === t2) {
-            freeze++
+        if (t2 && t1 === t2) {
+          freeze++
+        }
+        else {
+          freeze = 0
+        }
+
+        if (freeze >= 3) {
+          freeze = 0
+
+          if (t1 === 'no bar') {
+            fix = true
           }
           else {
-            freeze = 0
+            await nightmare
+              .click('.player-play-button .icon-pause2')
+              .wait(2000 + rand(2000))
+              .click('.player-play-button .icon-play-button')
+              .then()
+              .catch(ifCatch)
           }
-
-          if (freeze >= 3) {
-            freeze = 0
-
-            if (t1 === 'no bar') {
-              fix = true
-            }
-            else {
-              await nightmare
-                .click('.player-play-button .icon-pause2')
-                .wait(2000 + rand(2000))
-                .click('.player-play-button .icon-play-button')
-                .then()
-                .catch(ifCatch)
-            }
-          }
-
-          t2 = t1
         }
 
-        if (reboot || used || fix) {
-          if (used) {
-            await nightmare.screenshot('used.' + player + '.' + login + '.png')
-            console.log('used', account)
-          }
-          clearInterval(inter)
-          accountsValid = accountsValid.filter(a => a !== account)
-          accounts.push(account)
-          await nightmare.end()
-          return
+        t2 = t1
+      }
+
+      if (reboot || used || fix) {
+        if (used) {
+          await nightmare.screenshot('used.' + player + '.' + login + '.png')
+          console.log('used', account)
         }
-      }, 1000 * 15)
-    }
+        clearInterval(inter)
+        accountsValid = accountsValid.filter(a => a !== account)
+        accounts.push(account)
+        await nightmare.end()
+        return
+      }
+    }, 1000 * 15)
   }
   catch (e) {
     accountsValid = accountsValid.filter(a => a !== account)
@@ -685,7 +689,7 @@ const mainInter = setInterval(() => {
   }
 }, 1000 * pause);
 
-const file = process.env.FICHIER || 'napsterAccount.txt'
+const file = process.env.CHECK ? 'check.txt' : 'napsterAccount.txt'
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
