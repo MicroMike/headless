@@ -125,7 +125,7 @@ const main = async (restartAccount) => {
   }
 
   if (player === 'napster') {
-    delete webPreferences.partition
+    // delete webPreferences.partition
   }
 
   const Nightmare = require('nightmare')
