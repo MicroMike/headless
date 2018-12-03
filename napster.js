@@ -156,6 +156,7 @@ const main = async (restartAccount) => {
   let keyCaptcha
   let usedDom
   let reLog
+  let loginError
 
   let errorLog = false
   let connected = false
@@ -168,6 +169,7 @@ const main = async (restartAccount) => {
       username = '#username'
       password = '#password'
       loginBtn = '.signin'
+      loginError = '.login-error'
 
       playBtn = '.track-list-header .shuffle-button'
       repeatBtn = '.repeat-button'
@@ -238,10 +240,12 @@ const main = async (restartAccount) => {
       username = 'form input[name="username"]'
       password = 'form input[name="password"]'
       loginBtn = '#login-button'
+      loginError = '.alert.alert-warning'
 
       playBtn = '.tracklist-play-pause.tracklist-middle-align'
 
       keyCaptcha = '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo'
+
       let albums = [
         'https://open.spotify.com/album/0hf0fEpwluYYWwV1OoCWGX',
         'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
@@ -364,7 +368,7 @@ const main = async (restartAccount) => {
 
       if (errorLog) { throw errorLog }
 
-      suppressed = await nightmare
+      const URL = await nightmare
         .wait(2000 + rand(2000))
         .insert(usernameInput ? username : password, login)
         .wait(2000 + rand(2000))
@@ -373,12 +377,55 @@ const main = async (restartAccount) => {
         .wait(2000 + rand(2000))
         .click(remember || 'body')
         .wait(2000 + rand(2000))
-        .click(loginBtn)
+        .evaluate(() => {
+          return document.URL
+        })
+        .then()
+        .catch(async (e) => {
+          errorLog = e
+        })
+
+      if (errorLog) { throw errorLog }
+
+      if (player === 'spotify') {
+        const captcha = await anticaptcha(URL, keyCaptcha, true)
+        if (captcha === 'error') { throw captcha }
+
+        await nightmare
+          .evaluate((captcha) => {
+            let clients = window.___grecaptcha_cfg.clients[0]
+            Object.keys(clients).map(key => {
+              let client = clients[key]
+              Object.keys(client).map(k => {
+                let l = client[k]
+                l && l.callback && l.callback(captcha)
+              })
+            })
+          }, captcha)
+          .then()
+          .catch(async (e) => {
+            errorLog = e
+          })
+
+        if (errorLog) { throw errorLog }
+      }
+      else {
+        await nightmare
+          .click(loginBtn)
+          .then()
+          .catch(async (e) => {
+            errorLog = e
+          })
+
+        if (errorLog) { throw errorLog }
+      }
+
+      suppressed = await nightmare
         .wait(1000 * 30)
         .wait(2000 + rand(2000))
-        .evaluate(() => {
-          return document.querySelector('.login-error')
-        })
+        .evaluate((loginError) => {
+          return document.querySelector(loginError || '#mike')
+        }, loginError)
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
@@ -638,7 +685,9 @@ const mainInter = setInterval(() => {
   }
 }, 1000 * pause);
 
-fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
+const file = process.env.FICHIER || 'napsterAccount.txt'
+
+fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
   data = data.split(',')
 
@@ -654,53 +703,6 @@ fs.readFile('napsterAccount.txt', 'utf8', async (err, data) => {
   console.log(accounts.length)
   main()
 });
-
-const mail = async () => {
-  const Nightmare = require('nightmare')
-  const nightmare = Nightmare({
-    electronPath: require('electron'),
-    openDevTools: true,
-    alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 2,
-    gotoTimeout: 1000 * 59 * 2,
-    show: true,
-    typeInterval: 300,
-    webPreferences: {
-      partition: 'persist: mail',
-      webSecurity: false,
-      allowRunningInsecureContent: true,
-      plugins: true,
-      experimentalFeatures: true
-    }
-  })
-
-  await nightmare
-    .goto('https://my.mail.fr')
-    .wait('#loginName')
-    .wait(2000 + rand(2000))
-    .insert('#loginName', 'yokem92')
-    .wait(2000 + rand(2000))
-    .insert('#loginPassword', 'Yokem123')
-    .wait(2000 + rand(2000))
-    .click('#loginButton')
-    .wait('#loggedOutTip')
-    .evaluate(() => {
-      const tip = '#loggedOutTip'
-      document.querySelector(tip) && document.querySelector(tip).remove()
-    })
-    .then()
-    .catch(() => { })
-
-  const code = await nightmare
-    .wait(2000 + rand(2000))
-    .click('#dashboardContent .tbody .tr')
-    .wait(2000 + rand(2000))
-    .evaluate(() => {
-      return document.querySelector('.mailViewFrame').contentDocument.body.innerHTML.split(':')[1].split('<br>')[2].trim()
-    })
-
-  console.log(code)
-}
 
 process.on('SIGINT', function (code) {
   over = true
