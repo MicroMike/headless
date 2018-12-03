@@ -395,7 +395,7 @@ const main = async (restartAccount) => {
 
         await nightmare
           .evaluate((captcha) => {
-            console.log(window)
+            console.log(window.___grecaptcha_cfg)
             let clients = window.___grecaptcha_cfg.clients[0]
             console.log(clients)
             // Object.keys(clients).map(key => {
