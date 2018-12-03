@@ -235,7 +235,7 @@ const main = async (restartAccount) => {
       reLog = 'body > div > div > div > div > div > div > div > button'
     }
     if (player === 'spotify') {
-      url = 'https://accounts.spotify.com/login'
+      url = 'https://accounts.spotify.com/us/login'
 
       username = 'form input[name="username"]'
       password = 'form input[name="password"]'
