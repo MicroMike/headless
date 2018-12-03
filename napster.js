@@ -539,12 +539,6 @@ const main = async (restartAccount) => {
           if (!used) {
             await nightmare.click('#wimp > div > div > div > div > div > button')
           }
-          else {
-            console.log('used', account)
-          }
-        }
-        else if (used && player === 'amazon') {
-          console.log('used', account)
         }
 
         const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
@@ -589,13 +583,14 @@ const main = async (restartAccount) => {
         }
 
         if (reboot || used || fix) {
+          if (used) { console.log('used', account) }
           clearInterval(inter)
           accountsValid = accountsValid.filter(a => a !== account)
           accounts.push(account)
           await nightmare.end()
           return
         }
-      }, 1000 * 60)
+      }, 1000 * 15)
     }
   }
   catch (e) {
