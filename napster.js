@@ -534,7 +534,7 @@ const main = async (restartAccount) => {
           .then()
           .catch(ifCatch)
 
-        if (typeof used === string && player === 'tidal') {
+        if (typeof used === 'string' && player === 'tidal') {
           used = used.match(/currently/)
           if (!used) {
             await nightmare.click('#wimp > div > div > div > div > div > button')
