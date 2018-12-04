@@ -567,7 +567,10 @@ const main = async (restartAccount) => {
             .wait(2000 + rand(2000))
             .click(playBtn)
             .then()
-            .catch(ifCatch)
+            .catch(() => {
+              console.log('A')
+              ifCatch()
+            })
           isChanging = false
           countTimeout--
         }, 1000 * pause * countTimeout++);
@@ -590,7 +593,10 @@ const main = async (restartAccount) => {
           return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
         }, usedDom)
         .then()
-        .catch(ifCatch)
+        .catch(() => {
+          console.log('B')
+          ifCatch()
+        })
 
       if (typeof used === 'string' && player === 'tidal') {
         used = used.match(/currently/)
@@ -633,7 +639,10 @@ const main = async (restartAccount) => {
               .wait(2000 + rand(2000))
               .click('.player-play-button .icon-play-button')
               .then()
-              .catch(ifCatch)
+              .catch(() => {
+                console.log('C')
+                ifCatch()
+              })
           }
         }
 
