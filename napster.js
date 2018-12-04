@@ -9,7 +9,7 @@ let accountsValid = []
 let over = false
 let countTimeout = 0
 let countTimeoutFreeze = 0
-let finish = false
+let finish = true
 const max = 20
 const pause = 45
 
@@ -82,6 +82,7 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
 }
 
 const main = async (restartAccount) => {
+  finish = false
   let albums = []
   let currentAlbum
   const album = () => {
@@ -92,12 +93,10 @@ const main = async (restartAccount) => {
     currentAlbum = albumUrl
     return albumUrl
   }
-  finish = true
   if (over) { return }
   if (!restartAccount) {
     if (accountsValid.length >= accounts.length || accountsValid.length >= max) { return }
   }
-  finish = false
   // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts[0]
   accounts = accounts.filter(a => a !== account)
@@ -466,6 +465,8 @@ const main = async (restartAccount) => {
       if (issue) { throw 'del' }
     }
 
+    finish = true
+
     // ***************************************************************************************************************************************************************
     // *************************************************************************** PLAY ******************************************************************************
     // ***************************************************************************************************************************************************************
@@ -580,7 +581,7 @@ const main = async (restartAccount) => {
 
       if (isChanging) { return }
 
-      const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 5 + rand(1000 * 60 * 15)
+      const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 10 + rand(1000 * 60 * 15)
       if (changeTime) {
         time2 = 0
         tryChange()
@@ -660,6 +661,7 @@ const main = async (restartAccount) => {
     }, 1000 * 15)
   }
   catch (e) {
+    finish = true
     accountsValid = accountsValid.filter(a => a !== account)
 
     console.log("ERROR ", account, process.env.CHECK ? e : (e + ' ').split(' at')[0])
@@ -689,7 +691,9 @@ const main = async (restartAccount) => {
 const mainInter = setInterval(() => {
   if (over || process.env.TEST || process.env.CHECK) { return clearInterval(mainInter) }
   try {
-    main()
+    if (finish) {
+      main()
+    }
   }
   catch (e) {
     console.log(e)
