@@ -343,9 +343,7 @@ const main = async (restartAccount) => {
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
-        .evaluate((loggedDom) => {
-          return document.querySelector(loggedDom)
-        }, loggedDom)
+        .exists(loggedDom)
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
@@ -425,11 +423,8 @@ const main = async (restartAccount) => {
       finish = true
 
       suppressed = await nightmare
-        .wait(1000 * 30)
         .wait(2000 + rand(2000))
-        .evaluate((loginError) => {
-          return document.querySelector(loginError)
-        }, loginError)
+        .exists(loginError)
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
@@ -556,7 +551,7 @@ const main = async (restartAccount) => {
         accounts.push(account)
         await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
         await nightmare.end()
-        console.log("ERROR freeze ", account, e)
+        console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
       }
 
       const tryChange = async () => {
@@ -590,16 +585,24 @@ const main = async (restartAccount) => {
       }
 
       let used = await nightmare
-        .evaluate((usedDom) => {
-          return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
-        }, usedDom)
+        .exists(usedDom)
         .then()
         .catch((e) => {
           ifCatch('Q' + e)
         })
 
-      if (typeof used === 'string' && player === 'tidal') {
-        used = used.match(/currently/)
+      if (used && player === 'tidal') {
+        used = await nightmare
+          .evaluate((usedDom) => {
+            return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
+          }, usedDom)
+          .then()
+          .catch((e) => {
+            ifCatch('Q2' + e)
+          })
+
+        used = typeof used === 'string' && used.match(/currently/)
+
         if (!used) {
           await nightmare.click('#wimp > div > div > div > div > div > button')
         }
