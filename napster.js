@@ -285,7 +285,7 @@ const main = async (restartAccount) => {
             })
             .then()
             .catch(async (e) => {
-              errorLog = e
+              errorLog = 'A' + e
             })
 
           if (errorLog) { throw errorLog }
@@ -306,7 +306,7 @@ const main = async (restartAccount) => {
             }, captcha)
             .then()
             .catch(async (e) => {
-              errorLog = e
+              errorLog = 'B' + e
             })
 
           if (errorLog) { throw errorLog }
@@ -320,7 +320,7 @@ const main = async (restartAccount) => {
             .click('body > div > div > div > div > div > div > div > form > button')
             .then()
             .catch(async (e) => {
-              errorLog = e
+              errorLog = 'C' + e
             })
 
           if (errorLog) { throw errorLog }
@@ -333,7 +333,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = e
+          errorLog = 'D' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -349,7 +349,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          errorLog = 'A ' + e
+          errorLog = 'E' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -365,7 +365,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          errorLog = e
+          errorLog = 'F' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -384,7 +384,7 @@ const main = async (restartAccount) => {
         })
         .then()
         .catch(async (e) => {
-          errorLog = e
+          errorLog = 'G' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -406,7 +406,7 @@ const main = async (restartAccount) => {
           }, captcha)
           .then()
           .catch(async (e) => {
-            errorLog = e
+            errorLog = 'H' + e
           })
 
         if (errorLog) { throw errorLog }
@@ -416,7 +416,7 @@ const main = async (restartAccount) => {
           .click(loginBtn)
           .then()
           .catch(async (e) => {
-            errorLog = e
+            errorLog = 'I' + e
           })
 
         if (errorLog) { throw errorLog }
@@ -431,7 +431,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = e
+          errorLog = 'J' + e
         })
 
       if (suppressed) { throw 'del' }
@@ -442,7 +442,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch login timeout')
-          errorLog = e
+          errorLog = 'K' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -459,7 +459,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch account type')
-          errorLog = e
+          errorLog = 'L' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -480,7 +480,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch album')
-          errorLog = e
+          errorLog = 'M' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -493,7 +493,7 @@ const main = async (restartAccount) => {
       .then()
       .catch(async (e) => {
         // console.log('catch album')
-        errorLog = 'B ' + e
+        errorLog = 'N' + e
       })
 
     if (errorLog) { throw errorLog }
@@ -522,7 +522,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch album')
-          errorLog = e
+          errorLog = 'O' + e
         })
 
       if (errorLog) { throw errorLog }
@@ -567,9 +567,8 @@ const main = async (restartAccount) => {
             .wait(2000 + rand(2000))
             .click(playBtn)
             .then()
-            .catch(() => {
-              console.log('A')
-              ifCatch()
+            .catch((e) => {
+              ifCatch('P' + e)
             })
           isChanging = false
           countTimeout--
@@ -593,9 +592,8 @@ const main = async (restartAccount) => {
           return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
         }, usedDom)
         .then()
-        .catch(() => {
-          console.log('B')
-          ifCatch()
+        .catch((e) => {
+          ifCatch('Q' + e)
         })
 
       if (typeof used === 'string' && player === 'tidal') {
@@ -639,9 +637,8 @@ const main = async (restartAccount) => {
               .wait(2000 + rand(2000))
               .click('.player-play-button .icon-play-button')
               .then()
-              .catch(() => {
-                console.log('C')
-                ifCatch()
+              .catch((e) => {
+                ifCatch('R' + e)
               })
           }
         }
