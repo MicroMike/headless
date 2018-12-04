@@ -421,6 +421,8 @@ const main = async (restartAccount) => {
         if (errorLog) { throw errorLog }
       }
 
+      finish = true
+
       suppressed = await nightmare
         .wait(1000 * 30)
         .wait(2000 + rand(2000))
@@ -464,8 +466,6 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
       if (issue) { throw 'del' }
     }
-
-    finish = true
 
     // ***************************************************************************************************************************************************************
     // *************************************************************************** PLAY ******************************************************************************
