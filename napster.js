@@ -164,6 +164,7 @@ const main = async (restartAccount) => {
   try {
     if (player === 'napster') {
       url = 'https://app.napster.com/login/'
+      loggedDom = '.track-list-header .shuffle-button'
 
       username = '#username'
       password = '#password'
@@ -338,7 +339,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
     }
 
-    if (player === 'amazon') {
+    if (player === 'amazon' || player === 'napster') {
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
@@ -389,7 +390,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        const captcha = await anticaptcha(URL, keyCaptcha, true)
+        const captcha = 'test'//await anticaptcha(URL, keyCaptcha, true)
         if (captcha === 'error') { throw captcha }
 
         await nightmare
