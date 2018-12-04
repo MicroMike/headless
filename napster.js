@@ -516,9 +516,9 @@ const main = async (restartAccount) => {
             clickLoop()
           }
 
-          document.querySelector(shuffleBtn) && document.querySelector(shuffleBtn).click()
+          document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
 
-        }, { repeatBtn, repeatBtnOk })
+        }, { repeatBtn, repeatBtnOk, shuffleBtn })
         .then()
         .catch(async (e) => {
           // console.log('catch album')
