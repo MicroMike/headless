@@ -357,9 +357,7 @@ const main = async (restartAccount) => {
       usernameInput = await nightmare
         .goto(url)
         .wait(password)
-        .evaluate((username) => {
-          return document.querySelector(username)
-        }, username)
+        .exists(username)
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
@@ -423,6 +421,7 @@ const main = async (restartAccount) => {
       finish = true
 
       suppressed = await nightmare
+        .wait(1000 * 30)
         .wait(2000 + rand(2000))
         .exists(loginError)
         .then()
