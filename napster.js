@@ -696,7 +696,7 @@ const mainInter = setInterval(() => {
     }
   }
   catch (e) {
-    console.log(e)
+    console.log('Z' + e)
   }
 }, 1000 * pause);
 
