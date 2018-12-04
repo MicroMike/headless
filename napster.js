@@ -427,7 +427,7 @@ const main = async (restartAccount) => {
         .wait(1000 * 30)
         .wait(2000 + rand(2000))
         .evaluate((loginError) => {
-          return document.querySelector(loginError || '#mike')
+          return document.querySelector(loginError)
         }, loginError)
         .then()
         .catch(async (e) => {
@@ -691,9 +691,9 @@ const main = async (restartAccount) => {
 const mainInter = setInterval(() => {
   if (over || process.env.TEST || process.env.CHECK) { return clearInterval(mainInter) }
   try {
-    if (finish) {
-      main()
-    }
+    // if (finish) {
+    main()
+    // }
   }
   catch (e) {
     console.log('Z' + e)
