@@ -541,47 +541,37 @@ const main = async (restartAccount) => {
     let time = 0
     let time2 = 0
 
+    const ifCatch = async (e) => {
+      clearInterval(inter)
+      accountsValid = accountsValid.filter(a => a !== account)
+      accounts.push(account)
+      await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
+      await nightmare.end()
+      console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
+    }
+
+    const tryChange = async () => {
+      setTimeout(async () => {
+        await nightmare
+          .goto(album())
+          .wait(playBtn)
+          .wait(2000 + rand(2000))
+          .click(playBtn)
+          .then()
+          .catch((e) => {
+            ifCatch('P' + e)
+          })
+        countTimeout--
+      }, 1000 * pause * countTimeout++);
+    }
+
+    let changeInterval = setInterval(() => {
+      if (over) { return clearInterval(changeInterval) }
+      tryChange()
+    }, process.env.TEST ? 1000 * 60 * 5 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
+
     let inter = setInterval(async () => {
       if (over) { return clearInterval(inter) }
-
-      const ifCatch = async (e) => {
-        clearInterval(inter)
-        accountsValid = accountsValid.filter(a => a !== account)
-        accounts.push(account)
-        await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
-        await nightmare.end()
-        console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
-      }
-
-      const tryChange = async () => {
-        freeze = 0
-        isChanging = true
-        setTimeout(async () => {
-          await nightmare
-            .goto(album())
-            .wait(playBtn)
-            .wait(2000 + rand(2000))
-            .click(playBtn)
-            .then()
-            .catch((e) => {
-              ifCatch('P' + e)
-            })
-          isChanging = false
-          countTimeout--
-        }, 1000 * pause * countTimeout++);
-      }
-
-      time += 1000 * 15
-      time2 += 1000 * 15
-
-      if (isChanging) { return }
-
-      const changeTime = process.env.TEST ? time2 > 1000 * 60 * 5 : time2 > 1000 * 60 * 10 + rand(1000 * 60 * 15)
-      if (changeTime) {
-        time2 = 0
-        tryChange()
-        return
-      }
 
       let used = await nightmare
         .exists(usedDom)
@@ -607,7 +597,6 @@ const main = async (restartAccount) => {
         }
       }
 
-      const reboot = time > 1000 * 60 * 30 + rand(1000 * 60 * 30)
       let fix = false
 
       if (player === 'napster') {
@@ -650,18 +639,28 @@ const main = async (restartAccount) => {
         t2 = t1
       }
 
-      if (reboot || used || fix) {
+      if (used || fix) {
         if (used) {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
           console.log('used', account)
         }
-        clearInterval(inter)
-        accountsValid = accountsValid.filter(a => a !== account)
-        accounts.push(account)
-        await nightmare.end()
+        restart()
         return
       }
-    }, 1000 * 15)
+    }, 1000 * 30)
+
+    const restart = async () => {
+      clearInterval(changeInterval)
+      clearInterval(inter)
+      accountsValid = accountsValid.filter(a => a !== account)
+      accounts.push(account)
+      await nightmare.end()
+    }
+
+    let restartTimeout = setTimeout(() => {
+      if (over) { return clearTimeout(restartTimeout) }
+      restart()
+    }, 1000 * 60 * 30 + rand(1000 * 60 * 30));
   }
   catch (e) {
     finish = true
