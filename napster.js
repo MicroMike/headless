@@ -383,7 +383,9 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          errorLog = 'F' + e
+          if (!e.match(/navigation error/)) {
+            errorLog = 'F' + e
+          }
         })
 
       if (errorLog) { throw errorLog }
@@ -470,7 +472,6 @@ const main = async (restartAccount) => {
 
     if (check) {
       await nightmare.end()
-      main()
       return
     }
 
@@ -691,19 +692,13 @@ const main = async (restartAccount) => {
     }
 
     // if (player !== 'tidal') {
-    if (!e.match(/navigation error/)) {
-      await nightmare.end()
-    }
+    await nightmare.end()
     // }
-
-    if (check) {
-      main()
-    }
   }
 }
 
 const mainInter = setInterval(() => {
-  if (over || process.env.TEST || check) { return clearInterval(mainInter) }
+  if (over || process.env.TEST) { return clearInterval(mainInter) }
   try {
     // if (finish) {
     main()
