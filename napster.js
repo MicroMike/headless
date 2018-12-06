@@ -383,7 +383,7 @@ const main = async (restartAccount) => {
         .then()
         .catch(async (e) => {
           // console.log('catch logged')
-          if (!e.match(/navigation error/)) {
+          if (!(e + '').match(/navigation error/)) {
             errorLog = 'F' + e
           }
         })
