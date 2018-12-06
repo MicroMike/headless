@@ -408,7 +408,8 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        const validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        let validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        console.log(validCallback)
         if (validCallback !== 'done') { throw validCallback }
       }
       else {
