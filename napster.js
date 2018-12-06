@@ -27,7 +27,7 @@ function shuffle(arr) {
 }
 
 const resolveCaptcha = (nightmare, url, key) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let errorLog
     const needCaptcha = await nightmare
       .evaluate(() => {
