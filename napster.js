@@ -363,6 +363,7 @@ const main = async (restartAccount) => {
     }
 
     if (player === 'amazon' || player === 'napster' || player === 'spotify') {
+      console.log(album())
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
