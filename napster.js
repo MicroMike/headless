@@ -128,6 +128,7 @@ const main = async (restartAccount) => {
   const album = () => {
     let albumUrl = albums[rand(albums.length)]
     while (currentAlbum === albumUrl) {
+      console.log(albumUrl)
       albumUrl = albums[rand(albums.length)]
     }
     currentAlbum = albumUrl
@@ -292,7 +293,9 @@ const main = async (restartAccount) => {
 
       let albums = [
         'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
-        'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk'
+        'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk',
+        'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
+        'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk',
       ]
     }
     // ***************************************************************************************************************************************************************
