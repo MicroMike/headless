@@ -672,7 +672,7 @@ const main = async (restartAccount) => {
     finish = true
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log("ERROR ", account, process.env.CHECK ? e : (e + ' ').split(' at')[0])
+    console.log("ERROR ", account, check ? e : (e + ' ').split(' at')[0])
     await nightmare.screenshot('throw.' + player + '.' + login + '.png')
 
     if (e !== 'del') {
@@ -693,11 +693,15 @@ const main = async (restartAccount) => {
     // if (player !== 'tidal') {
     await nightmare.end()
     // }
+
+    if (check) {
+      main()
+    }
   }
 }
 
 const mainInter = setInterval(() => {
-  if (over || process.env.TEST || process.env.CHECK) { return clearInterval(mainInter) }
+  if (over || process.env.TEST || check) { return clearInterval(mainInter) }
   try {
     // if (finish) {
     main()
@@ -708,7 +712,7 @@ const mainInter = setInterval(() => {
   }
 }, 1000 * pause);
 
-const file = process.env.CHECK ? 'check.txt' : 'napsterAccount.txt'
+const file = check ? 'check.txt' : 'napsterAccount.txt'
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
