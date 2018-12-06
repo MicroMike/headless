@@ -38,9 +38,6 @@ const resolveCaptcha = (nightmare, url, key) => {
         return null
       })
 
-    console.log(needCaptcha)
-    return
-
     if (!needCaptcha) { return resolve('done') }
 
     const captcha = await anticaptcha(url, key, true)
