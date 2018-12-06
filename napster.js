@@ -276,6 +276,7 @@ const main = async (restartAccount) => {
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
+      loggedDom = '.sessionInfo'
 
       username = 'form input[name="username"]'
       password = 'form input[name="password"]'
@@ -299,7 +300,7 @@ const main = async (restartAccount) => {
     // *************************************************************************** CONNECT ***************************************************************************
     // ***************************************************************************************************************************************************************
 
-    if (player === 'tidal') {
+    if (goToLogin) {
       let notConnected = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
@@ -361,7 +362,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
     }
 
-    if (player === 'amazon' || player === 'napster') {
+    if (loggedDom) {
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
