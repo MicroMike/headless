@@ -404,7 +404,7 @@ const main = async (restartAccount) => {
           .catch(async (e) => {
             errorLog = 'H' + e
           })
-
+        return
         if (errorLog) { throw errorLog }
       }
       else {
