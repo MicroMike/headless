@@ -300,7 +300,7 @@ const main = async (restartAccount) => {
     // *************************************************************************** CONNECT ***************************************************************************
     // ***************************************************************************************************************************************************************
 
-    if (goToLogin) {
+    if (player === 'tidal') {
       let notConnected = await nightmare
         .goto(url)
         .wait(2000 + rand(2000))
@@ -362,7 +362,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
     }
 
-    if (loggedDom) {
+    if (player === 'amazon' || player === 'napster' || player === 'spotify') {
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
