@@ -38,7 +38,7 @@ const resolveCaptcha = (nightmare, url, key) => {
         return null
       })
 
-    if (!needCaptcha) { return resolve('done') }
+    if (!needCaptcha) { return resolve('click') }
 
     const captcha = await anticaptcha(url, key, true)
     if (captcha === 'error') { return resolve('captcha error') }
@@ -409,8 +409,17 @@ const main = async (restartAccount) => {
 
       if (player === 'spotify') {
         let validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
-        console.log(validCallback)
-        if (validCallback !== 'done') { throw validCallback }
+        if (validCallback !== 'done' && validCallback !== 'click') { throw validCallback }
+        if (validCallback === 'click') {
+          await nightmare
+            .click(loginBtn)
+            .then()
+            .catch(async (e) => {
+              errorLog = 'I' + e
+            })
+
+          if (errorLog) { throw errorLog }
+        }
       }
       else {
         await nightmare
