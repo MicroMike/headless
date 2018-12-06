@@ -26,6 +26,49 @@ function shuffle(arr) {
   return arr
 }
 
+const resolveCaptcha = (nightmare, url, key) => {
+  return new Promise((resolve, reject) => {
+    let errorLog
+    const needCaptcha = await nightmare
+      .evaluate(() => {
+        return window.___grecaptcha_cfg.clients[0]
+      })
+      .then()
+      .catch(async (e) => {
+        return null
+      })
+
+    console.log(needCaptcha)
+    return
+
+    if (!needCaptcha) { return resolve('done') }
+
+    const captcha = await anticaptcha(url, key, true)
+    if (captcha === 'error') { return resolve('Captcha error') }
+
+    await nightmare
+      .evaluate((captcha) => {
+        let clients = window.___grecaptcha_cfg.clients[0]
+        Object.keys(clients).map(key => {
+          let client = clients[key]
+          Object.keys(client).map(k => {
+            let l = client[k]
+            l && l.callback && l.callback(captcha)
+          })
+        })
+      }, captcha)
+      .then()
+      .catch(async (e) => {
+        errorLog = e
+      })
+
+    if (errorLog) {
+      return resolve('captcha ' + e)
+    }
+    resolve('done')
+  })
+}
+
 const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
   return new Promise((resolve, reject) => {
     request({
@@ -290,26 +333,9 @@ const main = async (restartAccount) => {
 
           if (errorLog) { throw errorLog }
 
-          const captcha = await anticaptcha(tidalUrl, keyCaptcha, true)
-          if (captcha === 'error') { throw captcha }
+          const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
 
-          await nightmare
-            .evaluate((captcha) => {
-              let clients = window.___grecaptcha_cfg.clients[0]
-              Object.keys(clients).map(key => {
-                let client = clients[key]
-                Object.keys(client).map(k => {
-                  let l = client[k]
-                  l && l.callback && l.callback(captcha)
-                })
-              })
-            }, captcha)
-            .then()
-            .catch(async (e) => {
-              errorLog = 'B' + e
-            })
-
-          if (errorLog) { throw errorLog }
+          if (validCallback !== 'done') { throw validCallback }
 
           await nightmare
             .wait(2000 + rand(2000))
