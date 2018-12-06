@@ -364,8 +364,8 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
     }
 
-    console.log(album())
     if (player === 'amazon' || player === 'napster' || player === 'spotify') {
+      console.log('here')
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
