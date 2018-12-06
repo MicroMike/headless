@@ -128,7 +128,6 @@ const main = async (restartAccount) => {
   const album = () => {
     let albumUrl = albums[rand(albums.length)]
     while (currentAlbum === albumUrl) {
-      console.log(albumUrl)
       albumUrl = albums[rand(albums.length)]
     }
     currentAlbum = albumUrl
@@ -363,7 +362,6 @@ const main = async (restartAccount) => {
     }
 
     if (player === 'amazon' || player === 'napster' || player === 'spotify') {
-      console.log('here')
       connected = await nightmare
         .goto(album())
         .wait(2000 + rand(2000))
