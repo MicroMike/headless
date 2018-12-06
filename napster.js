@@ -691,7 +691,9 @@ const main = async (restartAccount) => {
     }
 
     // if (player !== 'tidal') {
-    await nightmare.end()
+    if (!e.match(/navigation error/)) {
+      await nightmare.end()
+    }
     // }
 
     if (check) {
