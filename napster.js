@@ -44,7 +44,7 @@ const resolveCaptcha = (nightmare, url, key) => {
     if (!needCaptcha) { return resolve('done') }
 
     const captcha = await anticaptcha(url, key, true)
-    if (captcha === 'error') { return resolve('Captcha error') }
+    if (captcha === 'error') { return resolve('captcha error') }
 
     await nightmare
       .evaluate((captcha) => {
@@ -334,7 +334,6 @@ const main = async (restartAccount) => {
           if (errorLog) { throw errorLog }
 
           const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
-
           if (validCallback !== 'done') { throw validCallback }
 
           await nightmare
@@ -412,26 +411,8 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        const captcha = 'test'//await anticaptcha(URL, keyCaptcha, true)
-        if (captcha === 'error') { throw captcha }
-
-        await nightmare
-          .evaluate((captcha) => {
-            let clients = window.___grecaptcha_cfg.clients[0]
-            Object.keys(clients).map(key => {
-              let client = clients[key]
-              Object.keys(client).map(k => {
-                let l = client[k]
-                l && l.callback && l.callback(captcha)
-              })
-            })
-          }, captcha)
-          .then()
-          .catch(async (e) => {
-            errorLog = 'H' + e
-          })
-        return
-        if (errorLog) { throw errorLog }
+        const validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        if (validCallback !== 'done') { throw validCallback }
       }
       else {
         await nightmare
