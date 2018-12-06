@@ -291,9 +291,7 @@ const main = async (restartAccount) => {
 
       keyCaptcha = '6LeIZkQUAAAAANoHuYD1qz5bV_ANGCJ7n7OAW3mo'
 
-      let albums = [
-        'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
-        'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk',
+      albums = [
         'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
         'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk',
       ]
