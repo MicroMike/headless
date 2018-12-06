@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const request = require('ajax-request');
+const check = process.env.CHECK
 let accounts = []
 let accountsValid = []
 let over = false
@@ -13,7 +14,6 @@ let finish = true
 const max = 20
 const pause = check ? 10 : 30
 
-const check = process.env.CHECK
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
