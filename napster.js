@@ -41,7 +41,7 @@ const resolveCaptcha = (nightmare, url, key) => {
     if (!needCaptcha) { return resolve('click') }
 
     const captcha = await anticaptcha(url, key, true)
-    if (captcha === 'error') { return resolve('captcha error') }
+    if (captcha === 'error') { return resolve('error') }
 
     await nightmare
       .evaluate((captcha) => {
@@ -60,7 +60,7 @@ const resolveCaptcha = (nightmare, url, key) => {
       })
 
     if (errorLog) {
-      return resolve('captcha ' + e)
+      return resolve('error')
     }
     resolve('done')
   })
@@ -331,7 +331,7 @@ const main = async (restartAccount) => {
           if (errorLog) { throw errorLog }
 
           const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
-          if (validCallback !== 'done') { throw validCallback }
+          if (validCallback === 'error') { throw validCallback }
 
           await nightmare
             .wait(2000 + rand(2000))
@@ -408,8 +408,8 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (player === 'spotify') {
-        let validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
-        if (validCallback !== 'done' && validCallback !== 'click') { throw validCallback }
+        const validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        if (validCallback === 'error') { throw validCallback }
         if (validCallback === 'click') {
           await nightmare
             .click(loginBtn)
