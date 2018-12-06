@@ -407,21 +407,13 @@ const main = async (restartAccount) => {
 
       if (errorLog) { throw errorLog }
 
+      let validCallback
       if (player === 'spotify') {
-        const validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
         if (validCallback === 'error') { throw validCallback }
-        if (validCallback === 'click') {
-          await nightmare
-            .click(loginBtn)
-            .then()
-            .catch(async (e) => {
-              errorLog = 'I' + e
-            })
-
-          if (errorLog) { throw errorLog }
-        }
       }
-      else {
+
+      if (player !== 'spotify' || validCallback === 'click') {
         await nightmare
           .click(loginBtn)
           .then()
@@ -632,7 +624,7 @@ const main = async (restartAccount) => {
           freeze = 0
         }
 
-        if (freeze >= 3) {
+        if (freeze >= 2) {
           freeze = 0
 
           if (t1 === 'no bar') {
@@ -712,7 +704,7 @@ const mainInter = setInterval(() => {
     // }
   }
   catch (e) {
-    console.log('Z' + e)
+    console.log('ZEUB')
   }
 }, 1000 * pause);
 
