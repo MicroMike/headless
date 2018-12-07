@@ -578,17 +578,14 @@ const main = async (restartAccount) => {
     }
 
     changeInterval = setInterval(async () => {
-      if (over) { return clearInterval(changeInterval) }
       console.log('change')
+      if (over) { return clearInterval(changeInterval) }
       await nightmare
         .goto(album())
-      // .wait(playBtn)
-      // .wait(2000 + rand(2000))
-      // .click(playBtn)
-      // .then()
-      // .catch((e) => {
-      //   ifCatch('P' + e)
-      // })
+        .then()
+        .catch((e) => {
+          ifCatch('P' + e)
+        })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
     const restart = async () => {
