@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "cross-env TEST=true DIVIDED=1 node manual",
-    "test": "TEST=true RAND=true BEGIN=1 node napster",
+    "test": "git pull && TEST=true RAND=true BEGIN=1 node napster",
     "add": "cross-env ADD=true node manual",
     "vpn": "apt-get install nordvpn-release_1.0.0_all.deb && apt-get update && apt-get install nordvpn",
     "vm": "apt-get install qemu-kvm && apt-get install libvirt && apt-get install libvirt-client && apt-get install virt-install && apt-get install virt-viewer",
