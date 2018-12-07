@@ -14,6 +14,10 @@ let finish = true
 const max = 20
 const pause = check ? 10 : 30
 
+const getTime = () => {
+  const date = new Date
+  return date.getUTCHours + 1 + 'H' + date.getUTCMinutes
+}
 
 const rand = (max, min) => {
   return Math.floor(Math.random() * Math.floor(max) + (typeof min !== 'undefined' ? min : 0));
@@ -665,7 +669,7 @@ const main = async (restartAccount) => {
       if (used || fix) {
         if (used) {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
-          console.log(Date.now() + ' used', account)
+          console.log(getTime() + ' used', account)
         }
         restart()
         return
@@ -676,7 +680,7 @@ const main = async (restartAccount) => {
     finish = true
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log(Date.now() + " ERROR ", account, check ? e : (e + ' ').split(' at')[0])
+    console.log(getTime() + " ERROR ", account, check ? e : (e + ' ').split(' at')[0])
     await nightmare.screenshot('throw.' + player + '.' + login + '.png')
 
     if (e !== 'del') {
