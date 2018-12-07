@@ -665,7 +665,7 @@ const main = async (restartAccount) => {
       if (used || fix) {
         if (used) {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
-          console.log('used', account)
+          console.log(Date.now() + ' used', account)
         }
         restart()
         return
@@ -676,7 +676,7 @@ const main = async (restartAccount) => {
     finish = true
     accountsValid = accountsValid.filter(a => a !== account)
 
-    console.log("ERROR ", account, check ? e : (e + ' ').split(' at')[0])
+    console.log(Date.now() + " ERROR ", account, check ? e : (e + ' ').split(' at')[0])
     await nightmare.screenshot('throw.' + player + '.' + login + '.png')
 
     if (e !== 'del') {
