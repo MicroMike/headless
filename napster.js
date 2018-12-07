@@ -176,8 +176,8 @@ const main = async (restartAccount) => {
     electronPath: require('electron'),
     // openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 5,
-    gotoTimeout: 1000 * 59 * 5,
+    waitTimeout: 1000 * 60 * 3,
+    gotoTimeout: 1000 * 59 * 3,
     show: true,
     typeInterval: 300,
     webPreferences
@@ -577,16 +577,28 @@ const main = async (restartAccount) => {
       console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
     }
 
+    const waitAndPlay = async () => {
+      await nightmare
+        .refresh()
+        .wait(playBtn)
+        .wait(2000 + rand(2000))
+        .click(playBtn)
+        .then()
+        .catch((e) => {
+          waitAndPlay()
+        })
+    }
+
     changeInterval = setInterval(async () => {
       if (over) { return clearInterval(changeInterval) }
       await nightmare
         .goto(album())
-        // .wait(playBtn)
-        // .wait(2000 + rand(2000))
-        // .click(playBtn)
+        .wait(playBtn)
+        .wait(2000 + rand(2000))
+        .click(playBtn)
         .then()
         .catch((e) => {
-          ifCatch('P' + e)
+          waitAndPlay()
         })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
