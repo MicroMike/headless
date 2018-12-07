@@ -577,7 +577,7 @@ const main = async (restartAccount) => {
       console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
     }
 
-    changeInterval = setInterval(async () => {
+    changeInterval = setInterval(() => {
       console.log('change')
       if (over) { return clearInterval(changeInterval) }
       // await nightmare
