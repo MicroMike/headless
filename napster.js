@@ -531,7 +531,7 @@ const main = async (restartAccount) => {
                 if (!document.querySelector(btn.repeatBtnOk)) {
                   clickLoop()
                 }
-              }, 2600);
+              }, 1000 * 5);
             }
 
             if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
