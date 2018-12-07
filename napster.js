@@ -526,12 +526,12 @@ const main = async (restartAccount) => {
           .wait(2000 + rand(2000))
           .evaluate((btn) => {
             const clickLoop = () => {
+              document.querySelector(btn.repeatBtn).click()
               setTimeout(() => {
-                document.querySelector(btn.repeatBtn).click()
                 if (!document.querySelector(btn.repeatBtnOk)) {
                   clickLoop()
                 }
-              }, 1000 * 5);
+              }, 2600);
             }
 
             if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
