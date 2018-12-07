@@ -609,7 +609,7 @@ const main = async (restartAccount) => {
           ifCatch('Q' + e)
         })
 
-      if (used && player === 'tidal') {
+      if (used) {
         used = await nightmare
           .evaluate((usedDom) => {
             return document.querySelector(usedDom) && document.querySelector(usedDom).innerHTML
@@ -618,7 +618,9 @@ const main = async (restartAccount) => {
           .catch((e) => {
             ifCatch('Q2' + e)
           })
+      }
 
+      if (player === 'tidal') {
         used = typeof used === 'string' && used.match(/currently/) ? used : false
 
         if (!used) {
