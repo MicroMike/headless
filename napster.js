@@ -501,46 +501,54 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
     }
 
-    await nightmare
-      .wait(playBtn)
-      .wait(2000 + rand(2000))
-      .click(playBtn)
-      .then()
-      .catch(async (e) => {
-        // console.log('catch album')
-        errorLog = 'N' + e
-      })
+    let stopBeforePlay
+    if (player === 'spotify') {
+      stopBeforePlay = await nightmare
+        .exists(usedDom)
+    }
 
-    if (errorLog) { throw errorLog }
-
-    if (player === 'napster' || player === 'tidal' || player === 'spotify') {
+    if (!stopBeforePlay) {
       await nightmare
-        .wait(repeatBtn)
+        .wait(playBtn)
         .wait(2000 + rand(2000))
-        .evaluate((btn) => {
-          const clickLoop = () => {
-            setTimeout(() => {
-              document.querySelector(btn.repeatBtn).click()
-              if (!document.querySelector(btn.repeatBtnOk)) {
-                clickLoop()
-              }
-            }, 2600);
-          }
-
-          if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
-            clickLoop()
-          }
-
-          document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
-
-        }, { repeatBtn, repeatBtnOk, shuffleBtn })
+        .click(playBtn)
         .then()
         .catch(async (e) => {
           // console.log('catch album')
-          errorLog = 'O' + e
+          errorLog = 'N' + e
         })
 
       if (errorLog) { throw errorLog }
+
+      if (player === 'napster' || player === 'tidal' || player === 'spotify') {
+        await nightmare
+          .wait(repeatBtn)
+          .wait(2000 + rand(2000))
+          .evaluate((btn) => {
+            const clickLoop = () => {
+              setTimeout(() => {
+                document.querySelector(btn.repeatBtn).click()
+                if (!document.querySelector(btn.repeatBtnOk)) {
+                  clickLoop()
+                }
+              }, 2600);
+            }
+
+            if (document.querySelector(btn.repeatBtn) && !document.querySelector(btn.repeatBtnOk)) {
+              clickLoop()
+            }
+
+            document.querySelector(btn.shuffleBtn) && document.querySelector(btn.shuffleBtn).click()
+
+          }, { repeatBtn, repeatBtnOk, shuffleBtn })
+          .then()
+          .catch(async (e) => {
+            // console.log('catch album')
+            errorLog = 'O' + e
+          })
+
+        if (errorLog) { throw errorLog }
+      }
     }
 
     // ***************************************************************************************************************************************************************
