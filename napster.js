@@ -579,6 +579,7 @@ const main = async (restartAccount) => {
 
     changeInterval = setInterval(async () => {
       if (over) { return clearInterval(changeInterval) }
+      console.log('change')
       await nightmare
         .goto(album())
       // .wait(playBtn)
