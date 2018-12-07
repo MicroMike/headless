@@ -564,9 +564,11 @@ const main = async (restartAccount) => {
     let inter
     let fix = false
     let used
+    let changeInterval
 
     const ifCatch = async (e) => {
       clearInterval(inter)
+      clearInterval(changeInterval)
       accountsValid = accountsValid.filter(a => a !== account)
       accounts.push(account)
       await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
@@ -574,24 +576,17 @@ const main = async (restartAccount) => {
       console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
     }
 
-    const tryChange = async () => {
-      setTimeout(async () => {
-        await nightmare
-          .goto(album())
-          .wait(playBtn)
-          .wait(2000 + rand(2000))
-          .click(playBtn)
-          .then()
-          .catch((e) => {
-            ifCatch('P' + e)
-          })
-        countTimeout--
-      }, 1000 * pause * countTimeout++);
-    }
-
-    let changeInterval = setInterval(() => {
+    changeInterval = setInterval(() => {
       if (over || fix || used) { return clearInterval(changeInterval) }
-      tryChange()
+      await nightmare
+        .goto(album())
+        .wait(playBtn)
+        .wait(2000 + rand(2000))
+        .click(playBtn)
+        .then()
+        .catch((e) => {
+          ifCatch('P' + e)
+        })
     }, process.env.TEST ? 1000 * 60 * 5 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
     const restart = async () => {
