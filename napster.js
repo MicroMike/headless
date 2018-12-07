@@ -504,6 +504,7 @@ const main = async (restartAccount) => {
     let stopBeforePlay
     if (player === 'spotify') {
       stopBeforePlay = await nightmare
+        .wait(4000 + rand(2000))
         .exists(usedDom)
     }
 
