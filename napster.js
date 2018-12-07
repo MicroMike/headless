@@ -580,12 +580,12 @@ const main = async (restartAccount) => {
     changeInterval = setInterval(async () => {
       console.log('change')
       if (over) { return clearInterval(changeInterval) }
-      await nightmare
-        .goto(album())
-        .then()
-        .catch((e) => {
-          ifCatch('P' + e)
-        })
+      // await nightmare
+      //   .goto(album())
+      //   .then()
+      //   .catch((e) => {
+      //     ifCatch('P' + e)
+      //   })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
     const restart = async () => {
