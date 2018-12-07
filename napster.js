@@ -588,7 +588,7 @@ const main = async (restartAccount) => {
       // .catch((e) => {
       //   ifCatch('P' + e)
       // })
-    }, process.env.TEST ? 1000 * 60 * 5 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
+    }, process.env.TEST ? 1000 * 60 * 2 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
     const restart = async () => {
       clearInterval(changeInterval)
