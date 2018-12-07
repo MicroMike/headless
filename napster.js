@@ -578,6 +578,7 @@ const main = async (restartAccount) => {
     }
 
     const waitAndPlay = async () => {
+      console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
       await nightmare
         .refresh()
         .wait(playBtn)
