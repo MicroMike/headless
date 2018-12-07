@@ -619,7 +619,7 @@ const main = async (restartAccount) => {
             ifCatch('Q2' + e)
           })
 
-        used = typeof used === 'string' && used.match(/currently/)
+        used = typeof used === 'string' && used.match(/currently/) ? used : false
 
         if (!used) {
           await nightmare.click('#wimp > div > div > div > div > div > button')
