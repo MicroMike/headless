@@ -669,7 +669,7 @@ const main = async (restartAccount) => {
       if (used || fix) {
         if (used) {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
-          console.log(getTime() + ' used', account)
+          console.log(getTime() + ' used', account, used)
         }
         restart()
         return
