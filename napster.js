@@ -172,8 +172,8 @@ const main = async (restartAccount) => {
     electronPath: require('electron'),
     // openDevTools: true,
     alwaysOnTop: false,
-    waitTimeout: 1000 * 60 * 3,
-    gotoTimeout: 1000 * 59 * 3,
+    waitTimeout: 1000 * 60 * 5,
+    gotoTimeout: 1000 * 59 * 5,
     show: true,
     typeInterval: 300,
     webPreferences
@@ -549,6 +549,9 @@ const main = async (restartAccount) => {
     let isChanging = false
     let time = 0
     let time2 = 0
+    let inter
+    let fix = false
+    let used
 
     const ifCatch = async (e) => {
       clearInterval(inter)
@@ -575,14 +578,27 @@ const main = async (restartAccount) => {
     }
 
     let changeInterval = setInterval(() => {
-      if (over) { return clearInterval(changeInterval) }
+      if (over || fix || used) { return clearInterval(changeInterval) }
       tryChange()
     }, process.env.TEST ? 1000 * 60 * 5 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
-    let inter = setInterval(async () => {
+    const restart = async () => {
+      clearInterval(changeInterval)
+      clearInterval(inter)
+      accountsValid = accountsValid.filter(a => a !== account)
+      accounts.push(account)
+      await nightmare.end()
+    }
+
+    let restartTimeout = setTimeout(() => {
+      if (over) { return clearTimeout(restartTimeout) }
+      restart()
+    }, 1000 * 60 * 30 + rand(1000 * 60 * 30));
+
+    inter = setInterval(async () => {
       if (over) { return clearInterval(inter) }
 
-      let used = await nightmare
+      used = await nightmare
         .exists(usedDom)
         .then()
         .catch((e) => {
@@ -605,8 +621,6 @@ const main = async (restartAccount) => {
           await nightmare.click('#wimp > div > div > div > div > div > button')
         }
       }
-
-      let fix = false
 
       if (player === 'napster') {
         t1 = await nightmare
@@ -657,19 +671,6 @@ const main = async (restartAccount) => {
         return
       }
     }, 1000 * 30)
-
-    const restart = async () => {
-      clearInterval(changeInterval)
-      clearInterval(inter)
-      accountsValid = accountsValid.filter(a => a !== account)
-      accounts.push(account)
-      await nightmare.end()
-    }
-
-    let restartTimeout = setTimeout(() => {
-      if (over) { return clearTimeout(restartTimeout) }
-      restart()
-    }, 1000 * 60 * 30 + rand(1000 * 60 * 30));
   }
   catch (e) {
     finish = true
