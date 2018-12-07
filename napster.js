@@ -581,13 +581,13 @@ const main = async (restartAccount) => {
       if (over || fix || used) { return clearInterval(changeInterval) }
       await nightmare
         .goto(album())
-        // .wait(playBtn)
-        // .wait(2000 + rand(2000))
-        // .click(playBtn)
-        // .then()
-        // .catch((e) => {
-        //   ifCatch('P' + e)
-        // })
+      // .wait(playBtn)
+      // .wait(2000 + rand(2000))
+      // .click(playBtn)
+      // .then()
+      // .catch((e) => {
+      //   ifCatch('P' + e)
+      // })
     }, process.env.TEST ? 1000 * 60 * 5 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
     const restart = async () => {
@@ -658,8 +658,15 @@ const main = async (restartAccount) => {
             fix = true
           }
           else {
+            const isPause = await nightmare
+              .exists('.player-play-button .icon-pause2')
+
+            if (isPause) {
+              await nightmare
+                .click('.player-play-button .icon-pause2')
+            }
+
             await nightmare
-              .click('.player-play-button .icon-pause2')
               .wait(2000 + rand(2000))
               .click('.player-play-button .icon-play-button')
               .then()
