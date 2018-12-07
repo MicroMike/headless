@@ -574,20 +574,9 @@ const main = async (restartAccount) => {
       accounts.push(account)
       await nightmare.screenshot('freeze.' + player + '.' + login + '.png')
       await nightmare.end()
-      console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
-    }
-
-    const waitAndPlay = async (e) => {
-      console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
-      await nightmare
-        .refresh()
-        .wait(playBtn)
-        .wait(2000 + rand(2000))
-        .click(playBtn)
-        .then()
-        .catch((e) => {
-          waitAndPlay(e)
-        })
+      if (e !== 'ok') {
+        console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
+      }
     }
 
     changeInterval = setInterval(async () => {
@@ -599,7 +588,7 @@ const main = async (restartAccount) => {
         .click(playBtn)
         .then()
         .catch((e) => {
-          waitAndPlay(e)
+          ifCatch('ok')
         })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
