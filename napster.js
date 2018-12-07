@@ -626,13 +626,13 @@ const main = async (restartAccount) => {
           .catch((e) => {
             ifCatch('Q2' + e)
           })
-      }
 
-      if (player === 'tidal') {
-        used = typeof used === 'string' && used.match(/currently/) ? used : false
+        if (player === 'tidal') {
+          used = typeof used === 'string' && used.match(/currently/) ? used : false
 
-        if (!used) {
-          await nightmare.click('#wimp > div > div > div > div > div > button')
+          if (!used) {
+            await nightmare.click('#wimp > div > div > div > div > div > button')
+          }
         }
       }
 
