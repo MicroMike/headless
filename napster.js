@@ -587,9 +587,9 @@ const main = async (restartAccount) => {
 
       if (!playExist) {
         await nightmare
-          .refresh()
+          .wait(1000 * 30)
           .screenshot('aaa.' + player + '.' + login + '.png')
-        ifCatch()
+        ifCatch('catch no play')
         return
       }
 
