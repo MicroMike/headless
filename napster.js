@@ -678,15 +678,13 @@ const main = async (restartAccount) => {
             if (isPause) {
               await nightmare
                 .click('.player-play-button .icon-pause2')
+                .wait(2000 + rand(2000))
+                .click('.player-play-button .icon-play-button')
+                .then()
+                .catch((e) => {
+                  ifCatch('R' + e)
+                })
             }
-
-            await nightmare
-              .wait(2000 + rand(2000))
-              .click('.player-play-button .icon-play-button')
-              .then()
-              .catch((e) => {
-                ifCatch('R' + e)
-              })
           }
         }
 
