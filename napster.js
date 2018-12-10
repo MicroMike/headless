@@ -582,9 +582,11 @@ const main = async (restartAccount) => {
 
       const playExist = await nightmare
         .goto(album())
-        .wait(1000 * 30)
+        .wait(1000 * 30 * ++countTimeout)
         .wait(2000 + rand(2000))
         .exists(playBtn)
+
+      countTimeout--
 
       if (!playExist) {
         await nightmare
