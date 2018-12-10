@@ -582,12 +582,12 @@ const main = async (restartAccount) => {
 
       const playExist = await nightmare
         .goto(album())
+        .wait(1000 * 30)
         .wait(2000 + rand(2000))
         .exists(playBtn)
 
       if (!playExist) {
         await nightmare
-          .wait(1000 * 30)
           .screenshot('aaa.' + player + '.' + login + '.png')
         ifCatch('catch no play')
         return
