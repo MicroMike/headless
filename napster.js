@@ -577,24 +577,23 @@ const main = async (restartAccount) => {
       console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
     }
 
-    const waitAndPlay = async (e) => {
-      console.log("ERROR freeze ", account, (e + ' ').split(' at')[0])
-      await nightmare
-        .refresh()
-        .wait(playBtn)
-        .wait(2000 + rand(2000))
-        .click(playBtn)
-        .then()
-        .catch((e) => {
-          waitAndPlay(e)
-        })
-    }
-
     changeInterval = setInterval(async () => {
       if (over) { return clearInterval(changeInterval) }
-      await nightmare
+
+      const playExist = await nightmare
         .goto(album())
-        .wait(playBtn)
+        .wait(2000 + rand(2000))
+        .exists(playBtn)
+
+      if (!playExist) {
+        await nightmare
+          .refresh()
+          .screenshot('aaa.' + player + '.' + login + '.png')
+        ifCatch()
+        return
+      }
+
+      await nightmare
         .wait(2000 + rand(2000))
         .click(playBtn)
         .then()
@@ -695,7 +694,7 @@ const main = async (restartAccount) => {
       if (used || fix) {
         if (used) {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
-          console.log(getTime() + ' used', account, used)
+          console.log(getTime() + ' used', account)
         }
         restart()
         return
