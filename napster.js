@@ -598,7 +598,7 @@ const main = async (restartAccount) => {
         .click(playBtn)
         .then()
         .catch((e) => {
-          waitAndPlay(e)
+          console.log('P2' + e)
         })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
