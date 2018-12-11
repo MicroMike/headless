@@ -612,11 +612,13 @@ const main = async (restartAccount) => {
         })
     }, process.env.TEST ? 1000 * 60 : 1000 * 60 * 10 + rand(1000 * 60 * 15));
 
-    const restart = async () => {
+    const restart = async (timeout = 0) => {
       clearInterval(changeInterval)
       clearInterval(inter)
       accountsValid = accountsValid.filter(a => a !== account)
-      accounts.push(account)
+      setTimeout(() => {
+        accounts.push(account)
+      }, timeout);
       await nightmare.end()
     }
 
@@ -704,7 +706,7 @@ const main = async (restartAccount) => {
           await nightmare.screenshot('used.' + player + '.' + login + '.png')
           console.log(getTime() + ' used', account)
         }
-        restart()
+        restart(used ? 1000 * 60 * 60 : 0)
         return
       }
     }, 1000 * 30)
