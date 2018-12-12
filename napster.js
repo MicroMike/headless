@@ -351,19 +351,19 @@ const main = async (restartAccount) => {
 
           if (errorLog) { throw errorLog }
 
-          const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
-          console.log(validCallback)
-          if (validCallback === 'error') { throw validCallback }
-          if (validCallback === 'click') {
-            await nightmare
-              .click('#recap-invisible')
-              .then()
-              .catch(async (e) => {
-                errorLog = 'A2' + e
-              })
+          // const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
+          // console.log(validCallback)
+          // if (validCallback === 'error') { throw validCallback }
+          // if (validCallback === 'click') {
+          await nightmare
+            .click('#recap-invisible')
+            .then()
+            .catch(async (e) => {
+              errorLog = 'A2' + e
+            })
 
-            if (errorLog) { throw errorLog }
-          }
+          if (errorLog) { throw errorLog }
+          // }
 
           await nightmare
             .wait(2000 + rand(2000))
