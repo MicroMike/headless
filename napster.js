@@ -32,41 +32,47 @@ function shuffle(arr) {
 
 const resolveCaptcha = (nightmare, url, key) => {
   return new Promise(async (resolve, reject) => {
-    let errorLog
-    const needCaptcha = await nightmare
-      .evaluate(() => {
-        return window.___grecaptcha_cfg.clients[0]
-      })
-      .then()
-      .catch(async (e) => {
-        return null
-      })
-
-    if (!needCaptcha) { return resolve('click') }
-
-    const captcha = await anticaptcha(url, key, true)
-    if (captcha === 'error') { return resolve('error') }
-
-    await nightmare
-      .evaluate((captcha) => {
-        let clients = window.___grecaptcha_cfg.clients[0]
-        Object.keys(clients).map(key => {
-          let client = clients[key]
-          Object.keys(client).map(k => {
-            let l = client[k]
-            l && l.callback && l.callback(captcha)
-          })
+    try {
+      let errorLog
+      const needCaptcha = await nightmare
+        .evaluate(() => {
+          return window.___grecaptcha_cfg.clients[0]
         })
-      }, captcha)
-      .then()
-      .catch(async (e) => {
-        errorLog = e
-      })
+        .then()
+        .catch(async (e) => {
+          return null
+        })
 
-    if (errorLog) {
-      return resolve('error')
+      if (!needCaptcha) { return resolve('click') }
+
+      const captcha = await anticaptcha(url, key, true)
+      if (captcha === 'error') { return resolve('error') }
+
+      await nightmare
+        .evaluate((captcha) => {
+          let clients = window.___grecaptcha_cfg.clients[0]
+          Object.keys(clients).map(key => {
+            let client = clients[key]
+            Object.keys(client).map(k => {
+              let l = client[k]
+              l && l.callback && l.callback(captcha)
+            })
+          })
+        }, captcha)
+        .then()
+        .catch(async (e) => {
+          errorLog = e
+        })
+
+      if (errorLog) {
+        return resolve('error')
+      }
+      resolve('done')
     }
-    resolve('done')
+    catch (e) {
+      console.log(e)
+      resolve('error')
+    }
   })
 }
 
