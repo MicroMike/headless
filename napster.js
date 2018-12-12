@@ -314,12 +314,30 @@ const main = async (restartAccount) => {
         .goto(url)
         .wait(2000 + rand(2000))
         .exists(goToLogin)
+        .evaluate(() => {
+          return document.URL
+        })
+        .then()
+        .catch(async (e) => {
+          errorLog = 'A' + e
+        })
+
+      if (errorLog) { throw errorLog }
 
       if (notConnected) {
         const done = await nightmare
           .click(goToLogin)
           .wait(6000 + rand(2000))
           .exists(reLog)
+          .evaluate(() => {
+            return document.URL
+          })
+          .then()
+          .catch(async (e) => {
+            errorLog = 'A1' + e
+          })
+
+        if (errorLog) { throw errorLog }
 
         if (done) {
           await nightmare
@@ -335,7 +353,7 @@ const main = async (restartAccount) => {
             })
             .then()
             .catch(async (e) => {
-              errorLog = 'A' + e
+              errorLog = 'A2' + e
             })
 
           if (errorLog) { throw errorLog }
