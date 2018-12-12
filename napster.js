@@ -762,7 +762,7 @@ fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
   data = data.split(',')
 
-  if (process.env.FILE) {
+  if (!process.env.FILE) {
     const split = parseInt(data.length / 2)
     if (process.env.BEGIN === '2') {
       accounts = data.slice(split)
