@@ -314,10 +314,6 @@ const main = async (restartAccount) => {
         .goto(url)
         .wait(2000 + rand(2000))
         .exists(goToLogin)
-        .then()
-        .catch(async (e) => {
-          errorLog = 'A' + e
-        })
 
       if (errorLog) { throw errorLog }
 
@@ -326,10 +322,6 @@ const main = async (restartAccount) => {
           .click(goToLogin)
           .wait(6000 + rand(2000))
           .exists(reLog)
-          .then()
-          .catch(async (e) => {
-            errorLog = 'A1' + e
-          })
 
         if (errorLog) { throw errorLog }
 
@@ -343,19 +335,28 @@ const main = async (restartAccount) => {
             .wait(4000 + rand(2000))
             .type(username, login)
             .wait(4000 + rand(2000))
-            .click('#recap-invisible')
             .evaluate(() => {
               return document.URL
             })
             .then()
             .catch(async (e) => {
-              errorLog = 'A2' + e
+              errorLog = 'A' + e
             })
 
           if (errorLog) { throw errorLog }
 
           const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
           if (validCallback === 'error') { throw validCallback }
+          if (validCallback === 'click') {
+            await nightmare
+              .click('#recap-invisible')
+              .then()
+              .catch(async (e) => {
+                errorLog = 'A2' + e
+              })
+
+            if (errorLog) { throw errorLog }
+          }
 
           await nightmare
             .wait(2000 + rand(2000))
