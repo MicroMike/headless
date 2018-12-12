@@ -30,13 +30,14 @@ function shuffle(arr) {
   return arr
 }
 
-const resolveCaptcha = (nightmare, url, key) => {
+const resolveCaptcha = async (nightmare, url, key) => {
   return new Promise(async (resolve, reject) => {
     try {
       let errorLog
       const needCaptcha = await nightmare
         .evaluate(() => {
-          return window.___grecaptcha_cfg.clients[0]
+          // return window.___grecaptcha_cfg.clients[0]
+          return window.___grecaptcha_cfg.clients
         })
         .then()
         .catch(async (e) => {
