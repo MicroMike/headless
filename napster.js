@@ -342,6 +342,7 @@ const main = async (restartAccount) => {
           const tidalUrl = await nightmare
             .wait(4000 + rand(2000))
             .type(username, login)
+            .wait(4000 + rand(2000))
             .click('#recap-invisible')
             .evaluate(() => {
               return document.URL
