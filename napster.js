@@ -175,7 +175,8 @@ const main = async (restartAccount) => {
         let errorLog
         const needCaptcha = await nightmare
           .evaluate(() => {
-            return window.___grecaptcha_cfg.clients[0]
+            console.log(window.___grecaptcha_cfg.clients[0])
+            return null
           })
           .then()
           .catch(async (e) => {
