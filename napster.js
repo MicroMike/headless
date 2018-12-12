@@ -760,7 +760,7 @@ file = check ? 'check.txt' : file
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
-  data = data.split(',')
+  accounts = data = data.split(',')
 
   if (!process.env.FILE) {
     const split = parseInt(data.length / 2)
