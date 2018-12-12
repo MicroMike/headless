@@ -329,7 +329,7 @@ const main = async (restartAccount) => {
         else {
           const tidalUrl = await nightmare
             .wait(4000 + rand(2000))
-            .insert(username, login)
+            .type(username, login)
             .evaluate(() => {
               return document.URL
             })
