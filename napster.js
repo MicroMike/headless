@@ -175,16 +175,13 @@ const main = async (restartAccount) => {
         let errorLog
         const needCaptcha = await nightmare
           .evaluate(() => {
-            console.log(window.___grecaptcha_cfg.clients[0])
-            return null
+            return window.___grecaptcha_cfg.clients[0]
           })
           .then()
           .catch(async (e) => {
-            console.log(e)
             return null
           })
 
-        console.log(needCaptcha)
         if (!needCaptcha) { return resolve('click') }
 
         const captcha = await anticaptcha(url, key, true)
