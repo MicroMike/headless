@@ -139,6 +139,10 @@ const main = async (restartAccount) => {
   }
   if (over) { return }
   if (!restartAccount) {
+    if (accounts.length === 0) {
+      console.log('Pas de comptes')
+      return
+    }
     if (accountsValid.length >= accounts.length || accountsValid.length >= max) { return }
   }
   // let session = persist || 'persist: ' + Date.now()
@@ -751,7 +755,8 @@ const mainInter = setInterval(() => {
   }
 }, 1000 * pause);
 
-const file = check ? 'check.txt' : 'napsterAccount.txt'
+let file = process.env.FILE || 'napsterAccount.txt'
+file = check ? 'check.txt' : file
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);

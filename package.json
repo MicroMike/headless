@@ -17,7 +17,8 @@
     "n": "npm run initn && expressvpn connect nl && npm run startn",
     "s": "npm run inits && expressvpn connect br && npm run starts",
     "startn": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=1 node napster",
-    "starts": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=2 node napster"
+    "starts": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=2 node napster",
+    "starty": "git reset --hard && git clean -f && git pull && FILE=yohannAccounts.txt RAND=true BEGIN=2 node napster"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
