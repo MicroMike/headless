@@ -314,9 +314,6 @@ const main = async (restartAccount) => {
         .goto(url)
         .wait(2000 + rand(2000))
         .exists(goToLogin)
-        .evaluate(() => {
-          return document.URL
-        })
         .then()
         .catch(async (e) => {
           errorLog = 'A' + e
@@ -329,9 +326,6 @@ const main = async (restartAccount) => {
           .click(goToLogin)
           .wait(6000 + rand(2000))
           .exists(reLog)
-          .evaluate(() => {
-            return document.URL
-          })
           .then()
           .catch(async (e) => {
             errorLog = 'A1' + e
