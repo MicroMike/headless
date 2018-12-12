@@ -37,7 +37,7 @@ const resolveCaptcha = async (nightmare, url, key) => {
       const needCaptcha = await nightmare
         .evaluate(() => {
           // return window.___grecaptcha_cfg.clients[0]
-          return window.___grecaptcha_cfg.clients
+          return window
         })
         .then()
         .catch(async (e) => {
