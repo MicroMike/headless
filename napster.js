@@ -36,13 +36,15 @@ const resolveCaptcha = (nightmare, url, key) => {
       let errorLog
       const needCaptcha = await nightmare
         .evaluate(() => {
-          return window.___grecaptcha_cfg.clients[0]
+          return window.___grecaptcha_cfg.clients[0] ? 'ok' : 'error'
         })
         .then()
         .catch(async (e) => {
+          console.log(e)
           return null
         })
 
+      console.log(needCaptcha)
       if (!needCaptcha) { return resolve('click') }
 
       const captcha = await anticaptcha(url, key, true)
