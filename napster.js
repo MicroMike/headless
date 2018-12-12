@@ -760,19 +760,26 @@ file = check ? 'check.txt' : file
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
-  data = data.split(',')
 
-  const split = parseInt(data.length / 2)
-  if (process.env.BEGIN === '2') {
-    accounts = data.slice(split)
+  if (!data) {
+    accounts = []
   }
   else {
-    accounts = data.slice(0, split)
+    data = data.split(',')
+
+    const split = parseInt(data.length / 2)
+    if (process.env.BEGIN === '2') {
+      accounts = data.slice(split)
+    }
+    else {
+      accounts = data.slice(0, split)
+    }
+
+    accounts = process.env.RAND ? shuffle(accounts) : accounts
+    console.log(accounts.length)
+    main()
   }
 
-  accounts = process.env.RAND ? shuffle(accounts) : accounts
-  console.log(accounts.length)
-  main()
 });
 
 process.on('SIGINT', function (code) {
