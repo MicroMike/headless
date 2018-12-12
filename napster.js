@@ -332,9 +332,9 @@ const main = async (restartAccount) => {
         }
         else {
           const tidalUrl = await nightmare
-            .wait(4000 + rand(2000))
+            .wait(2000 + rand(2000))
             .type(username, login)
-            .wait(4000 + rand(2000))
+            .wait(2000 + rand(2000))
             .evaluate(() => {
               return document.URL
             })
