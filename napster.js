@@ -139,7 +139,7 @@ const main = async (restartAccount) => {
   }
   if (over) { return }
   if (!restartAccount) {
-    if (accounts.length === 0) {
+    if (!accounts[0]) {
       console.log('Pas de comptes')
       return
     }
@@ -760,26 +760,19 @@ file = check ? 'check.txt' : file
 
 fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
+  data = data.split(',')
 
-  if (!data) {
-    accounts = []
+  const split = parseInt(data.length / 2)
+  if (process.env.BEGIN === '2') {
+    accounts = data.slice(split)
   }
   else {
-    data = data.split(',')
-
-    const split = parseInt(data.length / 2)
-    if (process.env.BEGIN === '2') {
-      accounts = data.slice(split)
-    }
-    else {
-      accounts = data.slice(0, split)
-    }
-
-    accounts = process.env.RAND ? shuffle(accounts) : accounts
-    console.log(accounts.length)
-    main()
+    accounts = data.slice(0, split)
   }
 
+  accounts = process.env.RAND ? shuffle(accounts) : accounts
+  console.log(accounts.length)
+  main()
 });
 
 process.on('SIGINT', function (code) {
