@@ -346,6 +346,7 @@ const main = async (restartAccount) => {
           if (errorLog) { throw errorLog }
 
           const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
+          console.log(validCallback)
           if (validCallback === 'error') { throw validCallback }
           if (validCallback === 'click') {
             await nightmare
