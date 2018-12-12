@@ -30,55 +30,6 @@ function shuffle(arr) {
   return arr
 }
 
-const resolveCaptcha = async (nightmare, url, key) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let errorLog
-      const needCaptcha = await nightmare
-        .evaluate(() => {
-          // return window.___grecaptcha_cfg.clients[0]
-          return window
-        })
-        .then()
-        .catch(async (e) => {
-          console.log(e)
-          return null
-        })
-
-      console.log(needCaptcha)
-      if (!needCaptcha) { return resolve('click') }
-
-      const captcha = await anticaptcha(url, key, true)
-      if (captcha === 'error') { return resolve('error') }
-
-      await nightmare
-        .evaluate((captcha) => {
-          let clients = window.___grecaptcha_cfg.clients[0]
-          Object.keys(clients).map(key => {
-            let client = clients[key]
-            Object.keys(client).map(k => {
-              let l = client[k]
-              l && l.callback && l.callback(captcha)
-            })
-          })
-        }, captcha)
-        .then()
-        .catch(async (e) => {
-          errorLog = e
-        })
-
-      if (errorLog) {
-        return resolve('error')
-      }
-      resolve('done')
-    }
-    catch (e) {
-      console.log(e)
-      resolve('error')
-    }
-  })
-}
-
 const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
   return new Promise((resolve, reject) => {
     request({
@@ -217,6 +168,55 @@ const main = async (restartAccount) => {
   let errorLog = false
   let connected = false
   let suppressed = false
+
+  const resolveCaptcha = async (url, key) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let errorLog
+        const needCaptcha = await nightmare
+          .evaluate(() => {
+            // return window.___grecaptcha_cfg.clients[0]
+            return document.querySelector('body')
+          })
+          .then()
+          .catch(async (e) => {
+            console.log(e)
+            return null
+          })
+
+        console.log(needCaptcha)
+        if (!needCaptcha) { return resolve('click') }
+
+        const captcha = await anticaptcha(url, key, true)
+        if (captcha === 'error') { return resolve('error') }
+
+        await nightmare
+          .evaluate((captcha) => {
+            let clients = window.___grecaptcha_cfg.clients[0]
+            Object.keys(clients).map(key => {
+              let client = clients[key]
+              Object.keys(client).map(k => {
+                let l = client[k]
+                l && l.callback && l.callback(captcha)
+              })
+            })
+          }, captcha)
+          .then()
+          .catch(async (e) => {
+            errorLog = e
+          })
+
+        if (errorLog) {
+          return resolve('error')
+        }
+        resolve('done')
+      }
+      catch (e) {
+        console.log(e)
+        resolve('error')
+      }
+    })
+  }
 
   try {
     if (player === 'napster') {
