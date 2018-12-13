@@ -281,6 +281,7 @@ const main = async (restartAccount) => {
 
           await nightmare
             .inject('js', 'recaptcha__en.js')
+            .wait(1000 * 5)
             .evaluate((captcha) => {
               setTimeout(() => {
                 let clients = window.___grecaptcha_cfg.clients[0]
