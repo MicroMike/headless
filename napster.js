@@ -338,7 +338,7 @@ const main = async (restartAccount) => {
         }
         else {
           await nightmare
-            .wait(4000 + rand(2000))
+            .wait(6000 + rand(2000))
             .insert(username, login)
             .wait(2000 + rand(2000))
             .then()
