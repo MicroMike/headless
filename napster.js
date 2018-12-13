@@ -123,7 +123,7 @@ const main = async (restartAccount) => {
 
   const webPreferences = {
     partition: process.env.TEST ? '' : 'persist: ' + player + ':' + login,
-    webSecurity: false,
+    webSecurity: true,
     allowRunningInsecureContent: true,
     plugins: true,
     images: !!process.env.TEST,
@@ -338,7 +338,7 @@ const main = async (restartAccount) => {
           await nightmare
             .wait(2000 + rand(2000))
             .insert(username, login)
-            .inject('js', 'https://www.gstatic.com/recaptcha/api2/v1543818755456/recaptcha__fr.js')
+            .inject('js', 'recaptcha__en.js')
             .wait(1000 * 120)
             .then()
             .catch(async (e) => {
