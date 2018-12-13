@@ -166,7 +166,7 @@ const main = async (restartAccount) => {
 
   nightmare.on('did-start-loading', async (e) => {
     const html = await nightmare.evaluate(() => {
-      return document.querySelector('head').innerHTML.split('script')
+      return document.querySelector('head').innerHTML.split('</script>')
     })
     console.log(html)
   })
