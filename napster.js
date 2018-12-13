@@ -340,52 +340,55 @@ const main = async (restartAccount) => {
         }
         else {
           await nightmare
-            .wait(6000 + rand(2000))
-            .insert(username, login)
-            .wait(2000 + rand(2000))
-            .then()
-            .catch(async (e) => {
-              errorLog = 'A' + e
-            })
+            .wait(120000)
+          // await nightmare
+          //   .wait(6000 + rand(2000))
+          //   .insert(username, login)
+          //   .wait(2000 + rand(2000))
+          //   .then()
+          //   .catch(async (e) => {
+          //     errorLog = 'A' + e
+          //   })
 
-          if (errorLog) { throw errorLog }
+          // if (errorLog) { throw errorLog }
 
-          const validCallback = await resolveCaptcha()
-          console.log(validCallback)
-          if (validCallback === 'click') {
-            await nightmare
-              .click('#recap-invisible')
-              .then()
-              .catch(async (e) => {
-                errorLog = 'A2' + e
-              })
+          // const validCallback = await resolveCaptcha()
+          // console.log(validCallback)
+          // if (validCallback === 'click') {
+          //   await nightmare
+          //     .click('#recap-invisible')
+          //     .then()
+          //     .catch(async (e) => {
+          //       errorLog = 'A2' + e
+          //     })
 
-            if (errorLog) { throw errorLog }
-          }
-          else if (validCallback !== 'done') { throw validCallback }
+          //   if (errorLog) { throw errorLog }
+          // }
+          // else if (validCallback !== 'done') { throw validCallback }
 
-          await nightmare
-            .wait(2000 + rand(2000))
-            .wait(password)
-            .wait(2000 + rand(2000))
-            .insert(password, pass)
-            .wait(2000 + rand(2000))
-            .click('body > div > div > div > div > div > div > div > form > button')
-            .then()
-            .catch(async (e) => {
-              // errorLog = 'C' + e
-              const validCallback = await resolveCaptcha()
-              if (validCallback === 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
-              await nightmare
-                .wait(2000 + rand(2000))
-                .wait(password)
-                .wait(2000 + rand(2000))
-                .insert(password, pass)
-                .wait(2000 + rand(2000))
-                .click('body > div > div > div > div > div > div > div > form > button')
-            })
+          // await nightmare
+          //   .wait(2000 + rand(2000))
+          //   .wait(password)
+          //   .wait(2000 + rand(2000))
+          //   .insert(password, pass)
+          //   .wait(2000 + rand(2000))
+          //   .click('body > div > div > div > div > div > div > div > form > button')
+          //   .then()
+          //   .catch(async (e) => {
+          //     // errorLog = 'C' + e
+          //     const validCallback = await resolveCaptcha()
+          //     if (validCallback !== 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
 
-          if (errorLog) { throw errorLog }
+          //     await nightmare
+          //       .wait(2000 + rand(2000))
+          //       .wait(password)
+          //       .wait(2000 + rand(2000))
+          //       .insert(password, pass)
+          //       .wait(2000 + rand(2000))
+          //       .click('body > div > div > div > div > div > div > div > form > button')
+          //   })
+
+          // if (errorLog) { throw errorLog }
         }
       }
 
@@ -546,7 +549,6 @@ const main = async (restartAccount) => {
         .click(playBtn)
         .then()
         .catch(async (e) => {
-          // console.log('catch album')
           errorLog = 'N' + e
         })
 
@@ -575,7 +577,6 @@ const main = async (restartAccount) => {
           }, { repeatBtn, repeatBtnOk, shuffleBtn })
           .then()
           .catch(async (e) => {
-            // console.log('catch album')
             errorLog = 'O' + e
           })
 
@@ -611,7 +612,7 @@ const main = async (restartAccount) => {
     changeInterval = setInterval(async () => {
       if (over) { return clearInterval(changeInterval) }
 
-      const playExist = await nightmare
+      await nightmare
         .goto(album())
 
       countTimeout++
@@ -621,15 +622,13 @@ const main = async (restartAccount) => {
           .wait(1000 * 60)
       }
 
-      await nightmare
+      countTimeout--
+
+      const playExist = await nightmare
         .wait(2000 + rand(2000))
         .exists(playBtn)
 
-      countTimeout--
-
       if (!playExist) {
-        await nightmare
-          .screenshot('aaa.' + player + '.' + login + '.png')
         ifCatch('catch no play')
         return
       }
@@ -687,7 +686,7 @@ const main = async (restartAccount) => {
         }
       }
 
-      if (player === 'napster') {
+      if (!used && player === 'napster') {
         t1 = await nightmare
           .evaluate(() => {
             const time = '.player-progress-slider-box span.ui-slider-handle'
@@ -720,10 +719,22 @@ const main = async (restartAccount) => {
               await nightmare
                 .click('.player-play-button .icon-pause2')
                 .wait(2000 + rand(2000))
-                .click('.player-play-button .icon-play-button')
                 .then()
                 .catch((e) => {
                   ifCatch('R' + e)
+                })
+            }
+
+            const isPlay = await nightmare
+              .exists('.player-play-button .icon-play-button')
+
+            if (isPlay) {
+              await nightmare
+                .wait(2000 + rand(2000))
+                .click('.player-play-button .icon-play-button')
+                .then()
+                .catch((e) => {
+                  ifCatch('R2' + e)
                 })
             }
           }
@@ -764,18 +775,14 @@ const main = async (restartAccount) => {
       });
     }
 
-    // if (player !== 'tidal') {
     await nightmare.end()
-    // }
   }
 }
 
 const mainInter = setInterval(() => {
   if (over || process.env.TEST) { return clearInterval(mainInter) }
   try {
-    // if (finish) {
     main()
-    // }
   }
   catch (e) {
     console.log('ZEUB')
