@@ -618,7 +618,7 @@ const main = async (restartAccount) => {
 
       for (let i = 0; i < countTimeout; i++) {
         await nightmare
-          .wait(1000 * 30)
+          .wait(1000 * 60)
       }
 
       await nightmare
