@@ -122,16 +122,12 @@ const main = async (restartAccount) => {
   // account += !logged ? ':' + session : ''
 
   const webPreferences = {
-    partition: 'persist: ' + player + ':' + login,
+    partition: process.env.TEST ? '' : 'persist: ' + player + ':' + login,
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
     images: !!process.env.TEST,
     experimentalFeatures: true
-  }
-
-  if (player === 'napster') {
-    // delete webPreferences.partition
   }
 
   const Nightmare = require('nightmare')
