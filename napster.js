@@ -31,7 +31,6 @@ function shuffle(arr) {
 }
 
 const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
-  console.log(websiteURL, websiteKey, invisible)
   return new Promise((resolve, reject) => {
     request({
       url: 'https://api.anti-captcha.com/createTask',
@@ -47,8 +46,6 @@ const anticaptcha = (websiteURL, websiteKey, invisible = false) => {
         }
       }
     }, function (err, res, response) {
-      console.log(response)
-      return
       if (!response || !response.taskId) {
         console.log(response || 'no response')
         resolve('error')
