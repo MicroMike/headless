@@ -340,17 +340,15 @@ const main = async (restartAccount) => {
         }
         else {
           await nightmare
-            .wait(120000)
-          // await nightmare
-          //   .wait(6000 + rand(2000))
-          //   .insert(username, login)
-          //   .wait(2000 + rand(2000))
-          //   .then()
-          //   .catch(async (e) => {
-          //     errorLog = 'A' + e
-          //   })
+            .wait(6000 + rand(2000))
+            .insert(username, login)
+            .wait(2000 + rand(2000))
+            .then()
+            .catch(async (e) => {
+              errorLog = 'A' + e
+            })
 
-          // if (errorLog) { throw errorLog }
+          if (errorLog) { throw errorLog }
 
           // const validCallback = await resolveCaptcha()
           // console.log(validCallback)
@@ -366,29 +364,29 @@ const main = async (restartAccount) => {
           // }
           // else if (validCallback !== 'done') { throw validCallback }
 
-          // await nightmare
-          //   .wait(2000 + rand(2000))
-          //   .wait(password)
-          //   .wait(2000 + rand(2000))
-          //   .insert(password, pass)
-          //   .wait(2000 + rand(2000))
-          //   .click('body > div > div > div > div > div > div > div > form > button')
-          //   .then()
-          //   .catch(async (e) => {
-          //     // errorLog = 'C' + e
-          //     const validCallback = await resolveCaptcha()
-          //     if (validCallback !== 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
+          await nightmare
+            .wait(2000 + rand(2000))
+            .wait(password)
+            .wait(2000 + rand(2000))
+            .insert(password, pass)
+            .wait(2000 + rand(2000))
+            .click('body > div > div > div > div > div > div > div > form > button')
+            .then()
+            .catch(async (e) => {
+              // errorLog = 'C' + e
+              const validCallback = await resolveCaptcha()
+              if (validCallback !== 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
 
-          //     await nightmare
-          //       .wait(2000 + rand(2000))
-          //       .wait(password)
-          //       .wait(2000 + rand(2000))
-          //       .insert(password, pass)
-          //       .wait(2000 + rand(2000))
-          //       .click('body > div > div > div > div > div > div > div > form > button')
-          //   })
+              await nightmare
+                .wait(2000 + rand(2000))
+                .wait(password)
+                .wait(2000 + rand(2000))
+                .insert(password, pass)
+                .wait(2000 + rand(2000))
+                .click('body > div > div > div > div > div > div > div > form > button')
+            })
 
-          // if (errorLog) { throw errorLog }
+          if (errorLog) { throw errorLog }
         }
       }
 
