@@ -165,7 +165,7 @@ const main = async (restartAccount) => {
   let suppressed = false
 
   nightmare.on('did-start-loading', (e) => {
-    const html = await nightmare.evaluate(() => {
+    const html = await nightmare.evaluate(async () => {
       return document.querySelector('head').innerHTML
     })
     console.log(html)
