@@ -285,14 +285,16 @@ const main = async (restartAccount) => {
 
           await nightmare
             .evaluate((captcha) => {
-              let clients = window.___grecaptcha_cfg.clients[0]
-              Object.keys(clients).map(key => {
-                let client = clients[key]
-                Object.keys(client).map(k => {
-                  let l = client[k]
-                  l && l.callback && l.callback(captcha)
+              setTimeout(() => {
+                let clients = window.___grecaptcha_cfg.clients[0]
+                Object.keys(clients).map(key => {
+                  let client = clients[key]
+                  Object.keys(client).map(k => {
+                    let l = client[k]
+                    l && l.callback && l.callback(captcha)
+                  })
                 })
-              })
+              }, 5000);
             }, captcha)
             .then()
             .catch(async (e) => {
