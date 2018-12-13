@@ -346,21 +346,21 @@ const main = async (restartAccount) => {
             })
 
           if (errorLog) { throw errorLog }
-          return
+          // return
 
-          // const validCallback = await resolveCaptcha()
-          // console.log(validCallback)
-          // if (validCallback === 'click') {
-          //   await nightmare
-          //     .click('#recap-invisible')
-          //     .then()
-          //     .catch(async (e) => {
-          //       errorLog = 'A2' + e
-          //     })
+          const validCallback = await resolveCaptcha()
+          console.log(validCallback)
+          if (validCallback === 'click') {
+            await nightmare
+              .click('#recap-invisible')
+              .then()
+              .catch(async (e) => {
+                errorLog = 'A2' + e
+              })
 
-          //   if (errorLog) { throw errorLog }
-          // }
-          // else if (validCallback !== 'done') { throw validCallback }
+            if (errorLog) { throw errorLog }
+          }
+          else if (validCallback !== 'done') { throw validCallback }
 
           await nightmare
             .wait(2000 + rand(2000))
