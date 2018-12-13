@@ -171,52 +171,6 @@ const main = async (restartAccount) => {
   let connected = false
   let suppressed = false
 
-  const resolveCaptcha = async (url, key) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let errorLog
-        const needCaptcha = await nightmare
-          .evaluate(() => {
-            return window.___grecaptcha_cfg.clients[0] ? true : false
-          })
-          .then()
-          .catch(async (e) => {
-            return null
-          })
-
-        if (!needCaptcha) { return resolve('click') }
-
-        const captcha = await anticaptcha(url, key, true)
-        if (captcha === 'error') { return resolve('error') }
-
-        await nightmare
-          .evaluate((captcha) => {
-            let clients = window.___grecaptcha_cfg.clients[0]
-            Object.keys(clients).map(key => {
-              let client = clients[key]
-              Object.keys(client).map(k => {
-                let l = client[k]
-                l && l.callback && l.callback(captcha)
-              })
-            })
-          }, captcha)
-          .then()
-          .catch(async (e) => {
-            errorLog = e
-          })
-
-        if (errorLog) {
-          return resolve('error')
-        }
-        resolve('done')
-      }
-      catch (e) {
-        console.log(e)
-        resolve('error')
-      }
-    })
-  }
-
   try {
     if (player === 'napster') {
       url = 'https://app.napster.com/login/'
@@ -313,6 +267,52 @@ const main = async (restartAccount) => {
       usedDom = '.ConnectBar'
     }
 
+    const resolveCaptcha = async () => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let errorLog
+          const needCaptcha = await nightmare
+            .evaluate(() => {
+              return window.___grecaptcha_cfg.clients[0] ? true : false
+            })
+            .then()
+            .catch(async (e) => {
+              return null
+            })
+
+          if (!needCaptcha) { return resolve('click') }
+
+          const captcha = await anticaptcha(url, keyCaptcha, true)
+          if (captcha === 'error') { return resolve('error') }
+
+          await nightmare
+            .evaluate((captcha) => {
+              let clients = window.___grecaptcha_cfg.clients[0]
+              Object.keys(clients).map(key => {
+                let client = clients[key]
+                Object.keys(client).map(k => {
+                  let l = client[k]
+                  l && l.callback && l.callback(captcha)
+                })
+              })
+            }, captcha)
+            .then()
+            .catch(async (e) => {
+              errorLog = e
+            })
+
+          if (errorLog) {
+            return resolve('error')
+          }
+          resolve('done')
+        }
+        catch (e) {
+          console.log(e)
+          resolve('error')
+        }
+      })
+    }
+
     // ***************************************************************************************************************************************************************
     // *************************************************************************** CONNECT ***************************************************************************
     // ***************************************************************************************************************************************************************
@@ -339,13 +339,10 @@ const main = async (restartAccount) => {
             .wait(2000 + rand(2000))
         }
         else {
-          const tidalUrl = await nightmare
+          await nightmare
             .wait(2000 + rand(2000))
             .type(username, login)
             .wait(2000 + rand(2000))
-            .evaluate(() => {
-              return document.URL
-            })
             .then()
             .catch(async (e) => {
               errorLog = 'A' + e
@@ -353,7 +350,7 @@ const main = async (restartAccount) => {
 
           if (errorLog) { throw errorLog }
 
-          const validCallback = await resolveCaptcha(nightmare, tidalUrl, keyCaptcha)
+          const validCallback = await resolveCaptcha()
           console.log(validCallback)
           if (validCallback === 'error') { throw validCallback }
           if (validCallback === 'click') {
@@ -424,7 +421,7 @@ const main = async (restartAccount) => {
 
       if (errorLog) { throw errorLog }
 
-      const URL = await nightmare
+      await nightmare
         .wait(2000 + rand(2000))
         .insert(usernameInput ? username : password, login)
         .wait(2000 + rand(2000))
@@ -433,9 +430,6 @@ const main = async (restartAccount) => {
         .wait(2000 + rand(2000))
         .click(remember || 'body')
         .wait(2000 + rand(2000))
-        .evaluate(() => {
-          return document.URL
-        })
         .then()
         .catch(async (e) => {
           errorLog = 'G' + e
@@ -445,7 +439,7 @@ const main = async (restartAccount) => {
 
       let validCallback
       if (player === 'spotify') {
-        validCallback = await resolveCaptcha(nightmare, URL, keyCaptcha)
+        validCallback = await resolveCaptcha()
         if (validCallback === 'error') { throw validCallback }
       }
 
