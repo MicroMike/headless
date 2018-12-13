@@ -372,7 +372,7 @@ const main = async (restartAccount) => {
             .then()
             .catch(async (e) => {
               // errorLog = 'C' + e
-              await resolveCaptcha()
+              const validCallback = await resolveCaptcha()
               if (validCallback === 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
               await nightmare
                 .wait(2000 + rand(2000))
