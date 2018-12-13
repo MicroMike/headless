@@ -164,6 +164,10 @@ const main = async (restartAccount) => {
   let connected = false
   let suppressed = false
 
+  nightmare.on('did-start-loading', (e) => {
+    console.log(e)
+  })
+
   try {
     if (player === 'napster') {
       url = 'https://app.napster.com/login/'
