@@ -346,7 +346,7 @@ const main = async (restartAccount) => {
             })
 
           if (errorLog) { throw errorLog }
-          // return
+          return
 
           // const validCallback = await resolveCaptcha()
           // console.log(validCallback)
