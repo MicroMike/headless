@@ -338,8 +338,9 @@ const main = async (restartAccount) => {
         }
         else {
           await nightmare
-            .wait(1000 * 15)
+            .wait(2000 + rand(2000))
             .insert(username, login)
+            .wait(1000 * 120)
             .then()
             .catch(async (e) => {
               errorLog = 'A' + e
@@ -348,19 +349,19 @@ const main = async (restartAccount) => {
           if (errorLog) { throw errorLog }
           // return
 
-          const validCallback = await resolveCaptcha()
-          console.log(validCallback)
-          if (validCallback === 'click') {
-            await nightmare
-              .click('#recap-invisible')
-              .then()
-              .catch(async (e) => {
-                errorLog = 'A2' + e
-              })
+          // const validCallback = await resolveCaptcha()
+          // console.log(validCallback)
+          // if (validCallback === 'click') {
+          //   await nightmare
+          //     .click('#recap-invisible')
+          //     .then()
+          //     .catch(async (e) => {
+          //       errorLog = 'A2' + e
+          //     })
 
-            if (errorLog) { throw errorLog }
-          }
-          else if (validCallback !== 'done') { throw validCallback }
+          //   if (errorLog) { throw errorLog }
+          // }
+          // else if (validCallback !== 'done') { throw validCallback }
 
           await nightmare
             .wait(2000 + rand(2000))
