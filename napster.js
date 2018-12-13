@@ -126,7 +126,7 @@ const main = async (restartAccount) => {
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
-    images: process.env.TEST,
+    images: !!process.env.TEST,
     experimentalFeatures: true
   }
 
@@ -137,7 +137,7 @@ const main = async (restartAccount) => {
   const Nightmare = require('nightmare')
   const nightmare = Nightmare({
     electronPath: require('electron'),
-    openDevTools: process.env.TEST,
+    openDevTools: !!process.env.TEST,
     alwaysOnTop: false,
     waitTimeout: 1000 * 60 * 3,
     gotoTimeout: 1000 * 59 * 3,
