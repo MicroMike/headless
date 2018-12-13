@@ -296,8 +296,8 @@ const main = async (restartAccount) => {
                     let l = client[k]
                     l && l.callback && l.callback(captcha)
                   })
-                }, 5000)
-              }, timeout);
+                })
+              }, 5000);
             }, captcha)
             .then()
             .catch(async (e) => {
@@ -343,6 +343,7 @@ const main = async (restartAccount) => {
         }
         else {
           await nightmare
+            .wait(username)
             .wait(2000 + rand(2000))
             .type(username, login)
             .wait(2000 + rand(2000))
