@@ -187,7 +187,7 @@ const main = async (restartAccount) => {
         'https://app.napster.com/artist/yokem/album/boombeats',
         'https://app.napster.com/artist/hanke/album/new-york-story',
         'https://app.napster.com/artist/hanke/album/100-revenge',
-        'https://app.napster.com/artist/yonne/album/loser'
+        // 'https://app.napster.com/artist/yonne/album/loser'
       ]
 
       usedDom = '.player-error-box'
