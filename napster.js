@@ -126,7 +126,7 @@ const main = async (restartAccount) => {
     webSecurity: false,
     allowRunningInsecureContent: true,
     plugins: true,
-    images: false,
+    images: process.env.TEST,
     experimentalFeatures: true
   }
 
@@ -285,16 +285,12 @@ const main = async (restartAccount) => {
 
           await nightmare
             .evaluate((captcha) => {
-              console.log('a(\'' + captcha + '\')')
-              // grecaptcha.reset()
-              let a
               let clients = window.___grecaptcha_cfg.clients[0]
               Object.keys(clients).map(key => {
                 let client = clients[key]
                 Object.keys(client).map(k => {
                   let l = client[k]
-                  // l && l.callback && l.callback(captcha)
-                  a = l && l.callback
+                  l && l.callback && l.callback(captcha)
                 })
               })
             }, captcha)
@@ -375,7 +371,16 @@ const main = async (restartAccount) => {
             .click('body > div > div > div > div > div > div > div > form > button')
             .then()
             .catch(async (e) => {
-              errorLog = 'C' + e
+              // errorLog = 'C' + e
+              await resolveCaptcha()
+              if (validCallback === 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
+              await nightmare
+                .wait(2000 + rand(2000))
+                .wait(password)
+                .wait(2000 + rand(2000))
+                .insert(password, pass)
+                .wait(2000 + rand(2000))
+                .click('body > div > div > div > div > div > div > div > form > button')
             })
 
           if (errorLog) { throw errorLog }
