@@ -218,6 +218,7 @@ const main = async (restartAccount) => {
     }
     if (player === 'tidal') {
       url = 'https://listen.tidal.com/'
+      captchaUrl = 'https://login.tidal.com/'
 
       username = '#email'
       password = '[name="password"]'
@@ -243,6 +244,7 @@ const main = async (restartAccount) => {
     }
     if (player === 'spotify') {
       url = 'https://accounts.spotify.com/login'
+      captchaUrl = 'https://accounts.spotify.com/login'
       loggedDom = '.sessionInfo'
 
       username = 'form input[name="username"]'
@@ -279,7 +281,7 @@ const main = async (restartAccount) => {
 
           if (!needCaptcha) { return resolve('click') }
 
-          const captcha = await anticaptcha(url, keyCaptcha, true)
+          const captcha = await anticaptcha(captchaUrl, keyCaptcha, true)
           console.log(captcha)
           if (captcha === 'error') { return resolve('error') }
 
