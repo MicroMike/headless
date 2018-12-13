@@ -305,7 +305,7 @@ const main = async (restartAccount) => {
             })
 
           if (errorLog) {
-            return resolve('error')
+            return resolve(errorLog)
           }
           resolve('done')
         }
@@ -355,7 +355,6 @@ const main = async (restartAccount) => {
 
           const validCallback = await resolveCaptcha()
           console.log(validCallback)
-          if (validCallback === 'error') { throw validCallback }
           if (validCallback === 'click') {
             await nightmare
               .click('#recap-invisible')
@@ -366,6 +365,7 @@ const main = async (restartAccount) => {
 
             if (errorLog) { throw errorLog }
           }
+          else if (validCallback !== 'done') { throw validCallback }
 
           await nightmare
             .wait(2000 + rand(2000))
@@ -443,7 +443,7 @@ const main = async (restartAccount) => {
       let validCallback
       if (player === 'spotify') {
         validCallback = await resolveCaptcha()
-        if (validCallback === 'error') { throw validCallback }
+        if (validCallback !== 'click' && validCallback !== 'done') { throw validCallback }
       }
 
       if (player !== 'spotify' || validCallback === 'click') {
