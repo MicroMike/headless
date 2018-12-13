@@ -279,7 +279,7 @@ const main = async (restartAccount) => {
 
           if (!needCaptcha) { return resolve('click') }
 
-          const captcha = await anticaptcha(url, keyCaptcha, true)
+          const captcha = test//await anticaptcha(url, keyCaptcha, true)
           console.log(captcha)
           if (captcha === 'error') { return resolve('error') }
 
