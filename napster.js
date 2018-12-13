@@ -280,6 +280,7 @@ const main = async (restartAccount) => {
           if (captcha === 'error') { return resolve('error') }
 
           await nightmare
+            .inject('js', 'recaptcha__en.js')
             .evaluate((captcha) => {
               setTimeout(() => {
                 let clients = window.___grecaptcha_cfg.clients[0]
