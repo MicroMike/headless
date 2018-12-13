@@ -138,7 +138,7 @@ const main = async (restartAccount) => {
   const nightmare = Nightmare({
     electronPath: require('electron'),
     openDevTools: !!process.env.TEST,
-    alwaysOnTop: false,
+    alwaysOnTop: !!process.env.TEST,
     waitTimeout: 1000 * 60 * 3,
     gotoTimeout: 1000 * 59 * 3,
     show: true,
