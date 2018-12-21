@@ -190,7 +190,6 @@ const main = async (restartAccount) => {
         'https://app.napster.com/artist/yokem/album/boombeats',
         'https://app.napster.com/artist/hanke/album/new-york-story',
         'https://app.napster.com/artist/hanke/album/100-revenge',
-        // 'https://app.napster.com/artist/yonne/album/loser'
       ]
 
       usedDom = '.player-error-box'
@@ -215,6 +214,7 @@ const main = async (restartAccount) => {
         'https://music.amazon.fr/albums/B07D3NQ235',
         'https://music.amazon.fr/albums/B07G5PPYSY',
         'https://music.amazon.fr/albums/B07D3PGSR4',
+        'https://music.amazon.fr/albums/B07LGWP7SX',
       ]
 
       usedDom = '.concurrentStreamsPopover'
@@ -238,7 +238,8 @@ const main = async (restartAccount) => {
         'https://listen.tidal.com/album/93312939',
         'https://listen.tidal.com/album/93087422',
         'https://listen.tidal.com/album/88716570',
-        'https://listen.tidal.com/album/88041212'
+        'https://listen.tidal.com/album/88041212',
+        'https://listen.tidal.com/album/101352536',
       ]
 
       usedDom = '.WARN'
@@ -263,6 +264,7 @@ const main = async (restartAccount) => {
       albums = [
         'https://open.spotify.com/album/3FJdPTLyJVPYMqQQUyb6lr',
         'https://open.spotify.com/album/5509gS9cZUrbTFege0fpTk',
+        'https://open.spotify.com/album/5TeKj5BhfY6nuz8KIJK9zM',
       ]
       usedDom = '.ConnectBar'
     }
