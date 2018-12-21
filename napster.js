@@ -164,12 +164,12 @@ const main = async (restartAccount) => {
   let connected = false
   let suppressed = false
 
-  nightmare.on('did-start-loading', async (e) => {
-    const html = await nightmare.evaluate(() => {
-      return document.querySelector('head').innerHTML.split('</script>').length
-    })
-    console.log(html)
-  })
+  // nightmare.on('did-start-loading', async (e) => {
+  //   const html = await nightmare.evaluate(() => {
+  //     return document.querySelector('head').innerHTML.split('</script>').length
+  //   })
+  //   console.log(html)
+  // })
 
   try {
     if (player === 'napster') {
@@ -309,7 +309,7 @@ const main = async (restartAccount) => {
           if (errorLog) {
             return resolve(errorLog)
           }
-          // resolve('done')
+          resolve('done')
         }
         catch (e) {
           console.log(e)
