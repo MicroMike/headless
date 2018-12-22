@@ -18,6 +18,7 @@
     "inity": "/sbin/ip route del 173.249.43.0/24 via 173.249.43.1 dev ens18 && /sbin/ip route add 173.249.43.0/24 dev ens18 proto kernel scope link src 173.249.43.6",
     "n": "npm run initn && expressvpn connect nl && npm run startn",
     "s": "npm run inits && expressvpn connect br && npm run starts",
+    "all": "git reset --hard && git clean -f && git pull && FILE=napsterAccount.txt node napster",
     "startn": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=1 node napster",
     "starts": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=2 node napster",
     "starty": "git reset --hard && git clean -f && git pull && FILE=yohannAccounts.txt RAND=true BEGIN=2 node napster"
