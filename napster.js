@@ -186,10 +186,10 @@ const main = async (restartAccount) => {
       repeatBtnOk = '.repeat-button.repeat'
 
       albums = [
-        'https://app.napster.com/artist/honey/album/just-another-emotion',
         'https://app.napster.com/artist/yokem/album/boombeats',
         'https://app.napster.com/artist/hanke/album/new-york-story',
         'https://app.napster.com/artist/hanke/album/100-revenge',
+        'https://app.napster.com/artist/hazel-rockpop/album/blizzard-of-violence',
       ]
 
       usedDom = '.player-error-box'
