@@ -286,12 +286,10 @@ const main = async (restartAccount) => {
               return null
             })
 
-          console.log(needCaptcha)
-
           if (!needCaptcha) { return resolve('click') }
 
           const captcha = await anticaptcha(needCaptcha, keyCaptcha, true)
-          console.log(captcha)
+          // console.log(captcha)
           if (captcha === 'error') { return resolve('error') }
 
           await nightmare
@@ -383,17 +381,7 @@ const main = async (restartAccount) => {
             .click('body > div > div > div > div > div > div > div > form > button')
             .then()
             .catch(async (e) => {
-              // errorLog = 'C' + e
-              const validCallback = await resolveCaptcha()
-              if (validCallback !== 'click' && validCallback !== 'done') { return errorLog = 'C' + e }
-
-              await nightmare
-                .wait(2000 + rand(2000))
-                .wait(password)
-                .wait(2000 + rand(2000))
-                .insert(password, pass)
-                .wait(2000 + rand(2000))
-                .click('body > div > div > div > div > div > div > div > form > button')
+              errorLog = 'C' + e
             })
 
           if (errorLog) { throw errorLog }
