@@ -285,6 +285,8 @@ const main = async (restartAccount) => {
               return null
             })
 
+          console.log(needCaptcha)
+
           if (!needCaptcha) { return resolve('click') }
 
           const captcha = await anticaptcha(needCaptcha, keyCaptcha, true)
