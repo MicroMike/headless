@@ -102,7 +102,10 @@ const main = async (restartAccount) => {
       console.log('Pas de comptes')
       return
     }
-    if (accountsValid.length >= accounts.length || accountsValid.length >= max) { return }
+    if (accountsValid.length >= accounts.length || accountsValid.length >= max) {
+      console.log('reach max')
+      return
+    }
   }
   // let session = persist || 'persist: ' + Date.now()
   let account = restartAccount || accounts[0]
@@ -787,6 +790,7 @@ const main = async (restartAccount) => {
 const mainInter = setInterval(() => {
   if (over || process.env.TEST) { return clearInterval(mainInter) }
   try {
+    console.log('re')
     main()
   }
   catch (e) {
