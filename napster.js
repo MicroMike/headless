@@ -350,7 +350,6 @@ const main = async (restartAccount) => {
           await nightmare
             .wait(2000 + rand(2000))
             .insert(username, login)
-            .inject('js', 'recaptcha__en.js')
             .wait(1000 * 120)
             .then()
             .catch(async (e) => {
