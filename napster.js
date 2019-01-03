@@ -801,7 +801,10 @@ fs.readFile(file, 'utf8', async (err, data) => {
   if (err) return console.log(err);
   accounts = data = data.split(',')
 
-  if (!process.env.FILE) {
+  if (process.env.TYPE) {
+    accounts = accounts.filter(m => m.split(':')[0] === process.env.TYPE)
+  }
+  else if (!process.env.FILE) {
     const split = parseInt(data.length / 2)
     if (process.env.BEGIN === '2') {
       accounts = data.slice(split)
@@ -810,6 +813,7 @@ fs.readFile(file, 'utf8', async (err, data) => {
       accounts = data.slice(0, split)
     }
   }
+
 
   accounts = process.env.RAND ? shuffle(accounts) : accounts
   console.log(accounts.length)
