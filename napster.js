@@ -125,7 +125,7 @@ const main = async (restartAccount) => {
   // account += !logged ? ':' + session : ''
 
   const webPreferences = {
-    partition: process.env.TEST || process.env.TYPE ? '' : 'persist: ' + player + ':' + login,
+    partition: process.env.TEST ? '' : 'persist: ' + player + ':' + login,
     webSecurity: true,
     allowRunningInsecureContent: true,
     plugins: true,
