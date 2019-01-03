@@ -791,7 +791,6 @@ const main = async (restartAccount) => {
 const mainInter = setInterval(() => {
   if (over || process.env.TEST) { return clearInterval(mainInter) }
   try {
-    console.log('re')
     main()
   }
   catch (e) {
