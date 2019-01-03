@@ -273,6 +273,7 @@ const main = async (restartAccount) => {
     }
 
     const resolveCaptcha = async () => {
+      console.log('resolveCaptcha')
       return new Promise(async (resolve, reject) => {
         try {
           let errorLog
@@ -361,7 +362,7 @@ const main = async (restartAccount) => {
           return
 
           const validCallback = await resolveCaptcha()
-          // console.log(validCallback)
+          console.log(validCallback)
           if (validCallback === 'click') {
             await nightmare
               .click('#recap-invisible')
