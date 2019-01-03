@@ -335,6 +335,7 @@ const main = async (restartAccount) => {
       if (errorLog) { throw errorLog }
 
       if (notConnected) {
+        throw ('C' + e)
         const done = await nightmare
           .click(goToLogin)
           .wait(6000 + rand(2000))
