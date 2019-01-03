@@ -104,7 +104,6 @@ const main = async (restartAccount) => {
       return
     }
     if (accountsValid.length >= golbalAccountsLength || accountsValid.length >= max) {
-      console.log('reach max')
       return
     }
   }
