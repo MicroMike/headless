@@ -5,6 +5,7 @@
 const fs = require('fs');
 const request = require('ajax-request');
 const check = process.env.CHECK
+let golbalAccountsLength = []
 let accounts = []
 let accountsValid = []
 let over = false
@@ -102,7 +103,7 @@ const main = async (restartAccount) => {
       console.log('Pas de comptes')
       return
     }
-    if (accountsValid.length >= accounts.length || accountsValid.length >= max) {
+    if (accountsValid.length >= golbalAccountsLength || accountsValid.length >= max) {
       console.log('reach max')
       return
     }
@@ -818,8 +819,8 @@ fs.readFile(file, 'utf8', async (err, data) => {
     }
   }
 
-
   accounts = process.env.RAND ? shuffle(accounts) : accounts
+  golbalAccountsLength = accounts.length
   console.log(accounts.length)
   main()
 });

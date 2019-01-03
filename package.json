@@ -20,6 +20,9 @@
     "s": "npm run inits && expressvpn connect br && npm run starts",
     "all": "FILE=napsterAccount.txt RAND=true node napster",
     "amazon": "TYPE=amazon node napster",
+    "spotify": "TYPE=spotify node napster",
+    "tidal": "TYPE=tidal node napster",
+    "napster": "TYPE=napster node napster",
     "startn": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=1 node napster",
     "starts": "git reset --hard && git clean -f && git pull && RAND=true BEGIN=2 node napster",
     "starty": "git reset --hard && git clean -f && git pull && FILE=yohannAccounts.txt RAND=true BEGIN=2 node napster"
