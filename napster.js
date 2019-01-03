@@ -352,7 +352,6 @@ const main = async (restartAccount) => {
           await nightmare
             .wait(2000 + rand(2000))
             .insert(username, login)
-            .wait(1000 * 120)
             .then()
             .catch(async (e) => {
               errorLog = 'A' + e
