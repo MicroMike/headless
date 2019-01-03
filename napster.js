@@ -99,7 +99,7 @@ const main = async (restartAccount) => {
   }
   if (over) { return }
   if (!restartAccount) {
-    if (!accounts[0]) {
+    if (golbalAccountsLength === 0) {
       console.log('Pas de comptes')
       return
     }
